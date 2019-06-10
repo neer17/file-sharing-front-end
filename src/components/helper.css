@@ -1,0 +1,82 @@
+/* For left-part-home.js */
+.h1-home-page {
+    color: #fff;
+}
+
+.h2-home-page {
+    color: #fff;
+}
+
+.h3-home-page {
+    color: #bdbdbd;
+}
+
+.icon-paper-plane {
+    color: #fff;
+}
+
+/* Right part */
+.dashed-span-right-part {
+    display: block;
+    border: 3px dashed #bdbdbd;
+}
+
+.div-right-part {
+    display: block;
+}
+
+/* home-uploading */
+.app-card {
+    overflow: hidden;
+    position: relative;
+    background: #FFFFFF;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+@media (min-width: 768px) {
+    .app-card {
+        width: 350px;
+    }
+}
+
+.app-card .app-card-header {
+    background: #f3f7ff;
+}
+
+.app-card .app-card-header .app-card-header-inner {
+    padding: 10px 20px;
+}
+
+.app-card .app-card-content .app-card-content-inner {
+    padding: 20px;
+}
+
+.app-card.app-card-uploading .app-card-content .app-card-content-inner, .app-card.app-card-upload-sent .app-card-content .app-card-content-inner {
+    padding: 40px;
+}
+
+.app-message p {
+    padding: 10px;
+    border: 1px solid #1b65f6;
+    border-radius: 5px;
+    margin: 10px 0;
+    color: #1b65f6;
+}
+
+
+.app-message p.error {
+    border-color: #d0152e;
+    color: #d0152e;
+}
+
+.app-message p.success {
+    border-color: #00e676;
+    color: #00c853;
+}
+
+.root-class {
+    width: 100%;
+    height: 100%;
+}

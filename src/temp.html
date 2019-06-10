@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+<div className={"bg-primary"}>
+	<div className={"container"}>
+		<div className={"row"}>
+			<div className={"col col-md-6"}>
+			this is the left side
+		</div>
+		<div className={"col col-md-6
+		"}>
+		<div className="card" styles="width: 50rem;">
+			<div className="card-header pb-5 pt-2">
+				<div>
+					<input type="file" multiple={true}"/>
+					<img src={"images/outline_add_photo_alternate_black_48dp.png"}
+						 alt=" Image would go here" className={" mx-auto d-block pb-2"} />
+				</div>
+				<div className={" text-muted text-center
+				"}>Drag your files here
+			</div>
+		</div>
+		<ul className=" list-group list-group-flush">
+			<form className={" ml-5 mr-5
+			"}>
+			<div className=" form-group">
+				<label htmlFor=" exampleInputEmail1">Send To</label>
+				<input type=" email" className=" form-control" id=" InputEmail"
+					   aria-describedby=" emailHelp" placeholder=" Enter email"/>
+			</div>
+			<div className=" form-group">
+				<label htmlFor=" exampleInputPassword1">From</label>
+				<input type=" password" className=" form-control" id="
+                                                   exampleInputPassword1"
+					   placeholder=" Your Email Address"/>
+			</div>
+			<div className=" form-group">
+				<label htmlFor=" exampleInputPassword1">Message</label>
+				<input type=" password" className=" form-control" id="
+                                                   exampleInputPassword1"
+					   placeholder={" Enter message here"}/>
+			</div>
+			<button type=" submit" className=" btn btn-primary btn-block mb-5">Submit</button>
+			</form>
+		</ul>
+	</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
