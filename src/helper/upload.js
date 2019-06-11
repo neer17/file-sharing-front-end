@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {url} from './domainConfig'
 
 export const upload = (state, callback = () => {
 }) => {
@@ -35,7 +36,7 @@ export const upload = (state, callback = () => {
     //  sending all the data to the backend
     //  res would get whatever data ahas come back from the server
     //  check out "index.js" line 126 to see what is coming back from the server
-    axios.post('http://localhost:3001/upload-file', data, config).then((res) => {
+    axios.post(`${url}/upload-file`, data, config).then((res) => {
         return callback({
             type: 'success',
             payload: res
