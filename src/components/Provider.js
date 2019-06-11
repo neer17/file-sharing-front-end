@@ -22,7 +22,7 @@ export class Provider extends Component {
         this.setState({
             ...object
         }, () => {
-            console.log('provider.js state ==> ', this.state)
+            // console.log('provider.js state ==> ', this.state)
         })
     }
 

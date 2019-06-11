@@ -16,8 +16,6 @@ class HomeUploading extends Component {
     }
 
     componentDidMount() {
-        console.log('-- componentDidMount --')
-
         const type = this.props.type
         const payload = this.props.payload
         const currentTime = new Date().getTime()
@@ -35,16 +33,16 @@ class HomeUploading extends Component {
          */
         switch (type) {
             case 'onUploadProgress':
-                console.log('onUploadProgress')
+                // console.log('onUploadProgress')
 
                 const {loaded, total} = payload
                 const elapsedTime = currentTime - this.state.startTime
                 const diffInLoad = this.state.currentLoaded - loaded
                 const currentUploadSpeedInBytes = diffInLoad / elapsedTime
 
-                console.log('diffInLoad ==> ', diffInLoad)
-                console.log('elapsed time ==> ', elapsedTime)
-                console.log('currentUploadSpeedInBytes ==> ', currentUploadSpeedInBytes)
+                // console.log('diffInLoad ==> ', diffInLoad)
+                // console.log('elapsed time ==> ', elapsedTime)
+                // console.log('currentUploadSpeedInBytes ==> ', currentUploadSpeedInBytes)
 
                 const percentage = total !== 0 ? (loaded / total) * 100 : 0
                 return this.setState({
@@ -58,7 +56,7 @@ class HomeUploading extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('-- componentWillReceiveProps --')
+        // console.log('-- componentWillReceiveProps --')
 
         const type = nextProps.type
         const payload = nextProps.payload
@@ -74,7 +72,7 @@ class HomeUploading extends Component {
          */
         switch (type) {
             case 'onUploadProgress':
-                console.log('onUploadProgress')
+                // console.log('onUploadProgress')
 
                 const {loaded, total} = payload
                 const elapsedTime = currentTime - this.state.startTime
@@ -100,10 +98,8 @@ class HomeUploading extends Component {
         const totalFormat = betterNumber(total, true)
         const uploadSpeed = betterNumber(currentUploadSpeed, true) + '/s'
 
-        console.log('-- render --')
         /*console.log(`percentage ==> ${percentage}`)
         console.log('upload speed ==> ', betterNumber(currentUploadSpeed, true) + '/s')*/
-        console.log('----------------------------')
 
         return (
             <div className={'app-card app-card-uploading'}>

@@ -44,8 +44,6 @@ class LoginForm extends Component {
 
     //  submitting the form after getting the callback from @see "formValidation" method
     onSubmitForm(e) {
-        console.log('onSubmitForm')
-
         e.preventDefault()
 
         const {isLogin} = this.state
@@ -255,7 +253,7 @@ class LoginForm extends Component {
         this.setState({
             error
         }, () => {
-            console.log('formValidation state ==> ', this.state)
+            // console.log('formValidation state ==> ', this.state)
 
             //  checking the validation
             const isValid = error.name === null &&
@@ -269,9 +267,6 @@ class LoginForm extends Component {
     }
 
     render() {
-        console.log('======= login.js  render =============')
-        console.log('login.js state ==> ', this.state)
-
         const {isLogin, user, error, message} = this.state
 
         return (
@@ -361,10 +356,6 @@ class LoginForm extends Component {
                 </div>
             </div>
         )
-    }
-
-    componentWillUnmount() {
-        console.log('login.js componentWillUnmount')
     }
 }
 

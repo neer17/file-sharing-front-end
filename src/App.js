@@ -19,10 +19,6 @@ class App extends Component {
 
     render() {
         let {showLoginForm} = this.state
-
-        console.log('App render history ==> ', history)
-        console.log('App.js consumer value ==> ', this.context)
-        console.log('---------------------------------')
         return (
             <div>
                 <Provider>

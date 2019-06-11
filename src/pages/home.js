@@ -9,7 +9,7 @@ import {MyContext} from './../components/Provider'
 import './../helper.css'
 import './../App.css'
 import Authentication from '../components/authentication'
-import {backendUrl} from '../config'
+import {url} from './../helper/domainConfig'
 
 /*
 * The state of this class is maintained using "Context" APi
@@ -18,14 +18,8 @@ import {backendUrl} from '../config'
 * */
 class Home extends Component {
 
-    constructor(props) {
-        console.log('home.js constructor')
-        super(props)
-        this._renderComponent = this._renderComponent.bind(this)
-    }
-
 //  switching the components
-    _renderComponent() {
+    _renderComponent = () => {
         const state = this.props.context.getState()
         const {componentToRender} = this.props.context.getState()
 
@@ -73,7 +67,6 @@ class Home extends Component {
     }
 
     render() {
-        console.log('home.js render')
         return (
             <div className={"row root-class"}>
                 <div className={"container mt-5"}>
@@ -98,17 +91,14 @@ class Home extends Component {
     * then it would set a timer that would check the expiration if the token generated at the time of sign-in and log-in
     * */
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('home.js componentDidUpdate')
-
         const {isAuthenticated} = this.props.context.getState()
-        console.log('-------------------------------------- home.js ---------------------------------------')
 
         if (isAuthenticated) {
             const userId = localStorage.getItem("userId")
 
             //  making a POST request to /check-validation to check the expiration of user session
             const setIntervalCountdown = setInterval(() => {
-                axios.post(backendUrl + '/check-validation', {
+                axios.post(`${url}/check-validation`, {
                     userId
                 }).catch(err => {
                     if (err.response.status === 401) {

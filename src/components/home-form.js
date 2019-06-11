@@ -21,28 +21,6 @@ class HomeForm extends Component {
         }
     }
 
-    constructor(props) {
-        super(props)
-        this.multipleInputRef = React.createRef()
-        this.dragAndDropRef = React.createRef()
-
-        //  bindings
-        this.dragAndDropOnClick = this.dragAndDropOnClick.bind(this)
-        this.multipleInputOnClick = this.multipleInputOnClick.bind(this)
-        this._onTextChange = this._onTextChange.bind(this)
-        this._onSubmit = this._onSubmit.bind(this)
-        this._formValidation = this._formValidation.bind(this)
-        this._onFilesAdded = this._onFilesAdded.bind(this)
-    }
-
-    componentDidMount() {
-        //  this would catch the data that would be sent from the backend from th "/" route
-        fetch('http://localhost:3001/', {mode: 'cors'})
-            .then(res => res.text())
-            .then(data => console.log(`home-form.js componentDidMount data ==> ${data}`))
-            .catch(err => console.log(err))
-    }
-
     //  cancel method for removing the items added in drag and drop
     onCancel = (nameOfFile) => {
         //  getting the name of the file and then removing it from the values and finally
@@ -66,7 +44,8 @@ class HomeForm extends Component {
     }
 
     render() {
-        console.log('home-form.js render state ==> ', this.state)
+        // console.log('home-form.js render state ==> ', this.state)
+
         return (
             <div className={"col col-md-6"}>
                 <div className="card" style={{width: "50"}}>
@@ -77,7 +56,8 @@ class HomeForm extends Component {
                         <div>
                             {
                                 this.state.files.values.map((file) => {
-                                    console.log('home-form.js render file ==> ', file)
+                                    // console.log('home-form.js render file ==> ', file)
+
                                     return (
                                         <div className={"d-flex m-2"} key={file.name}>
                                             <div className={"flex-grow-1 border-bottom p-1"}
@@ -182,34 +162,14 @@ class HomeForm extends Component {
             </div>
         )
     }
-
-    //  this will click the multiple input
-    dragAndDropOnClick(e) {
-        e.preventDefault()
-        e.stopPropagation()
-        console.log('drag and drop is called')
-        this.multipleInputOnClick(e)
-    }
-
-    multipleInputOnClick(e) {
-        e.preventDefault()
-        e.stopPropagation()
-        console.log('multiple input clicked')
-    }
-
-    //  it will listen to text change in the email and password field
-    _onTextChange(e) {
-        e.preventDefault()
-    }
-
     //  on form submission
-    _onSubmit(e) {
+    _onSubmit = (e) => {
         e.preventDefault()
         this._formValidation(e)
     }
 
     //  validating the input fields
-    _formValidation(e) {
+    _formValidation = (e) => {
         e.preventDefault()
 
         let fields = {
@@ -281,7 +241,9 @@ class HomeForm extends Component {
             //  if there is no error then calling upload method from "upload.js"
             //  to send the state to the backend
             upload(this.state, (events) => {
-                console.log('Inside upload events ==> ', events)
+                //  information about the post that was uploaded fom the back-end
+                // console.log('Inside upload events ==> ', events)
+
                 /**
                  * passing prop "onUploading" from "home.js"
                  * checking it for null and then passing the events of the upload function
@@ -294,7 +256,7 @@ class HomeForm extends Component {
     }
 
     //  this would be called when files are added
-    _onFilesAdded(e) {
+    _onFilesAdded = (e) => {
         const filesObject = e.target.files
         const filesArray = Object.values(filesObject)
 

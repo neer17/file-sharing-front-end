@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import _ from 'lodash'
 
 import {postDownload} from "../helper/postDownload"
-import {backendUrl} from "../config"
+import {url} from './../helper/domainConfig'
 import {betterNumber} from "../helper/betterNumber"
 import './../components/sass_files/copied.css'
 
@@ -22,9 +22,6 @@ class ViewFile extends Component {
      * We'll shave access to props because of the "history" package
      */
     componentDidMount() {
-        console.log('componentWillMount')
-        console.log('ViewFile props==> ', this.props)
-
         const {match} = this.props
 
         const postId = _.get(match, 'params.id')
@@ -44,7 +41,6 @@ class ViewFile extends Component {
             this.setState({
                 post: _.get(response, 'data')
             }, () => {
-                console.log('ViewFile after updating the state ==> ', this.state)
             })
         }).catch((err) => {
             console.log("an error fetching download data", err)// we can redirect user to not found page later
@@ -67,18 +63,11 @@ class ViewFile extends Component {
     }
 
     render() {
-        console.log('view-file.js render')
-        console.log('view-file.js state => ' + this.state)
-
         const {post} = this.state
-
         const files = _.get(post, 'files', [])
         const totalSize = this.getTotalDownloadSize()
         const postId = _.get(post, '_id', null)
 
-        console.log('ViewFile post ==> ', post)
-        console.log(`ViewFile files ==> ${files} \t totalSize ==> ${totalSize}`)
-        console.log('---------------------------')
         return (
             <div className={'app-page-download'}>
                 {/*<div className={'app-top-header'}>
@@ -112,7 +101,7 @@ class ViewFile extends Component {
                                         return (<div key={index} className={'app-download-file-list-item'}>
                                             <div className={'filename'}>{_.get(file, 'originalname')}</div>
                                             <div className={'download-action'}><a
-                                                href={`${backendUrl}/download/${_.get(file, '_id')}`}>Download</a></div>
+                                                href={`${url}/download/${_.get(file, '_id')}`}>Download</a></div>
                                         </div>)
                                     })
                                 }
@@ -120,7 +109,7 @@ class ViewFile extends Component {
 
                             <div className={'app-download-actions app-form-actions'}>
 
-                                <a href={`${backendUrl}/downloadAllFiles/${postId}`} className={'app-button primary'}>Download
+                                <a href={`${url}/downloadAllFiles/${postId}`} className={'app-button primary'}>Download
                                     All</a>
                                 <button className={'app-button'} type={'button'}>Share</button>
                             </div>

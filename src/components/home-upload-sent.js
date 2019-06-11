@@ -4,11 +4,6 @@ import PropTypes from 'prop-types'
 import history from './../helper/history'
 
 class HomeUploadSent extends Component {
-
-    constructor(props) {
-        super(props)
-    }
-
     data = this.props.data
 
     render() {
@@ -16,7 +11,7 @@ class HomeUploadSent extends Component {
         const toEmail = this.data.file[0].to
 
         // console.log('data ==> ', this.data)
-        console.log('objectId ==> ', objectId)
+        // console.log('objectId ==> ', objectId)
 
         return (
             <div className={'app-card app-card-upload-sent'}>
