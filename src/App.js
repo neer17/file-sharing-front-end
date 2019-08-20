@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Route, Router, Switch, withRouter} from 'react-router-dom'
+import {CookiesProvider} from 'react-cookie'
 
 import history from './helper/history'
 import Home from './pages/home'

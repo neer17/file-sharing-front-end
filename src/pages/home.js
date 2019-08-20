@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import jwt from 'jsonwebtoken'
 
 import LeftPartHome from './../components/left-part-home'
 import HomeForm from './../components/home-form'
@@ -17,6 +18,12 @@ import {url} from './../helper/domainConfig'
 * states are being updated from "login.js" to update the "isAuthenticated" and "componentToRender" members after login as well
 * */
 class Home extends Component {
+
+    componentDidMount() {
+        console.info('home.js componentDidMount')
+
+        axios.post(``)
+    }
 
 //  switching the components
     _renderComponent = () => {

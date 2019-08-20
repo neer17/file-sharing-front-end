@@ -82,7 +82,7 @@ class LoginForm extends Component {
                             //  Calling after a timeout so that the message is displayed on the page
                             setTimeout(() => {
                                 /**
-                                 * calling the props so that "isAuthenticated " in "App.js" is updated
+                                 * calling the props so that "shoeLoginForm " in "App.js" is removed
                                  */
                                 this.props.onSignupOrlogin()
 
@@ -242,7 +242,7 @@ class LoginForm extends Component {
 
         //  validating email
         const email = user.email
-        let regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        let regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         const isEmailValid = regexEmail.test(email)
         if (user.email.length > 0 && !isEmailValid) {
             error.email = 'Email is not valid'

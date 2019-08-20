@@ -7,6 +7,7 @@ class HomeUploadSent extends Component {
     data = this.props.data
 
     render() {
+        console.log('HomeUploadSent data ==> ', this.props.data)
         const objectId = this.data.file[0]._id
         const toEmail = this.data.file[0].to
 

@@ -31,8 +31,8 @@ class HomeUploading extends Component {
          *  However, on a real server this component can render multiple times unless axios sends the file completely
          *  So, switch condition should be present in both "componentDidMount" and "componentWillReceiveProps"
          */
-        switch (type) {
-            case 'onUploadProgress':
+        if (type === 'onUploadProgress'){
+
                 // console.log('onUploadProgress')
 
                 const {loaded, total} = payload
@@ -70,8 +70,7 @@ class HomeUploading extends Component {
          *  updating "startTime", "currentLoaded" and "currentUploadSpeed" to calculate the speed
          *  on every render
          */
-        switch (type) {
-            case 'onUploadProgress':
+        if (type === 'onUploadProgress'){
                 // console.log('onUploadProgress')
 
                 const {loaded, total} = payload

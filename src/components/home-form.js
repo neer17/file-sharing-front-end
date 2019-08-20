@@ -97,8 +97,8 @@ class HomeForm extends Component {
                                        display: "none"
                                    }}/>
                             <div style={{
-                                "text-align": "center",
-                                "font-size": 20
+                                "textAlign": "center",
+                                "fontSize": 20
                             }}>Drag and drop files here
                             </div>
                             <div className={"d-flex align-items-center justify-content-center"} style={{
@@ -126,7 +126,6 @@ class HomeForm extends Component {
                                                : "form-control"
                                        }
                                        id="receiversEmailID"
-                                       onChange={this._onTextChange}
                                        defaultValue={this.state.form.to}
                                        aria-describedby="emailHelp" placeholder="Enter email"/>
                             </div>
@@ -141,7 +140,6 @@ class HomeForm extends Component {
                                                : "form-control"
                                        }
                                        id="sendersEmailID"
-                                       onChange={this._onTextChange}
                                        defaultValue={this.state.form.from}
                                        placeholder="Your Email Address"/>
                             </div>
@@ -185,7 +183,7 @@ class HomeForm extends Component {
         }
 
         //  regex to test the emails
-        let regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        let regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
         let {isNull, isValid} = fields.error
         let {from, to, message} = fields.form
