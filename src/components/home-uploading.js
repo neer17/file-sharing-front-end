@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
-import {betterNumber} from '../helper/betterNumber'
-import './sass_files/copied.css'
+import {betterNumber} from '../utils/betterNumber'
 
 class HomeUploading extends Component {
     constructor(props) {

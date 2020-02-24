@@ -21,9 +21,9 @@ a {
   max-width: 1000px;
   margin: 0 auto;
 
-  @media(min-width: $screen-md) {
+ /*  @media(min-width: $screen-md) {
     padding: 100px 50px 50px 50px;
-  }
+  } */
 }
 
 .app-container {
@@ -52,15 +52,15 @@ a {
         font-size: 50px;
         font-weight: 300;
         color: rgba(255, 255, 255, .9);
-        @media (max-width: $screen-sm) {
+        /* @media (max-width: $screen-sm) {
           display: none;
-        }
+        } */
       }
 
       .site-slogan {
-        @media (max-width: $screen-sm) {
+       /*  @media (max-width: $screen-sm) {
           display: none;
-        }
+        } */
         margin-top: 5px;
         padding: 0;
         font-size: 30px;
@@ -75,7 +75,7 @@ a {
 
   }
 
-  @media (min-width: $screen-md) {
+ /*  @media (min-width: $screen-md) {
     .app-header {
       float: left;
       padding-top: 100px;
@@ -84,7 +84,7 @@ a {
     .app-content {
       float: right;
     }
-  }
+  } */
 }
 
 .app-card {
@@ -94,9 +94,9 @@ a {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
-  @media (min-width: $screen-sm) {
+ /*  @media (min-width: $screen-sm) {
     width: 350px;
-  }
+  } */
 
   .app-card-header {
     background: rgba(243, 247, 255, 1);
@@ -376,9 +376,9 @@ a {
 
 .app-page-download {
   .app-card {
-    @media(min-width: $screen-sm) {
+   /*  @media(min-width: $screen-sm) {
       width: 400px;
-    }
+    } */
     margin: 0 auto;
   }
 }
@@ -486,63 +486,6 @@ a {
 .app-top-header {
   h1 {
     cursor: pointer;
-  }
-}
-
-.app-top-bar {
-  color: #FFFFFF;
-  height: $header-height;
-  position: fixed;
-  width: 100%;
-  left: 0;
-  top: 0;
-  z-index: 1000;
-
-  .app-top-bar-inner {
-    max-width: 1000px;
-    margin: 0 auto;
-    display: flex;
-
-    .app-top-bar-left {
-      flex-grow: 1;
-    }
-
-    .app-top-bar-right {
-      text-align: right;
-
-      .app-top-bar-right-inner {
-        display: flex;
-      }
-    }
-  }
-
-  .site-name {
-    font-size: 30px;
-    cursor: pointer;
-    line-height: $header-height;
-  }
-
-  .user-profile-picture {
-    padding-top: 10px;
-
-    img {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-
-    }
-  }
-
-  .user-profile-menu {
-    margin: 0;
-    padding: 0;
-    font-weight: 600;
-    list-style: none;
-
-    li {
-      padding: 0 10px;
-      line-height: $header-height;
-    }
   }
 }
 

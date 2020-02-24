@@ -1,3 +1,6 @@
+/* eslint-disable */
+
+
 export const betterNumber = (fileInBytes, inFormat = false) => {
     const kb = 1024
     const mb = kb * kb

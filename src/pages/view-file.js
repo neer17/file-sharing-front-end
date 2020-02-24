@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
 
-import {postDownload} from "../helper/postDownload"
-import {url} from './../helper/domainConfig'
-import {betterNumber} from "../helper/betterNumber"
-import './../components/sass_files/copied.css'
+import {postDownload} from "../utils/postDownload"
+import {url} from './../utils/domainConfig'
+import {betterNumber} from "../utils/betterNumber"
 
 class ViewFile extends Component {
 

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import Classnames from 'classnames'
 
-import CreateUser from './../helper/createUser'
+import CreateUser from './../utils/createUser'
 import {MyContext} from './Provider'
 
 class LoginForm extends Component {

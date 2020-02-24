@@ -1,0 +1,55 @@
+.app-top-bar {
+    color: #FFFFFF;
+    height: $header-height;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+  
+    .app-top-bar-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+  
+      .app-top-bar-left {
+        flex-grow: 1;
+      }
+  
+      .app-top-bar-right {
+        text-align: right;
+  
+        .app-top-bar-right-inner {
+          display: flex;
+        }
+      }
+    }
+  
+    .site-name {
+      font-size: 30px;
+      cursor: pointer;
+      line-height: $header-height;
+    }
+  
+    .user-profile-picture {
+      padding-top: 10px;
+  
+      img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+      }
+    }
+  
+    .user-profile-menu {
+      margin: 0;
+      padding: 0;
+      font-weight: 600;
+      list-style: none;
+  
+      li {
+        padding: 0 10px;
+        line-height: $header-height;
+      }
+    }
+  }
