@@ -1,0 +1,27 @@
+.panel {
+  position: absolute;
+  left: 15%;
+  top: -10%;
+  height: 120%;
+  width: 60%;
+  background-color: white;
+  z-index: 1000;
+  box-shadow: 0 1rem 1rem rgba($color: #000000, $alpha: 0.5);
+
+  &__filename {
+      font-size: 1.5rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+  }
+
+  &__close-button {
+    font-size: 20px;
+    color: grey;
+    cursor: pointer;
+
+    &:hover {
+      color: black;
+    }
+  }
+}

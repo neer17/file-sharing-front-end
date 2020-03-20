@@ -1,0 +1,39 @@
+.home-form-card {
+  height: 60vh;
+}
+
+.file-container {
+   overflow: hidden;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0 15px;
+  height: 25px;
+  font-size: 10px;
+  border-radius: 50px;
+  background-color: #f1f1f1;
+
+  &__filename {
+      width: 60px;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+  }
+
+  &__more-files {
+    cursor: pointer;
+  }
+}
+
+.closebtn {
+    color: #888;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  
+  .closebtn:hover {
+    color: #000;
+  }

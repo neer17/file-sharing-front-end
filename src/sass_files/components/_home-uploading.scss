@@ -1,0 +1,185 @@
+.app-card {
+  height: 60vh;
+  overflow: hidden;
+  position: relative;
+  background: #ffffff;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  /*  @media (min-width: $screen-sm) {
+      width: 350px;
+    } */
+
+  .app-card-header {
+    background: rgba(243, 247, 255, 1);
+
+    .app-card-header-inner {
+      padding: 10px 20px;
+    }
+  }
+
+  .app-card-content {
+    .app-card-content-inner {
+      padding: 20px;
+    }
+  }
+
+  &.app-card-uploading,
+  &.app-card-upload-sent {
+    .app-card-content {
+      .app-card-content-inner {
+        padding: 40px;
+      }
+    }
+  }
+}
+
+.app-home-upload-sent-icon {
+  display: block;
+  text-align: center;
+
+  i {
+    font-size: 50px;
+    display: inline-block;
+    border: 1px solid $body-text-color;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    line-height: 100px;
+  }
+}
+
+.app-upload-files-total {
+  margin-top: 20px;
+}
+
+.app-upload-stats {
+  display: flex;
+  flex-direction: row;
+
+  .app-upload-stats-left {
+    flex-grow: 1;
+  }
+
+  .app-upload-stats-right {
+  }
+}
+
+.app-progress {
+  background: rgba(241, 248, 254, 1);
+  border: 1px solid rgba(178, 216, 248, 1);
+  height: 15px;
+  line-height: 15px;
+  width: 100%;
+  border-radius: 10px;
+  margin: 10px 0 10px 0;
+  position: relative;
+  overflow: hidden;
+
+  .app-progress-bar {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0px;
+    height: 15px;
+    line-height: 15px;
+    background: $color-primary;
+  }
+}
+
+.app-upload-cancel-button {
+  margin-top: 50px;
+}
+
+.app-text-center {
+  text-align: center;
+}
+
+.app-upload-sent-message {
+  h2 {
+    font-size: 25px;
+    font-weight: 400;
+    padding: 0;
+    margin: 20px 0;
+  }
+
+  p {
+    line-height: 1.5em;
+  }
+}
+
+.app-upload-sent-actions {
+  margin: 20px 0;
+
+  button {
+    margin: 10px 0;
+  }
+}
+
+.app-upload-cancel-button {
+  margin-top: 50px;
+}
+
+.app-text-center {
+  text-align: center;
+}
+
+.app-upload-sent-message {
+  h2 {
+    font-size: 25px;
+    font-weight: 400;
+    padding: 0;
+    margin: 20px 0;
+  }
+
+  p {
+    line-height: 1.5em;
+  }
+}
+
+.app-upload-sent-actions {
+  margin: 20px 0;
+
+  button {
+    margin: 10px 0;
+  }
+}
+
+.app-upload-cancel-button {
+  margin-top: 50px;
+}
+
+.app-form-actions {
+  .app-button {
+    width: 100%;
+    text-align: center;
+    display: block;
+    font-weight: 800;
+    color: $color-primary;
+    border: 1px solid $color-primary;
+    background: #ffffff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 10px 15px;
+    text-transform: uppercase;
+
+    &.primary {
+      background: $color-primary;
+      color: #ffffff;
+    }
+
+    &.app-button-link {
+      background: none;
+      border: 0 none;
+      color: $color-primary;
+    }
+  }
+  button {
+    margin: 10px 0;
+  }
+}
+
+.app-home-uploading-icon {
+    text-align: center;
+}

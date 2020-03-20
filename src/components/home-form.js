@@ -1,19 +1,23 @@
 import React, { Component } from "react"
 import classnames from "classnames"
 
+import { MyContext } from './Provider'
 import { upload } from "../utils/upload"
+import { element } from "prop-types"
 
 class HomeForm extends Component {
+  constructor(props) {
+    super(props)
+    this.ref = React.createRef()
+  }
+
   state = {
     form: {
       from: "",
       to: "",
       message: ""
     },
-    files: {
-      values: [],
-      hasFiles: null
-    },
+   hasFiles: false,
     error: {
       isNull: null,
       isValid: null
@@ -21,179 +25,10 @@ class HomeForm extends Component {
   }
 
   //  cancel method for removing the items added in drag and drop
-  onCancel = nameOfFile => {
-    //  getting the name of the file and then removing it from the values and finally
-    //  updating the state with new "values"
-    let { files } = this.state
-    const values = files.values
-
-    values.forEach((value, index) => {
-      if (value.name === nameOfFile) {
-        return values.splice(index, 1)
-      }
-    })
-
-    this.setState({
-      files: {
-        hasFiles: true,
-        values
-      }
-    })
+  onCancel = fileName => {
+    this.context.cancel(fileName)
   }
 
-  render() {
-    // console.log('home-form.js render state ==> ', this.state)
-
-    return (
-      <div className={"home-form-container col col-md-6"}>
-        <div className="card" style={{ width: "50" }}>
-          {/*
-           * displaying the names of files selected
-           */}
-          {this.state.files.values.length === 0 ? null : (
-            <div>
-              {this.state.files.values.map(file => {
-                // console.log('home-form.js render file ==> ', file)
-
-                return (
-                  <div className={"d-flex m-2"} key={file.name}>
-                    <div className={"flex-grow-1 border-bottom p-1"}>
-                      {file.name}
-                    </div>
-                    {/*Cancel button of each file*/}
-                    <div
-                      className={"btn btn-light"}
-                      onClick={this.onCancel.bind(this, file.name)}
-                    >
-                      x
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          )}
-
-          <div
-            className="card-header
-                                d-flex flex-fill
-                                    justify-content-center align-items-center"
-          >
-            {/*using DragAndDrop component here*/}
-            <label
-              className={
-                this.state.error.isNull === null || this.state.files.hasFiles
-                  ? "border-warning"
-                  : "d-flex border border-danger"
-              }
-              style={{
-                width: 500,
-                height: 100
-              }}
-            >
-              <input
-                id={"multipleInputId"}
-                type="file"
-                multiple={true}
-                onChange={this._onFilesAdded}
-                style={{
-                  position: "fixed",
-                  display: "none"
-                }}
-              />
-              <div
-                style={{
-                  textAlign: "center",
-                  fontSize: 20
-                }}
-              >
-                Drag and drop files here
-              </div>
-              <div
-                className={"d-flex align-items-center justify-content-center"}
-                style={{
-                  height: 100
-                }}
-              >
-                <i
-                  className="far fa-images"
-                  style={{
-                    fontSize: 50,
-                    textAlign: "center"
-                  }}
-                />
-              </div>
-            </label>
-          </div>
-          <div></div>
-          <ul className="list-group list-group-flush">
-            <form className={"ml-5 mr-5"}>
-              <div
-                className={classnames("form-group", {
-                  error:
-                    this.state.error.isNull === true ||
-                    this.state.error.isValid === false
-                })}
-              >
-                <label htmlFor="receiversEmailID">Send To</label>
-                <input
-                  type="email"
-                  className={
-                    this.state.error.isNull !== null &&
-                    (this.state.error.isNull === true ||
-                      this.state.error.isValid === false)
-                      ? "form-control border border-danger"
-                      : "form-control"
-                  }
-                  id="receiversEmailID"
-                  defaultValue={this.state.form.to}
-                  aria-describedby="emailHelp"
-                  placeholder="Enter email"
-                />
-              </div>
-              <div
-                className={classnames("form-group", {
-                  error:
-                    this.state.error.isNull === true ||
-                    this.state.error.isValid === false
-                })}
-              >
-                <label htmlFor="sendersEmailID">Your Email</label>
-                <input
-                  type="email"
-                  className={
-                    this.state.error.isNull !== null &&
-                    (this.state.error.isNull === true ||
-                      this.state.error.isValid === false)
-                      ? "form-control border border-danger"
-                      : "form-control"
-                  }
-                  id="sendersEmailID"
-                  defaultValue={this.state.form.from}
-                  placeholder="Your Email Address"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="messageTextAreaID">Message</label>
-                <textarea
-                  className="form-control"
-                  id="messageTextAreaID"
-                  defaultValue={this.state.form.message}
-                  placeholder="Enter Message(Optional)"
-                />
-              </div>
-              <button
-                type="submit"
-                className="btn btn-primary btn-block mb-5"
-                onClick={this._onSubmit}
-              >
-                Submit
-              </button>
-            </form>
-          </ul>
-        </div>
-      </div>
-    )
-  }
   //  on form submission
   _onSubmit = e => {
     e.preventDefault()
@@ -272,7 +107,7 @@ class HomeForm extends Component {
         if (
           this.state.error.isNull ||
           !this.state.error.isValid ||
-          !this.state.files.hasFiles
+          !this.state.hasFiles
         )
           return
 
@@ -300,23 +135,227 @@ class HomeForm extends Component {
     const filesArray = Object.values(filesObject)
 
     //  updating the state
-    this.setState(
-      prevState => {
-        //  changing "hasFiles" to true and adding the files
-        const files = prevState.files
-        files.hasFiles = true
-        files.values = filesArray
-
-        return {
-          ...prevState,
-          files
-        }
-      },
+    this.setState({
+      hasFiles: true
+    },
       () => {
-        // console.log('State after adding files ==> ', this.state)
+       this.context.updateState({
+         files: filesArray
+       })
       }
     )
   }
+
+  windUpChips = () => {
+    console.info("windUpChips")
+    this.isElementOverflown(document.getElementById("file-container"))
+  }
+  isElementOverflown = element => {
+    // return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth
+    console.info(
+      "element width ==> ",
+      element.scrollWidth,
+      "\n",
+      "client width ==> ",
+      element.clientWidth
+    )
+  }
+
+  showAllFiles = () => {
+    this.context.updateState({
+      showMoreFilesPanel: true 
+    })
+  }
+
+  render() {
+    console.info("render")
+    // console.log('home-form.js render state ==> ', this.state)
+
+    const files = this.context.getState().files
+
+    return (
+      <div className="home-form-container">
+        <div className="home-form-card card">
+          <div className="card-header">
+            {/*using DragAndDrop component here*/}
+            <label
+              className={
+                this.state.error.isNull === null || this.state.hasFiles
+                  ? "d-block border-warning"
+                  : "d-block border border-danger"
+              }
+              style={
+                this.state.hasFiles === true
+                  ? {
+                      height: 40,
+                      position: "relative"
+                    }
+                  : {
+                      height: 80,
+                      position: "relative"
+                    }
+              }
+            >
+              <input
+                id={"multipleInputId"}
+                type="file"
+                multiple={true}
+                onChange={this._onFilesAdded}
+                style={{
+                  position: "fixed",
+                  display: "none"
+                }}
+              />
+              <div
+                style={
+                  this.state.hasFiles === true
+                    ? {
+                        position: "absolute",
+                        top: "0",
+                        left: "0",
+                        fontSize: 20
+                      }
+                    : {
+                        position: "absolute",
+                        top: "0",
+                        left: "20%",
+                        fontSize: 20
+                      }
+                }
+              >
+                Drag and drop files here
+              </div>
+              {/* <div
+                className={"d-block text-center"}
+                style={{
+                  position: "absolute",
+                  
+                  // transform: 'translate(-50%, 50%)'
+                }}
+              > */}
+              <i
+                className="far fa-images"
+                style={
+                  this.state.hasFiles === true
+                    ? {
+                        fontSize: 20,
+                        textAlign: "center",
+                        position: "absolute",
+                        left: "90%",
+                        top: "0",
+                        transition: "all .5s"
+                      }
+                    : {
+                        position: "absolute",
+                        fontSize: 50,
+                        textAlign: "center",
+                        left: "40%",
+                        top: "50%",
+
+                        transition: "all .5s"
+                      }
+                }
+              />
+            </label>
+          </div>
+
+          {/* displaying the names of files selected */}
+          {this.state.hasFiles === true ? (
+            <div className="file-container">
+              {files.map((file, index) => {
+                if (index < 3)
+                  return (
+                    <div className="chip d-inline-flex align-items-center" key={file.name}>
+                      <div className="chip__filename">{file.name}</div>
+                      <div
+                        className="closebtn align-self-baseline"
+                        onClick={this.onCancel.bind(this, file.name)}
+                      >
+                        &times;
+                      </div>
+                    </div>
+                  )
+              })}
+              <div className="chip chip__more-files d-inline-flex align-items-center">
+                      <div className="chip__filename" onClick={this.showAllFiles}>+{files.length - 3} files</div>
+                    </div>
+            </div>
+          ) : null}
+
+          {/* FORM */}
+          <div className="home-form__form">
+            <ul className="list-group list-group-flush">
+              <form className={"ml-5 mr-5"}>
+                <div
+                  className={classnames("form-group", {
+                    error:
+                      this.state.error.isNull === true ||
+                      this.state.error.isValid === false
+                  })}
+                >
+                  <label htmlFor="receiversEmailID">Send To</label>
+                  <input
+                    type="email"
+                    className={
+                      this.state.error.isNull !== null &&
+                      (this.state.error.isNull === true ||
+                        this.state.error.isValid === false)
+                        ? "form-control border border-danger"
+                        : "form-control"
+                    }
+                    id="receiversEmailID"
+                    defaultValue={this.state.form.to}
+                    aria-describedby="emailHelp"
+                    placeholder="Enter email"
+                  />
+                </div>
+                <div
+                  className={classnames("form-group", {
+                    error:
+                      this.state.error.isNull === true ||
+                      this.state.error.isValid === false
+                  })}
+                >
+                  <label htmlFor="sendersEmailID">Your Email</label>
+                  <input
+                    type="email"
+                    className={
+                      this.state.error.isNull !== null &&
+                      (this.state.error.isNull === true ||
+                        this.state.error.isValid === false)
+                        ? "form-control border border-danger"
+                        : "form-control"
+                    }
+                    id="sendersEmailID"
+                    defaultValue={this.state.form.from}
+                    placeholder="Your Email Address"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="messageTextAreaID">Message</label>
+                  <textarea
+                    className="form-control"
+                    id="messageTextAreaID"
+                    defaultValue={this.state.form.message}
+                    placeholder="Enter Message(Optional)"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-block"
+                  onClick={this._onSubmit}
+                >
+                  Submit
+                </button>
+              </form>
+            </ul>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
+
+HomeForm.contextType = MyContext
 
 export default HomeForm

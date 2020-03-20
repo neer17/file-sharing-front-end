@@ -9,14 +9,14 @@
 html {
   height: 100vh;
   width: 100vw;
+  font-size: 67.5%; // 10px
   box-sizing: border-box;
-  font-size: 62.5%;
 }
 
 body {
   width: 100%;
   height: 100%;
-  background-color: $color-primary;
+  // background-color: $color-primary;
 }
 
 #root {
@@ -28,3 +28,36 @@ body {
   width: 100%;
   height: 100%;
 }
+
+.video-div {
+  position: relative;
+}
+
+.video-background {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  height: 100vh;
+  width: 100vw;
+  object-fit: cover;
+  opacity: 0.5;
+  z-index: -1;
+}
+
+// MEDIA  QUERIES
+
+@media screen and (min-width: 768px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* @media (min-width: 1280px) {
+  html{font-size: 14px;}
+} */

@@ -24,7 +24,6 @@ const firebaseConfig = {
   appId: "1:38414507205:web:6ddb10eaad8b51d96524ac",
   measurementId: "G-0VHW3DEX5R"
 }
-
 firebase.initializeApp(firebaseConfig)
 
 function triggerGoogleSignIn() {
@@ -48,12 +47,12 @@ function triggerEmailSignIn(email, password) {
   if (isPassEmpty) error = EMPTY_PASSWORD
 
   const isEmailValid = validator.isEmail(email)
-  if (isEmailValid) error = INVALID_EMAIL
+  if (!isEmailValid) error = INVALID_EMAIL
 
   if(error !== null) return new Promise((resolve, reject) => {
     reject(error)
   })
-  else return firebase.auth().createUserWithEmailAndPassword(email, password)
+  else return firebase.auth().signInWithEmailAndPassword(email, password)
 }
 
 function triggerEmailSignUp(email, password, confirmPassword, username) {
@@ -76,7 +75,7 @@ function triggerEmailSignUp(email, password, confirmPassword, username) {
   if (!doesPassMatch) error = PASSWORD_DOES_NOT_MATCH
 
   if (error !== null)
-    return new Promise(( resove, reject) => {
+    return new Promise(( resolve, reject) => {
       reject(error)
     })
   else return firebase.auth().createUserWithEmailAndPassword(email, password)

@@ -6,14 +6,19 @@ import React, {Component} from 'react'
 
 const Context = React.createContext()
 
+Context.displayName = 'ReactContext1'
+
 export class Provider extends Component {
     constructor(props) {
         super(props)
+
         this.state = {
-            componentToRender: 'Authentication',
+            componentToRender: 'HomeForm',
             uploadEvent: null,
             data: null,
-            isAuthenticated: false
+            isAuthenticated: false,
+            showMoreFilesPanel: false,
+            files: []
         }
     }
 
@@ -22,13 +27,29 @@ export class Provider extends Component {
         this.setState({
             ...object
         }, () => {
-            // console.log('provider.js state ==> ', this.state)
+            console.info('provider.js state ==> ', this.state)
         })
     }
 
     getState = () => {
         return this.state
     }
+
+    cancel = nameOfFile => {
+        //  getting the name of the file and then removing it from the values and finally
+        //  updating the state with new "values"
+        const files = this.state.files
+    
+        files.forEach((file, index) => {
+          if (file.name === nameOfFile) {
+            return files.splice(index, 1)
+          }
+        })
+    
+        this.setState({
+          files
+        })
+      }
 
     render() {
         return (
@@ -38,6 +59,7 @@ export class Provider extends Component {
             <Context.Provider value={{
                 updateState: this.updateState,
                 getState: this.getState,
+                cancel: this.cancel
             }}>
                 {this.props.children}
             </Context.Provider>
