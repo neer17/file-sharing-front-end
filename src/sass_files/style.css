@@ -277,6 +277,7 @@ body {
   top: -10%;
   height: 120%;
   width: 60%;
+  overflow-y: auto;
   background-color: white;
   z-index: 1000;
   box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.5); }
@@ -290,4 +291,11 @@ body {
     color: grey;
     cursor: pointer; }
     .panel__close-button:hover {
+      color: black; }
+  .panel__cross-btn {
+    text-align: end;
+    font-size: 30px;
+    color: grey;
+    cursor: pointer; }
+    .panel__cross-btn:hover {
       color: black; }
