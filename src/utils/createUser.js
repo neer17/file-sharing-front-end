@@ -18,6 +18,11 @@ class CreateUser {
         const finalUrl = url + '/sign-in'
         return axios.post(finalUrl, this.user)
     }
+
+    static createUserFirebase(user) {
+        const finalUrl = url + '/firebase-create-user'
+        return axios.post(finalUrl, this.user)
+    }
 }
 
 export default CreateUser

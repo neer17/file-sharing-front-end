@@ -16,7 +16,7 @@ export class Provider extends Component {
     console.info("constructor")
 
     this.state = {
-      componentToRender: "HomeForm",
+      componentToRender: "Authentication",
       uploadEvent: null,
       data: null,
       isAuthenticated: false,

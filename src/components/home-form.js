@@ -1,7 +1,8 @@
 import React, { Component } from "react"
 import classnames from "classnames"
+import { reactLocalStorage } from "reactjs-localstorage"
 
-import { MyContext } from './Provider'
+import { MyContext } from "./Provider"
 import { upload } from "../utils/upload"
 import { element } from "prop-types"
 
@@ -15,40 +16,40 @@ class HomeForm extends Component {
     form: {
       from: "",
       to: "",
-      message: ""
+      message: "",
     },
-   hasFiles: false,
+    hasFiles: false,
     error: {
       isNull: null,
-      isValid: null
-    }
+      isValid: null,
+    },
   }
 
   //  cancel method for removing the items added in drag and drop
-  onCancel = fileName => {
+  onCancel = (fileName) => {
     this.context.cancel(fileName)
   }
 
   //  on form submission
-  _onSubmit = e => {
+  _onSubmit = (e) => {
     e.preventDefault()
     this._formValidation(e)
   }
 
   //  validating the input fields
-  _formValidation = e => {
+  _formValidation = (e) => {
     e.preventDefault()
 
     let fields = {
       form: {
         from: "",
         to: "",
-        message: ""
+        message: "",
       },
       error: {
         isNull: true,
-        isValid: false
-      }
+        isValid: false,
+      },
     }
 
     //  regex to test the emails
@@ -93,10 +94,10 @@ class HomeForm extends Component {
 
     //  updating the state
     this.setState(
-      prevState => {
+      (prevState) => {
         return {
           ...prevState,
-          ...fields
+          ...fields,
         }
       },
       () => {
@@ -113,7 +114,7 @@ class HomeForm extends Component {
 
         //  if there is no error then calling upload method from "upload.js"
         //  to send the state to the backend
-        upload(this.state, events => {
+        upload(this.state, (events) => {
           //  information about the post that was uploaded fom the back-end
           // console.log('Inside upload events ==> ', events)
 
@@ -130,18 +131,24 @@ class HomeForm extends Component {
   }
 
   //  this would be called when files are added
-  _onFilesAdded = e => {
+  _onFilesAdded = (e) => {
     const filesObject = e.target.files
     const filesArray = Object.values(filesObject)
 
-    //  updating the state
-    this.setState({
-      hasFiles: true
-    },
+    //  getting previous files from the state in Provider.js, adding it with the new files
+    const prevFiles = this.context.getState().files
+    let finalFiles = null
+    if (prevFiles.length !== 0) finalFiles = [...prevFiles, ...filesArray]
+    else finalFiles = filesArray
+
+    this.setState(
+      {
+        hasFiles: true,
+      },
       () => {
-       this.context.updateState({
-         files: filesArray
-       })
+        this.context.updateState({
+          files: finalFiles,
+        })
       }
     )
   }
@@ -150,7 +157,7 @@ class HomeForm extends Component {
     console.info("windUpChips")
     this.isElementOverflown(document.getElementById("file-container"))
   }
-  isElementOverflown = element => {
+  isElementOverflown = (element) => {
     // return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth
     console.info(
       "element width ==> ",
@@ -163,7 +170,7 @@ class HomeForm extends Component {
 
   showAllFiles = () => {
     this.context.updateState({
-      showMoreFilesPanel: true 
+      showMoreFilesPanel: true,
     })
   }
 
@@ -188,11 +195,11 @@ class HomeForm extends Component {
                 this.state.hasFiles === true
                   ? {
                       height: 40,
-                      position: "relative"
+                      position: "relative",
                     }
                   : {
                       height: 80,
-                      position: "relative"
+                      position: "relative",
                     }
               }
             >
@@ -203,7 +210,7 @@ class HomeForm extends Component {
                 onChange={this._onFilesAdded}
                 style={{
                   position: "fixed",
-                  display: "none"
+                  display: "none",
                 }}
               />
               <div
@@ -213,13 +220,13 @@ class HomeForm extends Component {
                         position: "absolute",
                         top: "0",
                         left: "0",
-                        fontSize: 20
+                        fontSize: 20,
                       }
                     : {
                         position: "absolute",
                         top: "0",
                         left: "20%",
-                        fontSize: 20
+                        fontSize: 20,
                       }
                 }
               >
@@ -243,7 +250,7 @@ class HomeForm extends Component {
                         position: "absolute",
                         left: "90%",
                         top: "0",
-                        transition: "all .5s"
+                        transition: "all .5s",
                       }
                     : {
                         position: "absolute",
@@ -252,20 +259,24 @@ class HomeForm extends Component {
                         left: "40%",
                         top: "50%",
 
-                        transition: "all .5s"
+                        transition: "all .5s",
                       }
                 }
               />
             </label>
           </div>
 
-          {/* displaying the names of files selected */}
+          {/* displaying the names of files selected
+          showing "chip__more-files" when files > 3*/}
           {this.state.hasFiles === true ? (
             <div className="file-container">
               {files.map((file, index) => {
                 if (index < 3)
                   return (
-                    <div className="chip d-inline-flex align-items-center" key={file.name}>
+                    <div
+                      className="chip d-inline-flex align-items-center"
+                      key={file.name}
+                    >
                       <div className="chip__filename">{file.name}</div>
                       <div
                         className="closebtn align-self-baseline"
@@ -276,9 +287,13 @@ class HomeForm extends Component {
                     </div>
                   )
               })}
-              <div className="chip chip__more-files d-inline-flex align-items-center">
-                      <div className="chip__filename" onClick={this.showAllFiles}>+{files.length - 3} files</div>
-                    </div>
+              {files.length > 3 ? (
+                <div className="chip chip__more-files d-inline-flex align-items-center">
+                  <div className="chip__filename" onClick={this.showAllFiles}>
+                    +{files.length - 3} files
+                  </div>
+                </div>
+              ) : null}
             </div>
           ) : null}
 
@@ -290,7 +305,7 @@ class HomeForm extends Component {
                   className={classnames("form-group", {
                     error:
                       this.state.error.isNull === true ||
-                      this.state.error.isValid === false
+                      this.state.error.isValid === false,
                   })}
                 >
                   <label htmlFor="receiversEmailID">Send To</label>
@@ -313,7 +328,7 @@ class HomeForm extends Component {
                   className={classnames("form-group", {
                     error:
                       this.state.error.isNull === true ||
-                      this.state.error.isValid === false
+                      this.state.error.isValid === false,
                   })}
                 >
                   <label htmlFor="sendersEmailID">Your Email</label>

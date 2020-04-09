@@ -92,7 +92,7 @@ class Panel extends Component {
           <div>
             {files.map(file => {
               return (
-                <div className="panel__container d-flex p-2" key={file.name}>
+                <div className="panel__container d-flex p-2" key={file.name + `${new Date().getTime()}`}>
                   <div className="panel__img align-self-center p-1 mr-4">
                     {this.findFileType(file.type)}
                   </div>

@@ -2,13 +2,14 @@
 
 import React, { Component } from "react"
 import classNames from "classnames"
+import jwt from "jsonwebtoken"
 
 import { MyContext } from "./Provider"
 import {
   triggerEmailSignIn,
   triggerGoogleSignIn,
   triggerEmailSignUp,
-  firebase
+  firebase,
 } from "../utils/firebaseAuth"
 import {
   INVALID_EMAIL,
@@ -16,60 +17,105 @@ import {
   EMPTY_PASSWORD,
   EMPTY_CONFIRM_PASSWORD,
   EMPTY_USERNAME,
-  PASSWORD_DOES_NOT_MATCH
+  PASSWORD_DOES_NOT_MATCH,
+  JWT_TOKEN_LOCAL_STORAGE,
 } from "./../utils/constants"
+import CreateUser from "../utils/createUser"
 
 class Authentication extends Component {
   state = {
     signUpComponentShown: false,
-    formError: null
+    formError: null,
   }
 
-  // listening for Auth changes
+  /* listen for Auth changes */
   componentDidMount() {
-    console.info("componentDidMount context ==> ", this.context.getState())
+    const FUNC_TAG = "componentDidMount: "
+
+    console.info("componentDidMount")
+    console.info(
+      "process.env.REACT_APP_JWT_TOKEN_SECRET: ",
+      process.env.REACT_APP_JWT_TOKEN_SECRET
+    )
+    //  inside "onAuthStateChanged" this would refer to the listener
     const context = this.context
-    // localStorage.clear()
-    firebase.auth().onAuthStateChanged(function(user) {
+
+    const logout = this.logout
+
+    firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         // User is signed in.
         var displayName = user.displayName
         var email = user.email
         var emailVerified = user.emailVerified
         var photoURL = user.photoURL
-        var isAnonymous = user.isAnonymous
         var uid = user.uid
-        var providerData = user.providerData
 
-        console.info("componentDidMount user found ==> ", user.email)
-        // change the component to "HomeForm" when the user is signed in or signed up
+        console.info(FUNC_TAG, "user.email: ", email)
 
-        context.updateState({
-          componentToRender: "HomeForm"
-        })
+        //  get token from session storage, validate
+        const jwtTokenFromLS = localStorage.getItem(JWT_TOKEN_LOCAL_STORAGE)
+        if (jwtTokenFromLS) {
+          try {
+            const decodedToken = jwt.verify(
+              jwtTokenFromLS,
+              process.env.REACT_APP_JWT_TOKEN_SECRET
+            )
+
+            context.updateState({
+              componentToRender: "HomeForm",
+            })
+          } catch (error) {
+            //  invalid token, log-out
+            console.error(error)
+            logout()
+          }
+        } else {
+          //  generating jwt
+          const jwtToken = jwt.sign(
+            {
+              data: {
+                name: displayName,
+                email: email,
+                uid: uid,
+              },
+            },
+            process.env.REACT_APP_JWT_TOKEN_SECRET,
+            {
+              expiresIn: "24h",
+            }
+          )
+
+          //  store in local storage and send to backend
+          localStorage.setItem(JWT_TOKEN_LOCAL_STORAGE, jwtToken)
+
+          CreateUser.createUserFirebase(user)
+            .then((response) => {
+              if (response)
+                context.updateState({
+                  componentToRender: "HomeForm",
+                })
+            })
+            .catch(console.error)
+        }
       } else {
-        console.info("componentDidMount user not found/signed out")
+        console.info(FUNC_TAG, "no user")
       }
     })
   }
 
-  googleSignIn = e => {
+  googleSignIn = (e) => {
     e.preventDefault()
 
-    triggerGoogleSignIn()
-      .then()
-      .catch(console.error)
+    triggerGoogleSignIn().then().catch(console.error)
   }
 
   logout = () => {
-    firebase
-      .auth()
-      .signOut()
-      .then()
-      .catch(console.error)
+    localStorage.clear() //  to clear the token
+    firebase.auth().signOut().catch(console.error)
   }
 
-  emailSignUp = e => {
+  emailSignUp = (e) => {
     e.preventDefault()
 
     let { formError } = this.state
@@ -80,10 +126,10 @@ class Authentication extends Component {
     const confirmPassword = e.target.inputConfirmPassword.value
 
     triggerEmailSignUp(email, password, confirmPassword, username)
-      .then(response => {
+      .then((response) => {
         console.info("Email Signup response ==> ", response)
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Email Signup error => ", error)
         switch (error) {
           case INVALID_EMAIL: {
@@ -116,12 +162,12 @@ class Authentication extends Component {
         }
 
         this.setState({
-          formError
+          formError,
         })
       })
   }
 
-  emailSignIn = e => {
+  emailSignIn = (e) => {
     e.preventDefault()
     console.info("EmailSignIn")
 
@@ -131,10 +177,10 @@ class Authentication extends Component {
     const password = e.target.inputPassword.value
 
     triggerEmailSignIn(email, password)
-      .then(res => {
+      .then((res) => {
         console.info("EmailSignIn ==> ", res.user.email)
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error)
         switch (error) {
           case INVALID_EMAIL: {
@@ -155,28 +201,28 @@ class Authentication extends Component {
         }
 
         this.setState({
-          formError
+          formError,
         })
       })
   }
 
-  showSignUpComponent = e => {
+  showSignUpComponent = (e) => {
     e.preventDefault()
 
     this.setState({
-      signUpComponentShown: true
+      signUpComponentShown: true,
     })
   }
-  showSignInComponent = e => {
+  showSignInComponent = (e) => {
     e.preventDefault()
 
     this.setState({
-      signUpComponentShown: false
+      signUpComponentShown: false,
     })
   }
 
   render() {
-    console.info("=================== render ======================")
+    // console.info("=================== render ======================")
 
     let { signUpComponentShown: signUpComponentShown, formError } = this.state
 
@@ -201,7 +247,7 @@ class Authentication extends Component {
             {/* when signUpComponentShown = true */}
             {signUpComponentShown ? (
               <div className="form-group">
-                <label for="inputUsername h6">Username</label>
+                <label htmlFor="inputUsername h6">Username</label>
                 <input
                   type="text"
                   className="form-control inputUsername"
@@ -212,7 +258,7 @@ class Authentication extends Component {
             ) : null}
 
             <div className="form-group">
-              <label for="inputEmail text-muted h6">Email address</label>
+              <label htmlFor="inputEmail text-muted h6">Email address</label>
               <input
                 type="email"
                 className="form-control inputEmail"
@@ -220,7 +266,7 @@ class Authentication extends Component {
               ></input>
             </div>
             <div className="form-group">
-              <label for="inputPassword h6">Password</label>
+              <label htmlFor="inputPassword h6">Password</label>
               <input
                 type="password"
                 className="form-control inputPassword"
@@ -231,7 +277,7 @@ class Authentication extends Component {
             {/* when signUpComponentShown = true */}
             {signUpComponentShown ? (
               <div className="form-group mb-2">
-                <label for="inputConfirmPassword text-muted h6">
+                <label htmlFor="inputConfirmPassword text-muted h6">
                   Confirm Password
                 </label>
                 <input
@@ -245,13 +291,13 @@ class Authentication extends Component {
             <button type="submit" className="btn btn-primary submitBtn h6 mt-1">
               Login
             </button>
-            <button
+            {/* <button
               type="button"
               className="btn btn-primary submitBtn h6 mt-1"
               onClick={this.logout}
             >
               Logout
-            </button>
+            </button> */}
           </form>
         </div>
         <div className="or__div"></div>
