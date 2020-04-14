@@ -2,7 +2,7 @@
 
 import React, { Component } from "react"
 import classNames from "classnames"
-import jwt from "jsonwebtoken"
+import jwt, { sign } from "jsonwebtoken"
 
 import { MyContext } from "./Provider"
 import {
@@ -228,12 +228,26 @@ class Authentication extends Component {
 
     return (
       <div className="authentication-div p-4">
-        <div className="heading display-4 text-center mb-3 text-uppercase">
+        {/* Heading */}
+        <div
+          className={classNames(
+            signUpComponentShown
+              ? "heading display-5 text-center mb-1 text-uppercase"
+              : "heading display-4 text-center mb-3 text-uppercase"
+          )}
+        >
           Share
         </div>
-        <div className="title h1 text-center mb-4 text-uppercase">
+        <div
+          className={classNames(
+            signUpComponentShown
+              ? "title display-6 text-center mb-2 text-uppercase"
+              : "title h1 text-center mb-4 text-uppercase"
+          )}
+        >
           Welcome to Share
         </div>
+
         {/* Error Dialog */}
         {formError ? <div className="errorDialog mb-2">{formError}</div> : null}
 
@@ -246,50 +260,64 @@ class Authentication extends Component {
           >
             {/* when signUpComponentShown = true */}
             {signUpComponentShown ? (
-              <div className="form-group">
-                <label htmlFor="inputUsername h6">Username</label>
+              <div className="form-group display-6 mb-1">
+                <label htmlFor="inputUsername">Username</label>
                 <input
                   type="text"
-                  className="form-control inputUsername"
+                  className="form-control inputUsername input-height"
                   id="inputUsername"
-                  aria-describedby="passwordHelp"
                 ></input>
               </div>
             ) : null}
 
-            <div className="form-group">
-              <label htmlFor="inputEmail text-muted h6">Email address</label>
+            <div
+              className={classNames(
+                signUpComponentShown ? "form-group display-6 mb-1" : "form-group"
+              )}
+            >
+              <label htmlFor="inputEmail">Email address</label>
               <input
                 type="email"
-                className="form-control inputEmail"
+                className="form-control inputEmail input-height"
                 id="inputEmail"
               ></input>
             </div>
-            <div className="form-group">
-              <label htmlFor="inputPassword h6">Password</label>
+            <div
+              className={classNames(
+                signUpComponentShown ? "form-group display-6 mb-1" : "form-group"
+              )}
+            >
+              <label htmlFor="inputPassword">Password</label>
               <input
                 type="password"
-                className="form-control inputPassword"
+                className="form-control inputPassword input-height"
                 id="inputPassword"
-                aria-describedby="passwordHelp"
               ></input>
             </div>
+
             {/* when signUpComponentShown = true */}
             {signUpComponentShown ? (
-              <div className="form-group mb-2">
-                <label htmlFor="inputConfirmPassword text-muted h6">
+              <div className="form-group display-6 mb-1">
+                <label htmlFor="inputConfirmPassword">
                   Confirm Password
                 </label>
                 <input
                   type="password"
-                  className="form-control inputConfirmPassword"
+                  className="form-control inputConfirmPassword input-height"
                   id="inputConfirmPassword"
                 ></input>
               </div>
             ) : null}
 
-            <button type="submit" className="btn btn-primary submitBtn h6 mt-1">
-              Login
+            <button
+              type="submit"
+              className={classNames(
+                signUpComponentShown
+                  ? "btn btn-primary btn-block display-6 mt-2 mb-2"
+                  : "btn btn-primary btn-block h6 mt-2 mb-2"
+              )}
+            >
+              {signUpComponentShown ? "Sign-Up" : "Login"}
             </button>
             {/* <button
               type="button"
@@ -299,10 +327,15 @@ class Authentication extends Component {
               Logout
             </button> */}
           </form>
-        </div>
-        <div className="or__div"></div>
-        <div className="google-sign-in mb-3 h6">
-          <a href="" onClick={this.googleSignIn}>
+
+          <div
+          className={classNames(
+            signUpComponentShown
+              ? "google-sign-in mb-1"
+              : "google-sign-in mb-3"
+          )}
+        >
+          <a href="" className="" onClick={this.googleSignIn}>
             <img
               src={require("../images/google_sign_in.png")}
               alt="Google Sign In"
@@ -311,7 +344,10 @@ class Authentication extends Component {
           </a>
         </div>
         {signUpComponentShown ? (
-          <div className="create-account h6" onClick={this.showSignInComponent}>
+          <div
+            className="create-account display-6"
+            onClick={this.showSignInComponent}
+          >
             Existing user? Sign-in instead
           </div>
         ) : (
@@ -319,6 +355,7 @@ class Authentication extends Component {
             New User? Create Account
           </div>
         )}
+        </div>
       </div>
     )
   }

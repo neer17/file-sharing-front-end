@@ -132,14 +132,32 @@ body {
 /* @media (min-width: 1280px) {
   html{font-size: 14px;}
 } */
-.authentication-img {
-  height: 60vh; }
-
 .create-account {
   cursor: pointer; }
 
 .google-sign-in-logo {
   height: 3rem; }
+
+.sign-in__form {
+  max-height: 60vh; }
+
+.display-5 {
+  font-size: 20px; }
+
+.display-6 {
+  font-size: 12px; }
+
+.heading, .title {
+  transition: all .2s ease-in; }
+
+.input-height {
+  height: 2rem !important; }
+
+.create-account {
+  font-weight: 600; }
+
+.authentication-img {
+  height: 60vh; }
 
 .app-card {
   height: 60vh;
