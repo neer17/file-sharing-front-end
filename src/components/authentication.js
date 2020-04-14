@@ -2,7 +2,6 @@
 
 import React, { Component } from "react"
 import classNames from "classnames"
-import jwt, { sign } from "jsonwebtoken"
 
 import { MyContext } from "./Provider"
 import {
@@ -18,10 +17,8 @@ import {
   EMPTY_CONFIRM_PASSWORD,
   EMPTY_USERNAME,
   PASSWORD_DOES_NOT_MATCH,
-  JWT_TOKEN_LOCAL_STORAGE,
-  AUTH_STATE
+  AUTH_STATE,
 } from "./../utils/constants"
-import CreateUser from "../utils/createUser"
 import { reactLocalStorage } from "reactjs-localstorage"
 
 class Authentication extends Component {
@@ -35,79 +32,14 @@ class Authentication extends Component {
     const FUNC_TAG = "componentDidMount: "
 
     //  register listener to run "cleanUpCode" before component unloads
-    window.addEventListener('beforeunload', this.cleanUpCode)
-
-    //  inside "onAuthStateChanged" "this" would refer to the listener
-    const context = this.context
-    const logout = this.logout
+    window.addEventListener("beforeunload", this.cleanUpCode)
 
     // read local storage to change the local state
     const stateLS = reactLocalStorage.getObject(AUTH_STATE)
-    if (stateLS) 
-    this.setState({
-      ...stateLS
-    })
-
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        // User is signed in.
-        var displayName = user.displayName
-        var email = user.email
-        var emailVerified = user.emailVerified
-        var photoURL = user.photoURL
-        var uid = user.uid
-
-        console.info(FUNC_TAG, "user.email: ", email)
-
-        //  get token from session storage, validate
-        const jwtTokenFromLS = localStorage.getItem(JWT_TOKEN_LOCAL_STORAGE)
-        if (jwtTokenFromLS) {
-          try {
-            jwt.verify(
-              jwtTokenFromLS,
-              process.env.REACT_APP_JWT_TOKEN_SECRET
-            )
-
-            context.updateState({
-              componentToRender: "HomeForm",
-            })
-          } catch (error) {
-            //  invalid token, log-out
-            console.error(error)
-            logout()
-          }
-        } else {
-          //  generating jwt, sending jwt to backend
-          const jwtToken = jwt.sign(
-            {
-              data: {
-                name: displayName,
-                email: email,
-                uid: uid,
-              },
-            },
-            process.env.REACT_APP_JWT_TOKEN_SECRET,
-            {
-              expiresIn: "1s",
-            }
-          )
-
-          //  store in local storage and send to backend
-          localStorage.setItem(JWT_TOKEN_LOCAL_STORAGE, jwtToken)
-
-          CreateUser.createUserFirebase(user)
-            .then((response) => {
-              if (response)
-                context.updateState({
-                  componentToRender: "HomeForm",
-                })
-            })
-            .catch(console.error)
-        }
-      } else {
-        console.info(FUNC_TAG, "no user")
-      }
-    })
+    if (stateLS)
+      this.setState({
+        ...stateLS,
+      })
   }
 
   cleanUpCode = () => {
@@ -281,7 +213,9 @@ class Authentication extends Component {
 
             <div
               className={classNames(
-                signUpComponentShown ? "form-group display-6 mb-1" : "form-group"
+                signUpComponentShown
+                  ? "form-group display-6 mb-1"
+                  : "form-group"
               )}
             >
               <label htmlFor="inputEmail">Email address</label>
@@ -293,7 +227,9 @@ class Authentication extends Component {
             </div>
             <div
               className={classNames(
-                signUpComponentShown ? "form-group display-6 mb-1" : "form-group"
+                signUpComponentShown
+                  ? "form-group display-6 mb-1"
+                  : "form-group"
               )}
             >
               <label htmlFor="inputPassword">Password</label>
@@ -307,9 +243,7 @@ class Authentication extends Component {
             {/* when signUpComponentShown = true */}
             {signUpComponentShown ? (
               <div className="form-group display-6 mb-1">
-                <label htmlFor="inputConfirmPassword">
-                  Confirm Password
-                </label>
+                <label htmlFor="inputConfirmPassword">Confirm Password</label>
                 <input
                   type="password"
                   className="form-control inputConfirmPassword input-height"
@@ -338,39 +272,42 @@ class Authentication extends Component {
           </form>
 
           <div
-          className={classNames(
-            signUpComponentShown
-              ? "google-sign-in mb-1"
-              : "google-sign-in mb-3"
-          )}
-        >
-          <a href="" className="" onClick={this.googleSignIn}>
-            <img
-              src={require("../images/google_sign_in.png")}
-              alt="Google Sign In"
-              className="google-sign-in-logo"
-            />
-          </a>
-        </div>
-        {signUpComponentShown ? (
-          <div
-            className="create-account display-6"
-            onClick={this.showSignInComponent}
+            className={classNames(
+              signUpComponentShown
+                ? "google-sign-in mb-1"
+                : "google-sign-in mb-3"
+            )}
           >
-            Existing user? Sign-in instead
+            <a href="" onClick={this.googleSignIn}>
+              <img
+                src={require("../images/google_sign_in.png")}
+                alt="Google Sign In"
+                className="google-sign-in-logo"
+              />
+            </a>
           </div>
-        ) : (
-          <div className="create-account h6" onClick={this.showSignUpComponent}>
-            New User? Create Account
-          </div>
-        )}
+          {signUpComponentShown ? (
+            <div
+              className="create-account display-6"
+              onClick={this.showSignInComponent}
+            >
+              Existing user? Sign-in instead
+            </div>
+          ) : (
+            <div
+              className="create-account h6"
+              onClick={this.showSignUpComponent}
+            >
+              New User? Create Account
+            </div>
+          )}
         </div>
       </div>
     )
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.cleanUpCode)
+    window.removeEventListener("beforeunload", this.cleanUpCode)
   }
 }
 

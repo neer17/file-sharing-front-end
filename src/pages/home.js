@@ -1,7 +1,6 @@
 /* eslint-disable */
 
 import React, { Component } from "react"
-import axios from "axios"
 import jwt from "jsonwebtoken"
 
 import TopPartHome from "../components/top-part-home"
@@ -12,16 +11,95 @@ import Panel from "./../components/Panel"
 import { MyContext } from "./../components/Provider"
 import Authentication from "../components/authentication"
 import Carousel from "./../components/carousel"
-import { url } from "./../utils/domainConfig"
+import { firebase } from "../utils/firebaseAuth"
+import CreateUser from "../utils/createUser"
+import { JWT_TOKEN_LOCAL_STORAGE } from "./../utils/constants"
 
 /*
  * The state of this class is maintained using "Context" APi
  * "Provider.js" only contains the state of this class
- * states are being updated from "login.js" to update the "isAuthenticated" and "componentToRender" members after login as well
  * */
 class Home extends Component {
+  constructor(props) {
+    super(props)
+
+    this.authChangeListener = this.authChangeListener.bind(this)
+  }
+
   componentDidMount() {
-    console.info("home.js componentDidMount")
+    const FUNC_TAG = "Home.js: componentDidMount: "
+
+    this.authChangeListener()
+  }
+
+  //  listen auth changes from Firebase
+  authChangeListener() {
+    const FUNC_TAG = "Home.js: authChangeListener: "
+
+    const context = this.context
+    const logout = this.logout
+
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        // User is signed in.
+        var displayName = user.displayName
+        var email = user.email
+        var emailVerified = user.emailVerified
+        var photoURL = user.photoURL
+        var uid = user.uid
+
+        console.info(FUNC_TAG, "user.email: ", email)
+
+        //  get token from session storage, validate
+        const jwtTokenFromLS = localStorage.getItem(JWT_TOKEN_LOCAL_STORAGE)
+        if (jwtTokenFromLS) {
+          try {
+            jwt.verify(jwtTokenFromLS, process.env.REACT_APP_JWT_TOKEN_SECRET)
+
+            context.updateState({
+              componentToRender: "HomeForm",
+            })
+          } catch (error) {
+            //  invalid token, log-out
+            console.error(error)
+            logout()
+          }
+        } else {
+          //  generating jwt, sending jwt to backend
+          const jwtToken = jwt.sign(
+            {
+              data: {
+                name: displayName,
+                email: email,
+                uid: uid,
+              },
+            },
+            process.env.REACT_APP_JWT_TOKEN_SECRET,
+            {
+              expiresIn: "1h",
+            }
+          )
+
+          //  store in local storage and send to backend
+          localStorage.setItem(JWT_TOKEN_LOCAL_STORAGE, jwtToken)
+
+          CreateUser.createUserFirebase(user)
+            .then((response) => {
+              if (response)
+                context.updateState({
+                  componentToRender: "HomeForm",
+                })
+            })
+            .catch(console.error)
+        }
+      } else {
+        console.info(FUNC_TAG, "no user or logout")
+
+        context.updateState({
+          componentToRender: "Authentication",
+        })
+      }
+    })
   }
 
   /*
@@ -81,7 +159,7 @@ class Home extends Component {
               this.context.updateState({
                 componentToRender: "HomeForm",
                 uploadEvent: null,
-                data: null
+                data: null,
               })
             }}
           />
@@ -91,7 +169,7 @@ class Home extends Component {
           <HomeUploadSent
             onSendAnotherFile={() => {
               this.context.updateState({
-                componentToRender: "HomeForm"
+                componentToRender: "HomeForm",
               })
             }}
             data={state.data}
@@ -105,7 +183,7 @@ class Home extends Component {
       case "HomeForm":
         return (
           <HomeForm
-            onUploading={events => {
+            onUploading={(events) => {
               const { type } = events
 
               const componentToRender =
@@ -115,7 +193,7 @@ class Home extends Component {
               this.context.updateState({
                 componentToRender,
                 uploadEvent: events,
-                data
+                data,
               })
             }}
           />
@@ -123,15 +201,20 @@ class Home extends Component {
     }
   }
 
-  cancel = fileName => {
+  cancel = (fileName) => {
     this.context.cancel(fileName)
   }
 
   closePanel = () => {
     this.context.updateState({
-      showMoreFilesPanel: false
+      showMoreFilesPanel: false,
     })
   }
+/* 
+  logout = () => {
+    localStorage.clear() //  to clear the token
+    firebase.auth().signOut().catch(console.error)
+  } */
 
   render() {
     console.info("render")
@@ -156,27 +239,16 @@ class Home extends Component {
           </div>
 
           {/* MORE FILES PANEL */}
-          {showMoreFilesPanel === true ? (
-            <Panel />
-          ) : null}
+          {showMoreFilesPanel === true ? <Panel /> : null}
+
+          {/* <button className="btn btn-primary" onClick={this.logout}>
+            Logout
+          </button> */}
         </div>
       </div>
     )
   }
 }
-
-/* //  By doing this the context of "Provider.js" would be available in the props (this.context)
-const withContext = Component => {
-  return props => {
-    return (
-      <MyContext.Consumer>
-        {context => {
-          return <Component {...props} context={context} />
-        }}
-      </MyContext.Consumer>
-    )
-  }
-} */
 
 Home.contextType = MyContext
 
