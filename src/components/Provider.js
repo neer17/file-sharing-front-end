@@ -26,8 +26,6 @@ export class Provider extends Component {
   }
 
   componentDidMount() {
-    console.info("componentDidMount")
-
     window.addEventListener('beforeunload', this.cleanUpCode)
   }
 
@@ -86,7 +84,6 @@ export class Provider extends Component {
   }
 
   componentWillUnmount() {
-    console.info("componentWillUnmount")
     window.removeEventListener('beforeunload', this.cleanUpCode)
   }
 }

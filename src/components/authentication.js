@@ -19,8 +19,10 @@ import {
   EMPTY_USERNAME,
   PASSWORD_DOES_NOT_MATCH,
   JWT_TOKEN_LOCAL_STORAGE,
+  AUTH_STATE
 } from "./../utils/constants"
 import CreateUser from "../utils/createUser"
+import { reactLocalStorage } from "reactjs-localstorage"
 
 class Authentication extends Component {
   state = {
@@ -32,15 +34,19 @@ class Authentication extends Component {
   componentDidMount() {
     const FUNC_TAG = "componentDidMount: "
 
-    console.info("componentDidMount")
-    console.info(
-      "process.env.REACT_APP_JWT_TOKEN_SECRET: ",
-      process.env.REACT_APP_JWT_TOKEN_SECRET
-    )
-    //  inside "onAuthStateChanged" this would refer to the listener
-    const context = this.context
+    //  register listener to run "cleanUpCode" before component unloads
+    window.addEventListener('beforeunload', this.cleanUpCode)
 
+    //  inside "onAuthStateChanged" "this" would refer to the listener
+    const context = this.context
     const logout = this.logout
+
+    // read local storage to change the local state
+    const stateLS = reactLocalStorage.getObject(AUTH_STATE)
+    if (stateLS) 
+    this.setState({
+      ...stateLS
+    })
 
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
@@ -57,7 +63,7 @@ class Authentication extends Component {
         const jwtTokenFromLS = localStorage.getItem(JWT_TOKEN_LOCAL_STORAGE)
         if (jwtTokenFromLS) {
           try {
-            const decodedToken = jwt.verify(
+            jwt.verify(
               jwtTokenFromLS,
               process.env.REACT_APP_JWT_TOKEN_SECRET
             )
@@ -71,7 +77,7 @@ class Authentication extends Component {
             logout()
           }
         } else {
-          //  generating jwt
+          //  generating jwt, sending jwt to backend
           const jwtToken = jwt.sign(
             {
               data: {
@@ -82,7 +88,7 @@ class Authentication extends Component {
             },
             process.env.REACT_APP_JWT_TOKEN_SECRET,
             {
-              expiresIn: "24h",
+              expiresIn: "1s",
             }
           )
 
@@ -104,6 +110,9 @@ class Authentication extends Component {
     })
   }
 
+  cleanUpCode = () => {
+    reactLocalStorage.setObject(AUTH_STATE, this.state)
+  }
   googleSignIn = (e) => {
     e.preventDefault()
 
@@ -358,6 +367,10 @@ class Authentication extends Component {
         </div>
       </div>
     )
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.cleanUpCode)
   }
 }
 
