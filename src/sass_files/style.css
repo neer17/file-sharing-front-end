@@ -1,8 +1,4 @@
-.home-row-1 {
-  height: 20vh;
-  margin-bottom: 1rem; }
-
-.home-row-2 {
+.main-box {
   height: 60vh;
   box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5);
   position: relative;
@@ -108,23 +104,6 @@ body {
 #root {
   width: 100%;
   height: 100%; }
-
-.container {
-  width: 100%;
-  height: 100%; }
-
-.video-div {
-  position: relative; }
-
-.video-background {
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  height: 100vh;
-  width: 100vw;
-  object-fit: cover;
-  opacity: 0.5;
-  z-index: -1; }
 
 @media screen and (min-width: 768px) {
   html {
@@ -322,3 +301,24 @@ body {
     cursor: pointer; }
     .panel__cross-btn:hover {
       color: black; }
+
+.top-part {
+  height: 20vh;
+  margin-bottom: 1rem; }
+
+.container {
+  width: 100%;
+  height: 100%; }
+
+.app__video-div {
+  position: relative; }
+
+.video-background {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  height: 100vh;
+  width: 100vw;
+  object-fit: cover;
+  opacity: 0.5;
+  z-index: -1; }

@@ -3,7 +3,7 @@
 import React, { Component } from "react"
 import jwt from "jsonwebtoken"
 
-import TopPartHome from "../components/TopPartHome"
+import TopPartHome from "../components/TopPart"
 import HomeForm from "../components/HomeForm"
 import HomeUploading from "../components/HomeUploading"
 import HomeUploadSent from "../components/HomeUploadSent"
@@ -195,11 +195,7 @@ class Home extends Component {
 
     return (
       <div className={"home-container container"}>
-        <div className="home-row-1 row">
-          <TopPartHome />
-        </div>
-
-        <div className="home-row-2 row">
+        <div className="main-box row">
           {/* LEFT PART  */}
           <div className="home-left-container d-none d-lg-block col-6 pl-0 pr-0">
             <Carousel />

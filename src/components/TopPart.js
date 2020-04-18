@@ -2,10 +2,10 @@ import React from "react"
 import { IconContext } from "react-icons"
 import { FaPaperPlane } from 'react-icons/fa'
 
-function TopPartHome(props) {
+function TopPart(props) {
   return (
-    <div className="left-part-home col">
-      <div className="wrapper">
+   
+      <div className="top-part__wrapper">
         <IconContext.Provider
           value={{ color: "blue", className: "global-class-name", size: "30px"}}
         >
@@ -20,8 +20,7 @@ function TopPartHome(props) {
         <h2 className="h2-home-page">Share your files</h2>
         <h3 className="h3-home-page">Secure.Safe.Free</h3>
       </div>
-    </div>
   )
 }
 
-export default TopPartHome
+export default TopPart

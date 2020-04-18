@@ -17,7 +17,7 @@ class ViewFile extends Component {
   }
 
   /**
-   * We'll shave access to props because of the "history" package
+   * We'll have access to props because of the "history" package
    */
   componentDidMount() {
     const { match } = this.props

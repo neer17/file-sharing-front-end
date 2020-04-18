@@ -1,0 +1,24 @@
+.top-part {
+    height: 20vh;
+    margin-bottom: 1rem;
+  }
+
+  .container {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .app__video-div {
+    position: relative;
+  }
+  
+  .video-background {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+    opacity: 0.5;
+    z-index: -1;
+  }

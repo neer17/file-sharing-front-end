@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "./sass_files/style.css"
 
 import history from "./utils/history"
+import TopPart from './components/TopPart'
 import Home from "./pages/Home"
 import ViewFile from "./pages/ViewFile"
 import { Provider } from "./components/Provider"
@@ -23,7 +24,7 @@ class App extends Component {
     return (
       <div>
         {/* background video */}
-        <div className="video-div">
+        <div className="app__video-div">
           <video
             playsInline="playsinline"
             autoPlay="autoplay"
@@ -37,8 +38,14 @@ class App extends Component {
             ></source>
           </video>
         </div>
+       
+       {/* Top Bar */}
+       <div className="app__top-part container">
+          <TopPart />
+        </div>
+
         {/* main container */}
-        <div className={"container"}>
+        <div className="app__main-container container">
           <ErrorBoundary>
             <Provider>
               {/* <TopBar onShowLoginForm={() => {
