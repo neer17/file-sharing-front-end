@@ -1,9 +1,7 @@
 /* eslint-disable */
-
-
 import React, { Component } from "react"
 
-import history from "./../utils/history"
+import history from "../utils/history"
 import { MyContext } from "./Provider"
 
 class TopBar extends Component {

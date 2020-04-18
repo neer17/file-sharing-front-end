@@ -18,7 +18,7 @@ import {
   EMPTY_USERNAME,
   PASSWORD_DOES_NOT_MATCH,
   AUTH_STATE,
-} from "./../utils/constants"
+} from "../utils/constants"
 import { reactLocalStorage } from "reactjs-localstorage"
 
 class Authentication extends Component {
@@ -110,7 +110,6 @@ class Authentication extends Component {
 
   emailSignIn = (e) => {
     e.preventDefault()
-    console.info("EmailSignIn")
 
     let { formError } = this.state
 

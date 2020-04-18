@@ -13,15 +13,14 @@ Context.displayName = "ReactContext1"
 export class Provider extends Component {
   constructor(props) {
     super(props)
-    console.info("constructor")
-
     this.state = {
       componentToRender: "Authentication",
       uploadEvent: null,
       data: null,
       isAuthenticated: false,
       showMoreFilesPanel: false,
-      files: []
+      files: [],
+      userEmail: null
     }
   }
 
@@ -30,12 +29,13 @@ export class Provider extends Component {
   }
 
   updateState = (object = {}) => {
+    const FUNC_TAG = "updateState"
     this.setState(
       {
         ...object
       },
       () => {
-        console.info("provider.js state ==> ", this.state)
+        console.info(FUNC_TAG, "state ==> ", this.state)
       }
     )
   }
@@ -65,8 +65,6 @@ export class Provider extends Component {
   }
 
   render() {
-    console.info("render")
-
     return (
       //  state will now be available to all the components
       //  as this Provider class would be wrapped around all the components in App.js

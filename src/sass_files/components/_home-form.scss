@@ -6,6 +6,16 @@
    overflow: hidden;
 }
 
+.form {
+  &__container {
+    height: 100%;
+
+    form {
+      height: inherit;
+    }
+  }
+}
+
 .chip {
   display: inline-block;
   padding: 0 15px;

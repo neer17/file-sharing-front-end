@@ -58,6 +58,11 @@
 .file-container {
   overflow: hidden; }
 
+.form__container {
+  height: 100%; }
+  .form__container form {
+    height: inherit; }
+
 .chip {
   display: inline-block;
   padding: 0 15px;

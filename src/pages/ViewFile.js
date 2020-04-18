@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import _ from "lodash"
 
 import { postDownload } from "../utils/postDownload"
-import { url } from "./../utils/domainConfig"
+import { url } from "../utils/domainConfig"
 import { betterNumber } from "../utils/betterNumber"
 
 class ViewFile extends Component {

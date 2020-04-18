@@ -3,17 +3,17 @@
 import React, { Component } from "react"
 import jwt from "jsonwebtoken"
 
-import TopPartHome from "../components/top-part-home"
-import HomeForm from "./../components/home-form"
-import HomeUploading from "./../components/home-uploading"
-import HomeUploadSent from "./../components/home-upload-sent"
-import Panel from "./../components/Panel"
-import { MyContext } from "./../components/Provider"
-import Authentication from "../components/authentication"
-import Carousel from "./../components/carousel"
+import TopPartHome from "../components/TopPartHome"
+import HomeForm from "../components/HomeForm"
+import HomeUploading from "../components/HomeUploading"
+import HomeUploadSent from "../components/HomeUploadSent"
+import Panel from "../components/Panel"
+import { MyContext } from "../components/Provider"
+import Authentication from "../components/Authentication"
+import Carousel from "../components/Carousel"
 import { firebase } from "../utils/firebaseAuth"
 import CreateUser from "../utils/createUser"
-import { JWT_TOKEN_LOCAL_STORAGE } from "./../utils/constants"
+import { JWT_TOKEN_LOCAL_STORAGE } from "../utils/constants"
 
 /*
  * The state of this class is maintained using "Context" APi
@@ -58,6 +58,7 @@ class Home extends Component {
 
             context.updateState({
               componentToRender: "HomeForm",
+              userEmail: user.email
             })
           } catch (error) {
             //  invalid token, log-out
@@ -88,52 +89,23 @@ class Home extends Component {
               if (response)
                 context.updateState({
                   componentToRender: "HomeForm",
+                  userEmail: user.email
                 })
             })
-            .catch(console.error)
+            .catch(console.error) 
         }
       } else {
         console.info(FUNC_TAG, "no user or logout")
 
         context.updateState({
-          componentToRender: "Authentication",
+          componentToRender: "Authentication"
         })
       }
     })
   }
 
-  /*
-   * This method would run in the second render when the global state in Provider.js" would change after login and
-   * then it would set a timer that would check the expiration if the token generated at the time of sign-in and log-in
-   * */
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const { isAuthenticated } = this.context.getState()
-
-    /* if (isAuthenticated) {
-      const userId = localStorage.getItem("userId")
-
-      //  making a POST request to /check-validation to check the expiration of user session
-      const setIntervalCountdown = setInterval(() => {
-        axios
-          .post(`${url}/check-validation`, {
-            userId
-          })
-          .catch(err => {
-            if (err.response.status === 401) {
-              clearInterval(setIntervalCountdown)
-
-              this.context.updateState({
-                componentToRender: "Authentication",
-                isAuthenticated: false
-              })
-            }
-          })
-      }, 1000 * 60 * 60 * 24)
-    } */
-  }
-
   //  switching the components
-  _renderComponent = () => {
+  renderComponent = () => {
     const state = this.context.getState()
     const { componentToRender } = state
 
@@ -210,11 +182,11 @@ class Home extends Component {
       showMoreFilesPanel: false,
     })
   }
-/* 
+
   logout = () => {
     localStorage.clear() //  to clear the token
     firebase.auth().signOut().catch(console.error)
-  } */
+  }
 
   render() {
     console.info("render")
@@ -235,7 +207,7 @@ class Home extends Component {
 
           {/* RIGHT PART ( this changes based on values in Provider.js ) */}
           <div className="home-right-container col col-lg-6 ">
-            {this._renderComponent()}
+            {this.renderComponent()}
           </div>
 
           {/* MORE FILES PANEL */}

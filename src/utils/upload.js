@@ -1,15 +1,15 @@
 import axios from "axios"
 import { url } from "./domainConfig"
 
-export const upload = (state, callback = events => {}) => {
-  const { files, form } = state
+export const upload = (form, files, callback = events => {}) => {
+  const FUNC_TAG = "upload"
 
   // console.log('upload.js files ==> ', files)
   //  creating an instance of form to send to the backend
   let data = new FormData()
 
   //  adding each file to the "photos" key in the form
-  files.values.forEach(file => {
+  files.forEach(file => {
     data.append("photos", file)
   })
 
@@ -19,7 +19,7 @@ export const upload = (state, callback = events => {}) => {
   data.append("from", from)
   data.append("message", message)
 
-  // "onUploadProgress" would run when the files would being uploaded
+  // "onUploadProgress" would run when the files are being uploaded
   //  "onUploadProgress" would be called and all the details of files would be present in "event"
   const config = {
     onUploadProgress: event => {
@@ -37,6 +37,7 @@ export const upload = (state, callback = events => {}) => {
   axios
     .post(`${url}/upload-file`, data)
     .then(res => {
+      console.info(FUNC_TAG, res)
       return callback({
         type: "success",
         payload: res

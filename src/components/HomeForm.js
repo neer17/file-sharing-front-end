@@ -7,23 +7,28 @@ import { upload } from "../utils/upload"
 import { element } from "prop-types"
 
 class HomeForm extends Component {
-  constructor(props) {
-    super(props)
+
+  static contextType = MyContext
+
+  constructor(props, context) {
+    super(props, context)
     this.ref = React.createRef()
+
+    this.state = {
+      form: {
+        from: this.context.getState().userEmail,
+        to: "",
+        message: "",
+      },
+      hasFiles: false,
+      error: {
+        isNull: null,
+        isValid: null,
+      },
+    }
   }
 
-  state = {
-    form: {
-      from: "",
-      to: "",
-      message: "",
-    },
-    hasFiles: false,
-    error: {
-      isNull: null,
-      isValid: null,
-    },
-  }
+ 
 
   //  cancel method for removing the items added in drag and drop
   onCancel = (fileName) => {
@@ -31,13 +36,13 @@ class HomeForm extends Component {
   }
 
   //  on form submission
-  _onSubmit = (e) => {
+  onSubmit = (e) => {
     e.preventDefault()
-    this._formValidation(e)
+    this.formValidation(e)
   }
 
   //  validating the input fields
-  _formValidation = (e) => {
+  formValidation = (e) => {
     e.preventDefault()
 
     let fields = {
@@ -60,7 +65,7 @@ class HomeForm extends Component {
 
     //  getting values from the inputs
     const receiversEmail = document.getElementById("receiversEmailID").value
-    const sendersEmail = document.getElementById("sendersEmailID").value
+    const sendersEmail = this.state.form.from
     const messageInput = document.getElementById("messageTextAreaID").value
 
     //  logic for validation
@@ -93,6 +98,8 @@ class HomeForm extends Component {
     fields.error.isValid = isValid
 
     //  updating the state
+    //  files to pe passed in upload()
+    const files = this.context.getState().files
     this.setState(
       (prevState) => {
         return {
@@ -114,7 +121,7 @@ class HomeForm extends Component {
 
         //  if there is no error then calling upload method from "upload.js"
         //  to send the state to the backend
-        upload(this.state, (events) => {
+        upload(this.state.form, files, (events) => {
           //  information about the post that was uploaded fom the back-end
           // console.log('Inside upload events ==> ', events)
 
@@ -131,7 +138,7 @@ class HomeForm extends Component {
   }
 
   //  this would be called when files are added
-  _onFilesAdded = (e) => {
+  onFilesAdded = (e) => {
     const filesObject = e.target.files
     const filesArray = Object.values(filesObject)
 
@@ -153,21 +160,6 @@ class HomeForm extends Component {
     )
   }
 
-  windUpChips = () => {
-    console.info("windUpChips")
-    this.isElementOverflown(document.getElementById("file-container"))
-  }
-  isElementOverflown = (element) => {
-    // return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth
-    console.info(
-      "element width ==> ",
-      element.scrollWidth,
-      "\n",
-      "client width ==> ",
-      element.clientWidth
-    )
-  }
-
   showAllFiles = () => {
     this.context.updateState({
       showMoreFilesPanel: true,
@@ -175,9 +167,6 @@ class HomeForm extends Component {
   }
 
   render() {
-    console.info("render")
-    // console.log('home-form.js render state ==> ', this.state)
-
     const files = this.context.getState().files
 
     return (
@@ -207,7 +196,7 @@ class HomeForm extends Component {
                 id={"multipleInputId"}
                 type="file"
                 multiple={true}
-                onChange={this._onFilesAdded}
+                onChange={this.onFilesAdded}
                 style={{
                   position: "fixed",
                   display: "none",
@@ -298,9 +287,8 @@ class HomeForm extends Component {
           ) : null}
 
           {/* FORM */}
-          <div className="home-form__form">
-            <ul className="list-group list-group-flush">
-              <form className={"ml-5 mr-5"}>
+          <div className="form__container">
+              <form className={"d-flex flex-column ml-5 mr-5"} onSubmit={this.onSubmit}>
                 <div
                   className={classnames("form-group", {
                     error:
@@ -324,28 +312,6 @@ class HomeForm extends Component {
                     placeholder="Enter email"
                   />
                 </div>
-                <div
-                  className={classnames("form-group", {
-                    error:
-                      this.state.error.isNull === true ||
-                      this.state.error.isValid === false,
-                  })}
-                >
-                  <label htmlFor="sendersEmailID">Your Email</label>
-                  <input
-                    type="email"
-                    className={
-                      this.state.error.isNull !== null &&
-                      (this.state.error.isNull === true ||
-                        this.state.error.isValid === false)
-                        ? "form-control border border-danger"
-                        : "form-control"
-                    }
-                    id="sendersEmailID"
-                    defaultValue={this.state.form.from}
-                    placeholder="Your Email Address"
-                  />
-                </div>
                 <div className="form-group">
                   <label htmlFor="messageTextAreaID">Message</label>
                   <textarea
@@ -357,18 +323,21 @@ class HomeForm extends Component {
                 </div>
                 <button
                   type="submit"
-                  className="btn btn-primary btn-block"
-                  onClick={this._onSubmit}
+                  className="btn btn-primary btn-block mt-auto mb-2"
                 >
-                  Submit
+                  Send
                 </button>
-              </form>
-            </ul>
+              </form>          
           </div>
         </div>
       </div>
     )
   }
+
+  // componentDidCatch(error, errorInfo) {
+  //   const FUNC_TAG = "componentDidCatch"
+  //   console.info(FUNC_TAG, "error: ", error, "error info", errorInfo)
+  // }
 }
 
 HomeForm.contextType = MyContext

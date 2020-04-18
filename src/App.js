@@ -1,26 +1,20 @@
 /* eslint-disable */
 
-
 import React, { Component } from "react"
 import { Route, Router, Switch, withRouter } from "react-router-dom"
 import { CookiesProvider } from "react-cookie"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./sass_files/style.css"
-import * as dotenv from "dotenv"
-dotenv.config()
-
 
 import history from "./utils/history"
-import Home from "./pages/home"
-import ViewFile from "./pages/view-file"
-import TopBar from "./components/top-bar"
-import LoginForm from "./components/login"
+import Home from "./pages/Home"
+import ViewFile from "./pages/ViewFile"
 import { Provider } from "./components/Provider"
-import Authentication from "./components/authentication"
+import ErrorBoundary from "./components/ErrorBoundary"
 
 class App extends Component {
   state = {
-    showLoginForm: false
+    showLoginForm: false,
   }
 
   render() {
@@ -45,8 +39,9 @@ class App extends Component {
         </div>
         {/* main container */}
         <div className={"container"}>
-          <Provider>
-            {/* <TopBar onShowLoginForm={() => {
+          <ErrorBoundary>
+            <Provider>
+              {/* <TopBar onShowLoginForm={() => {
                         this.setState({
                             showLoginForm: true
                         })
@@ -64,13 +59,14 @@ class App extends Component {
                     }
                     }/> : null} */}
 
-            <Router history={history}>
-              <Switch>
-                <Route exact path={"/"} component={Home} />
-                <Route path={"/share/:id"} component={withRouter(ViewFile)} />
-              </Switch>
-            </Router>
-          </Provider>
+              <Router history={history}>
+                <Switch>
+                  <Route exact path={"/"} component={Home} />
+                  <Route path={"/share/:id"} component={withRouter(ViewFile)} />
+                </Switch>
+              </Router>
+            </Provider>
+          </ErrorBoundary>
         </div>
       </div>
     )
