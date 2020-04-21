@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import _ from "lodash"
 
+import Icon from "./../components/Icon"
 import { postDownload } from "../utils/postDownload"
 import { url } from "../utils/domainConfig"
 import { betterNumber } from "../utils/betterNumber"
@@ -10,7 +11,7 @@ class ViewFile extends Component {
     super(props)
 
     this.state = {
-      post: null
+      post: null,
     }
 
     this.getTotalDownloadSize = this.getTotalDownloadSize.bind(this)
@@ -35,15 +36,15 @@ class ViewFile extends Component {
      * and then every thing would run fine
      */
     postDownload(postId)
-      .then(response => {
+      .then((response) => {
         this.setState(
           {
-            post: _.get(response, "data")
+            post: _.get(response, "data"),
           },
           () => {}
         )
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("an error fetching download data", err) // we can redirect user to not found page later
       })
   }
@@ -54,7 +55,7 @@ class ViewFile extends Component {
     let total = 0
     const filesIds = _.get(post, "files", [])
 
-    _.each(filesIds, fileId => {
+    _.each(filesIds, (fileId) => {
       total += _.get(fileId, "size", 0)
     })
 
@@ -68,59 +69,48 @@ class ViewFile extends Component {
     const postId = _.get(post, "_id", null)
 
     return (
-      <div className={"app-page-download"}>
-        {/*<div className={'app-top-header'}>
-                    <h1 onClick={() => {
-                        //  going back to the "Home" page
-                        history.push('/')
+      <div className={"main-box row"}>
+        <div className={"col"}>
+          <div className={"main-box__container d-flex flex-column"}>
+            <div className={"app-download-icon align-self-center mt-3"}>
+              <Icon size={"5rem"} />
+            </div>
 
-                    }}><i className={'icon-paper-plane'}/> SHARE</h1>
-                </div>*/}
-        <div className={"app-card app-card-download"}>
-          <div className={"app-card-content"}>
-            <div className={"app-card-content-inner"}>
-              <div className={"app-download-icon"}>
-                <i className={"icon-download"} />
-              </div>
+            <div className="app-card-heading h2">Ready to download</div>
+            <div className={"app-download-message app-text-center d-flex justify-content-center"}>
+             <div className="p-2">{files.length} files</div>
+             <div className="p-2">{totalSize}</div>
+             <div className="p-2">Expires in 30 days</div>
+            </div>
 
-              <div className={"app-download-message app-text-center"}>
-                <h2>Ready to download</h2>
-                <ul>
-                  <li>{files.length} files</li>
-                  <li>{totalSize}</li>
-                  <li>Expires in 30 days</li>
-                </ul>
-              </div>
-
-              <div className={"app-download-file-list"}>
-                {files.map((file, index) => {
-                  return (
-                    <div key={index} className={"app-download-file-list-item"}>
-                      <div className={"filename"}>
-                        {_.get(file, "originalname")}
-                      </div>
-                      <div className={"download-action"}>
-                      {/* url to backend route */}
-                        <a href={`${url}/download/${_.get(file, "_id")}`}>
-                          Download
-                        </a>
-                      </div>
+            <div className={"app-download-file-list"}>
+              {files.map((file, index) => {
+                return (
+                  <div key={index} className={"app-download-file-list-item"}>
+                    <div className={"filename"}>
+                      {_.get(file, "originalname")}
                     </div>
-                  )
-                })}
-              </div>
+                    <div className={"download-action"}>
+                      {/* url to backend route */}
+                      <a href={`${url}/download/${_.get(file, "_id")}`}>
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
 
-              <div className={"app-download-actions app-form-actions"}>
-                <a
-                  href={`${url}/downloadAllFiles/${postId}`}
-                  className={"app-button primary"}
-                >
-                  Download All
-                </a>
-                <button className={"app-button"} type={"button"}>
-                  Share
-                </button>
-              </div>
+            <div className={"mt-auto app-download-actions app-form-actions"}>
+              <a
+                href={`${url}/downloadAllFiles/${postId}`}
+                className={"app-button primary"}
+              >
+                Download All
+              </a>
+              <button className={"app-button"} type={"button"}>
+                Share
+              </button>
             </div>
           </div>
         </div>

@@ -325,3 +325,29 @@ body {
 
 .paper-plane-icon {
   cursor: pointer; }
+
+.main-box {
+  height: 60vh;
+  box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 1;
+  background: white;
+  border-radius: 5px; }
+  .main-box__container {
+    height: 60vh; }
+
+.app-card-heading {
+  text-align: center; }
+
+.app-download-file-list {
+  margin: 30px 0;
+  overflow-y: auto; }
+  .app-download-file-list .app-download-file-list-item {
+    border-bottom: 1px solid #e3eaf8;
+    padding: 10px 5px;
+    display: flex; }
+    .app-download-file-list .app-download-file-list-item .filename {
+      flex-grow: 1; }
+    .app-download-file-list .app-download-file-list-item .download-action a {
+      color: #1a86eb;
+      text-decoration: none; }

@@ -57,7 +57,7 @@ class Home extends Component {
             jwt.verify(jwtTokenFromLS, process.env.REACT_APP_JWT_TOKEN_SECRET)
 
             context.updateState({
-              componentToRender: "HomeUploadSent",
+              componentToRender: "HomeForm",
               userEmail: user.email
             })
           } catch (error) {
