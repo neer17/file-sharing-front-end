@@ -33,7 +33,7 @@ class App extends Component {
             className="video-background"
           >
             <source
-              src="https://storage.googleapis.com/coverr-main/mp4/Mt_Baker.mp4"
+              src={require('./video/Mt_Baker.mp4')}
               type="video/mp4"
             ></source>
           </video>

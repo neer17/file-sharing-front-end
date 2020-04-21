@@ -6,7 +6,7 @@ export default class Icon extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      color: null,
+      color: null
     }
   }
 
@@ -37,10 +37,6 @@ export default class Icon extends Component {
   }
 
   render() {
-    return <React.Fragment>{this.icon()}</React.Fragment>
-  }
-
-  icon = () => {
     return (
       <React.Fragment>
         <IconContext.Provider

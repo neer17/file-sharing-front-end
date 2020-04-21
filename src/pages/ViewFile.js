@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import _ from "lodash"
 
-import Icon from "./../components/Icon"
+import Icon from "../components/Icon"
 import { postDownload } from "../utils/postDownload"
 import { url } from "../utils/domainConfig"
 import { betterNumber } from "../utils/betterNumber"
