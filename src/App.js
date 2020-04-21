@@ -22,7 +22,7 @@ class App extends Component {
     let { showLoginForm } = this.state
 
     return (
-      <div>
+      <div className="app__main">
         {/* background video */}
         <div className="app__video-div">
           <video
