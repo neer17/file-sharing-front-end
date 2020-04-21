@@ -3,6 +3,7 @@
 import React, { Component } from "react"
 import classNames from "classnames"
 
+import Icon from "./Icon"
 import { MyContext } from "./Provider"
 import {
   triggerEmailSignIn,
@@ -169,14 +170,19 @@ class Authentication extends Component {
     return (
       <div className="authentication-div p-4">
         {/* Heading */}
-        <div
-          className={classNames(
-            signUpComponentShown
-              ? "heading display-5 text-center mb-1 text-uppercase"
-              : "heading display-4 text-center mb-3 text-uppercase"
-          )}
-        >
-          Share
+        <div className="d-flex flex-row justify-content-center">
+          <div className="p-2 align-self-center">
+            <Icon size={"3rem"}/>
+          </div>
+          <div
+            className={classNames(
+              signUpComponentShown
+                ? "heading display-5 text-center mb-1 text-uppercase"
+                : "heading display-4 text-center mb-3 text-uppercase"
+            )}
+          >
+            Share
+          </div>
         </div>
         <div
           className={classNames(
