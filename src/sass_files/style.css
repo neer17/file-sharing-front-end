@@ -322,3 +322,6 @@ body {
   object-fit: cover;
   opacity: 0.5;
   z-index: -1; }
+
+.paper-plane-icon {
+  cursor: pointer; }

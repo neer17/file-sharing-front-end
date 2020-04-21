@@ -9,7 +9,7 @@ import HomeUploading from "../components/HomeUploading"
 import HomeUploadSent from "../components/HomeUploadSent"
 import Panel from "../components/Panel"
 import { MyContext } from "../components/Provider"
-import Authentication from "../components/Authentication"
+import Authentication from "../components/Authentication" 
 import Carousel from "../components/Carousel"
 import { firebase } from "../utils/firebaseAuth"
 import CreateUser from "../utils/createUser"
@@ -57,7 +57,7 @@ class Home extends Component {
             jwt.verify(jwtTokenFromLS, process.env.REACT_APP_JWT_TOKEN_SECRET)
 
             context.updateState({
-              componentToRender: "HomeForm",
+              componentToRender: "HomeUploadSent",
               userEmail: user.email
             })
           } catch (error) {

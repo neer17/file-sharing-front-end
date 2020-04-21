@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 
+import Icon from './Icon'
 import history from "../utils/history"
 
 class HomeUploadSent extends Component {
@@ -27,7 +28,7 @@ class HomeUploadSent extends Component {
           <div className={"app-card-content-inner"}>
             <div className={"app-home-uploading"}>
               <div className={"app-home-upload-sent-icon"}>
-                <i className={"icon-paperplane"} />
+                <Icon size={"10rem"}/>
               </div>
               <div className={"app-upload-sent-message app-text-center"}>
                 <h2>Files sent!</h2>
