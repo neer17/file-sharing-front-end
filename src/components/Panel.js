@@ -22,24 +22,24 @@ class Panel extends Component {
     document.removeEventListener("mousedown", this.hidePanel)
   }
 
-  hidePanel = event => {
+  hidePanel = (event) => {
     if (this.ref && !this.ref.current.contains(event.target))
       this.context.updateState({
-        showMoreFilesPanel: false
+        showMoreFilesPanel: false,
       })
   }
 
-  onCancel = fileName => {
+  onCancel = (fileName) => {
     this.context.cancel(fileName)
   }
 
   closePanel = () => {
     this.context.updateState({
-      showMoreFilesPanel: false
+      showMoreFilesPanel: false,
     })
   }
 
-  findFileType = fileType => {
+  findFileType = (fileType) => {
     switch (fileType) {
       case "image/jpeg":
       case "image/jpg":
@@ -48,7 +48,7 @@ class Panel extends Component {
             value={{
               color: "blue",
               className: "global-class-name",
-              size: IMAGE_SIZE
+              size: IMAGE_SIZE,
             }}
           >
             <FaImage />
@@ -60,24 +60,24 @@ class Panel extends Component {
             value={{
               color: "blue",
               className: "global-class-name",
-              size: IMAGE_SIZE
+              size: IMAGE_SIZE,
             }}
           >
             <FaRegFilePdf />
           </IconContext.Provider>
-        )        
+        )
       default:
         return (
           <IconContext.Provider
             value={{
               color: "blue",
               className: "global-class-name",
-              size: IMAGE_SIZE
+              size: IMAGE_SIZE,
             }}
           >
             <TiDocumentText />
           </IconContext.Provider>
-        )  
+        )
     }
   }
 
@@ -85,21 +85,31 @@ class Panel extends Component {
     const files = this.context.getState().files
 
     return (
-      <div className="panel container " ref={this.ref}>
-        <div className="panel__cross-btn" onClick={this.closePanel}>&times;</div>
+      <div className="panel container" ref={this.ref}>
+        <div className="panel__cross-btn" onClick={this.closePanel}>
+          &times;
+        </div>
 
         {files.length > 0 ? (
           <div>
-            {files.map(file => {
+            {files.map((file) => {
               return (
-                <div className="panel__container d-flex p-2" key={file.name + `${new Date().getTime()}`}>
+                <div
+                  className="panel__container d-flex p-2"
+                  key={file.name + `${new Date().getTime()}`}
+                >
                   <div className="panel__img align-self-center p-1 mr-4">
                     {this.findFileType(file.type)}
                   </div>
                   <div className="panel__filename flex-grow-1 p-1">
                     {file.name}
                   </div>
-                  <div className="panel__close-button p-1" onClick={this.onCancel.bind(this, file.name)}>&times;</div>
+                  <div
+                    className="panel__close-button p-1"
+                    onClick={this.onCancel.bind(this, file.name)}
+                  >
+                    &times;
+                  </div>
                 </div>
               )
             })}

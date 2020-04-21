@@ -77,7 +77,7 @@ class Home extends Component {
             },
             process.env.REACT_APP_JWT_TOKEN_SECRET,
             {
-              expiresIn: "1h",
+              expiresIn: "24h",
             }
           )
 

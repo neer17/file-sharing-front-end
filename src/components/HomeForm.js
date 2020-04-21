@@ -283,6 +283,7 @@ class HomeForm extends Component {
                   </div>
                 </div>
               ) : null}
+              <div className="file-container__separator"></div>
             </div>
           ) : null}
 
