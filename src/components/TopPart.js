@@ -1,13 +1,19 @@
 import React from "react"
 
 import Icon from './Icon'
+import {MyContext} from './Provider'
+import history from './../utils/history'
 
 class TopPart extends React.Component {
+
+  navigateToComponent = () => {
+    history.goBack()
+  }
   render() {
     return (
       <div className="top-part__wrapper">
          <div className="d-flex flex-row">
-            <div className="p-2 paper-plane-icon align-self-center">
+            <div className="p-2 paper-plane-icon align-self-center" onClick={this.navigateToComponent}>
               <Icon />
             </div>
             <div className="h1 p-2">SHARE</div>
