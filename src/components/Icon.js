@@ -5,13 +5,13 @@ import { FaPaperPlane } from "react-icons/fa"
 export default class Icon extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      color: null
+      color: null,
     }
   }
 
   componentDidMount() {
-    console.info('componentDidMount')
     const colors = [
       "#FF5252",
       "#FF4081",
@@ -29,8 +29,10 @@ export default class Icon extends Component {
       "#FFD740",
       "#FFAB40",
     ]
-    setInterval(() => {
+
+    this.interval = setInterval(() => {
       const randomColor = colors[Math.floor(Math.random() * colors.length)]
+
       this.setState({
         color: randomColor,
       })
@@ -38,7 +40,7 @@ export default class Icon extends Component {
   }
 
   componentWillUnmount() {
-console.info('componentWillUnmount')
+    clearInterval(this.interval)
   }
 
   render() {
