@@ -5,15 +5,38 @@ import { MyContext } from "./Provider"
 import history from "./../utils/history"
 
 class TopPart extends React.Component {
-  constructor(props) {
-    super(props)
+  static contextType = MyContext
+
+  constructor(props, context) {
+    super(props, context)
     this.state = {
-      color: null
+      color: null,
     }
+
+    this.navigateToComponent = this.navigateToComponent.bind(this)
+
+    this.unlisten = null
   }
 
-  navigateToComponent = () => {
-    history.goBack()
+  componentDidMount() {
+    console.info("history listener attached")
+    this.unlisten = history.listen((location) => {
+      console.info("history location:", location)
+    })
+  }
+
+  componentWillUnmount() {
+    console.info("history listener de-attached")
+    this.unlisten()
+  }
+
+  navigateToComponent() {
+    const path = history.location.pathname
+    if (path !== "/") history.goBack()
+    else
+      this.context.updateState({
+        componentToRender: "Home",
+      })
   }
 
   render() {
@@ -34,5 +57,7 @@ class TopPart extends React.Component {
     )
   }
 }
+
+// TopPart.contextType = MyContext
 
 export default TopPart

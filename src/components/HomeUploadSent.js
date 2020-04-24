@@ -1,34 +1,33 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 
-import Icon from './Icon'
+import Icon from "./Icon"
 import history from "../utils/history"
 
 class HomeUploadSent extends Component {
-  data = this.props.data
+  componentDidMount() {
+    console.info("componentDidMount")
+  }
+
+  componentWillUnmount() {
+    console.info("componentWillUnmount")
+  }
+
+  // componentDidCatch() {
+  //   console.info('componentDidCatch')
+  // }
 
   render() {
-    let objectId = ""
-    let toEmail = ""
-
-    console.log("HomeUploadSent data ==> ", this.props.data)
-    try {
-      objectId = this.data.file[0]._id
-      toEmail = this.data.file[0].to
-    } catch (err) {
-      console.error(err)
-    }
-
-    // console.log('data ==> ', this.data)
-    // console.log('objectId ==> ', objectId)
-
+    const objectId = this.props.data.data.file[0]._id
+    const toEmail = this.props.data.data.file[0].to
+    
     return (
       <div className={"app-card app-card-upload-sent"}>
         <div className={"app-card-content"}>
           <div className={"app-card-content-inner"}>
             <div className={"app-home-uploading"}>
               <div className={"app-home-upload-sent-icon"}>
-                <Icon size={"10rem"}/>
+                <Icon size={"10rem"} />
               </div>
               <div className={"app-upload-sent-message app-text-center"}>
                 <h2>Files sent!</h2>
@@ -74,6 +73,6 @@ class HomeUploadSent extends Component {
 
 HomeUploadSent.propTypes = {
   data: PropTypes.object,
-  onSendAnotherFile: PropTypes.func
+  onSendAnotherFile: PropTypes.func,
 }
 export default HomeUploadSent

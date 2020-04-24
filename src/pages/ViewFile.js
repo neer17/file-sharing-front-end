@@ -5,6 +5,7 @@ import Icon from "../components/Icon"
 import { postDownload } from "../utils/postDownload"
 import { url } from "../utils/domainConfig"
 import { betterNumber } from "../utils/betterNumber"
+import history from './../utils/history'
 
 class ViewFile extends Component {
   constructor(props) {
@@ -21,6 +22,8 @@ class ViewFile extends Component {
    * We'll have access to props because of the "history" package
    */
   componentDidMount() {
+    console.info('componentDidMount')
+
     const { match } = this.props
 
     const postId = _.get(match, "params.id")
@@ -47,6 +50,10 @@ class ViewFile extends Component {
       .catch((err) => {
         console.log("an error fetching download data", err) // we can redirect user to not found page later
       })
+  }
+
+  componentWillUnmount() {
+    console.info('componentWillUnmount')
   }
 
   getTotalDownloadSize() {

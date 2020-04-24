@@ -11,6 +11,7 @@ export default class Icon extends Component {
   }
 
   componentDidMount() {
+    console.info('componentDidMount')
     const colors = [
       "#FF5252",
       "#FF4081",
@@ -34,6 +35,10 @@ export default class Icon extends Component {
         color: randomColor,
       })
     }, 200)
+  }
+
+  componentWillUnmount() {
+console.info('componentWillUnmount')
   }
 
   render() {

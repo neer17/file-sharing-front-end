@@ -7,27 +7,24 @@ import { betterNumber } from "../utils/betterNumber"
 class HomeUploading extends Component {
   constructor(props) {
     super(props)
-    let currentLoaded = null,
-      total = null
-    try {
-      currentLoaded = this.props.payload.loaded
-      total = this.props.payload.total
-    } catch (err) {
-      console.error(err)
-    }
-    //  initializing the state
+    const { uploadEvent } = props
+
+    const currentLoaded = uploadEvent.payload.loaded
+    const total = uploadEvent.payload.total
+
     this.state = {
       startTime: new Date().getTime(),
       currentLoaded,
       currentUploadSpeed: 0,
       total,
-      percentage: 0
+      percentage: 0,
     }
   }
 
   componentDidMount() {
-    const type = this.props.type
-    const payload = this.props.payload
+    // console.info("componentDidMount")
+
+    const {type, payload} = this.props.uploadEvent
     const currentTime = new Date().getTime()
 
     /*console.log('home-uploading \t type ==> ', type, 'payload ==> ', payload)
@@ -59,7 +56,7 @@ class HomeUploading extends Component {
         currentLoaded: loaded,
         currentUploadSpeed: currentUploadSpeedInBytes,
         total,
-        percentage
+        percentage,
       })
     }
   }
@@ -95,7 +92,7 @@ class HomeUploading extends Component {
         currentLoaded: loaded,
         currentUploadSpeed: currentUploadSpeedInBytes,
         total,
-        percentage
+        percentage,
       })
     }
   }
@@ -119,7 +116,7 @@ class HomeUploading extends Component {
                   value={{
                     color: "blue",
                     className: "global-class-name",
-                    size: "5rem"
+                    size: "5rem",
                   }}
                 >
                   <FiUpload />

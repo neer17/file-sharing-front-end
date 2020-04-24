@@ -9,11 +9,13 @@ import HomeUploading from "../components/HomeUploading"
 import HomeUploadSent from "../components/HomeUploadSent"
 import Panel from "../components/Panel"
 import { MyContext } from "../components/Provider"
-import Authentication from "../components/Authentication" 
+import Authentication from "../components/Authentication"
 import Carousel from "../components/Carousel"
 import { firebase } from "../utils/firebaseAuth"
 import CreateUser from "../utils/createUser"
 import { JWT_TOKEN_LOCAL_STORAGE } from "../utils/constants"
+import history from "./../utils/history"
+import upload from "./../utils/upload"
 
 /*
  * The state of this class is maintained using "Context" APi
@@ -28,8 +30,13 @@ class Home extends Component {
 
   componentDidMount() {
     const FUNC_TAG = "Home.js: componentDidMount: "
+    console.info(FUNC_TAG)
 
     this.authChangeListener()
+  }
+
+  componentWillUnmount() {
+    console.info("componentWillUnmount")
   }
 
   //  listen auth changes from Firebase
@@ -58,7 +65,7 @@ class Home extends Component {
 
             context.updateState({
               componentToRender: "HomeForm",
-              userEmail: user.email
+              userEmail: user.email,
             })
           } catch (error) {
             //  invalid token, log-out
@@ -89,21 +96,41 @@ class Home extends Component {
               if (response)
                 context.updateState({
                   componentToRender: "HomeForm",
-                  userEmail: user.email
+                  userEmail: user.email,
                 })
             })
-            .catch(console.error) 
+            .catch(console.error)
         }
       } else {
         console.info(FUNC_TAG, "no user or logout")
 
         context.updateState({
-          componentToRender: "Authentication"
+          componentToRender: "Authentication",
         })
       }
     })
   }
 
+  triggerUploading = (form, files) => {
+    upload(form, files, (event) => {
+      const { type, payload } = event
+
+      //  @see upload.js
+      const componentToRender =
+        type === "success" ? "HomeUploadSent" : "HomeUploading"
+      let data = type === "success" ? payload.data : payload
+
+      const uploadEvent = {
+        type,
+        payload,
+      }
+
+      this.context.updateState({
+        componentToRender,
+        uploadEvent,
+      })
+    })
+  }
   //  switching the components
   renderComponent = () => {
     const state = this.context.getState()
@@ -113,25 +140,18 @@ class Home extends Component {
 
     switch (componentToRender) {
       case "HomeUploading":
-        let type = null,
-          payload = null
-
-        try {
-          type = state.uploadEvent.type
-          payload = state.uploadEvent.payload
-        } catch (err) {
-          console.error(err)
-        }
+      const {uploadEvent} = state
 
         return (
           <HomeUploading
-            type={type}
-            payload={payload}
+            uploadEvent = {uploadEvent}
             onCancel={() => {
               this.context.updateState({
                 componentToRender: "HomeForm",
-                uploadEvent: null,
-                data: null,
+                uploadEvent: {
+                  type: null,
+                  payload: null
+                }
               })
             }}
           />
@@ -144,7 +164,8 @@ class Home extends Component {
                 componentToRender: "HomeForm",
               })
             }}
-            data={state.data}
+            
+            data={state.uploadEvent.payload}
           />
         )
 
@@ -155,18 +176,8 @@ class Home extends Component {
       case "HomeForm":
         return (
           <HomeForm
-            onUploading={(events) => {
-              const { type } = events
-
-              const componentToRender =
-                type === "success" ? "HomeUploadSent" : "HomeUploading"
-              let data = type === "success" ? events.payload.data : null
-
-              this.context.updateState({
-                componentToRender,
-                uploadEvent: events,
-                data,
-              })
+            onUploading={(form, files) => {
+              this.triggerUploading(form, files)
             }}
           />
         )
@@ -189,7 +200,6 @@ class Home extends Component {
   }
 
   render() {
-    console.info("render")
     const files = this.context.getState().files
     const showMoreFilesPanel = this.context.getState().showMoreFilesPanel
 

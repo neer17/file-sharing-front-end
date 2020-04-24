@@ -15,8 +15,10 @@ export class Provider extends Component {
     super(props)
     this.state = {
       componentToRender: "Authentication",
-      uploadEvent: null,
-      data: null,
+      uploadEvent: {
+        type: null,
+        payload: null
+      },
       isAuthenticated: false,
       showMoreFilesPanel: false,
       files: [],
@@ -35,7 +37,7 @@ export class Provider extends Component {
         ...object
       },
       () => {
-        console.info(FUNC_TAG, "state ==> ", this.state)
+        // console.info(FUNC_TAG, "state ==> ", this.state)
       }
     )
   }

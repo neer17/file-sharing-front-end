@@ -1,7 +1,7 @@
 import axios from "axios"
 import { url } from "./domainConfig"
 
-export const upload = (form, files, callback = events => {}) => {
+export default function upload (form, files, callback = (events) => {}) {
   const FUNC_TAG = "upload"
 
   // console.log('upload.js files ==> ', files)
@@ -9,7 +9,7 @@ export const upload = (form, files, callback = events => {}) => {
   let data = new FormData()
 
   //  adding each file to the "photos" key in the form
-  files.forEach(file => {
+  files.forEach((file) => {
     data.append("photos", file)
   })
 
@@ -19,34 +19,35 @@ export const upload = (form, files, callback = events => {}) => {
   data.append("from", from)
   data.append("message", message)
 
-  // "onUploadProgress" would run when the files are being uploaded
-  //  "onUploadProgress" would be called and all the details of files would be present in "event"
+  /*
+   * onUploadProgress would be called multiple times on a slow network
+   */
   const config = {
-    onUploadProgress: event => {
+    onUploadProgress: (event) => {
+      // console.info("progress:", event)
       callback({
         type: "onUploadProgress",
-        payload: event
+        payload: event,
       })
-    }
+    },
   }
 
   //  making a POST upload-file call
   //  sending all the data to the backend
-  //  res would get whatever data has come back from the server
-  //  check out "index.js" line 126 to see what is coming back from the server
+  //  res would get "post" object
   axios
-    .post(`${url}/upload-file`, data)
-    .then(res => {
+    .post(`${url}/upload-file`, data, config)
+    .then((res) => {
       console.info(FUNC_TAG, res)
       return callback({
         type: "success",
-        payload: res
+        payload: res,
       })
     })
-    .catch(err => {
+    .catch((err) => {
       return callback({
         type: "error",
-        payload: err
+        payload: err,
       })
     })
 }

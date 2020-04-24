@@ -3,7 +3,6 @@ import classnames from "classnames"
 import { reactLocalStorage } from "reactjs-localstorage"
 
 import { MyContext } from "./Provider"
-import { upload } from "../utils/upload"
 import { element } from "prop-types"
 
 class HomeForm extends Component {
@@ -26,6 +25,10 @@ class HomeForm extends Component {
         isValid: null,
       },
     }
+  }
+
+  componentWillUnmount() {
+    console.info("componentWillUnmount")
   }
 
  
@@ -119,20 +122,8 @@ class HomeForm extends Component {
         )
           return
 
-        //  if there is no error then calling upload method from "upload.js"
-        //  to send the state to the backend
-        upload(this.state.form, files, (events) => {
-          //  information about the post that was uploaded fom the back-end
-          // console.log('Inside upload events ==> ', events)
-
-          /**
-           * passing prop "onUploading" from "home.js"
-           * checking it for null and then passing the events of the upload function
-           */
-          if (this.props.onUploading) {
-            this.props.onUploading(events)
-          }
-        })
+          //  this will trigger "upload" method in "Home"
+          this.props.onUploading(this.state.form, files)
       }
     )
   }
