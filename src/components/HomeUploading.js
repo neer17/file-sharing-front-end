@@ -1,16 +1,22 @@
 import React, { Component } from "react"
 import { IconContext } from "react-icons"
 import { FiUpload } from "react-icons/fi"
+import {MyContext} from './Provider'
 
-import {source} from "./../utils/upload"
+import { source } from "./../utils/upload"
 import { betterNumber } from "../utils/betterNumber"
 
 class HomeUploading extends Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      isOperationCancelled: false,
+    }
+
     this.startTime = new Date().getTime()
     this.currentLoaded = this.props.uploadEvent.payload.loaded
+    this.currentUploadSpeed = 0
   }
 
   computeValues = () => {
@@ -18,13 +24,13 @@ class HomeUploading extends Component {
     const { loaded, total } = this.props.uploadEvent.payload
     const elapsedTime = currentTime - this.startTime
     const diffInLoad = loaded - this.currentLoaded
-    const currentUploadSpeed = (diffInLoad / elapsedTime) * 1000
+    this.currentUploadSpeed = (diffInLoad / elapsedTime) * 1000
     const percentage = total !== 0 ? (loaded / total) * 100 : 0
 
     const returnObject = {
       currentLoaded: this.currentLoaded,
       percentage,
-      currentUploadSpeed,
+      currentUploadSpeed: this.currentUploadSpeed,
     }
     //  updating values
     this.currentLoaded = loaded
@@ -34,7 +40,17 @@ class HomeUploading extends Component {
   }
 
   cancelRequest = () => {
-    source.cancel('Operation cancelled by the user')
+    source.cancel("Operation cancelled by the user")
+
+    this.setState({
+      isOperationCancelled: true,
+    })
+  }
+
+  navigateBackToHome = () => {
+    this.context.updateState({
+      componentToRender: "HomeForm"
+    })
   }
 
   render() {
@@ -67,30 +83,49 @@ class HomeUploading extends Component {
                 <div>Sending...</div>
               </div>
 
-              <div className={"app-upload-files-total"}>Uploading files.</div>
-
-              <div className={"app-progress"}>
-                <span
-                  style={{ width: `${percentage}%` }}
-                  className={"app-progress-bar"}
-                />
-              </div>
-
-              <div className={"app-upload-stats"}>
-                <div className={"app-upload-stats-left"}>
-                  {loadedFormat}/{totalFormat}
+              {this.state.isOperationCancelled ? (
+                <div className="app-card__error-card">
+                  The operation has been canceled
                 </div>
-                <div className={"app-upload-stats-right"}>{uploadSpeed}</div>
-              </div>
+              ) : (
+                <div className="app-card__progress-card">
+                  <div className={"app-upload-files-total"}>
+                    Uploading files.
+                  </div>
+
+                  <div className={"app-progress"}>
+                    <span
+                      style={{ width: `${percentage}%` }}
+                      className={"app-progress-bar"}
+                    />
+                  </div>
+
+                  <div className={"app-upload-stats"}>
+                    <div className={"app-upload-stats-left"}>
+                      {loadedFormat}/{totalFormat}
+                    </div>
+                    <div className={"app-upload-stats-right"}>
+                      {uploadSpeed}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className={"app-form-actions"}>
-                <button
-                  className={"app-upload-cancel-button app-button"}
-                  type={"button"}
-                  onClick={this.cancelRequest}
-                >
-                  Cancel
-                </button>
+                {this.state.isOperationCancelled ? (
+                  <button
+                    className={"app-upload-cancel-button app-button"}
+                    onClick={this.navigateBackToHome}
+                  >Go back to Home</button>
+                ) : (
+                  <button
+                    className={"app-upload-cancel-button app-button"}
+                    type={"button"}
+                    onClick={this.cancelRequest}
+                  >
+                    Cancel
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -99,5 +134,7 @@ class HomeUploading extends Component {
     )
   }
 }
+
+HomeUploading.contextType = MyContext
 
 export default HomeUploading
