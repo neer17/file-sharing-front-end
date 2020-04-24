@@ -15,7 +15,7 @@ import { firebase } from "../utils/firebaseAuth"
 import CreateUser from "../utils/createUser"
 import { JWT_TOKEN_LOCAL_STORAGE } from "../utils/constants"
 import history from "./../utils/history"
-import upload from "./../utils/upload"
+import {upload} from "./../utils/upload"
 
 /*
  * The state of this class is maintained using "Context" APi
@@ -164,7 +164,7 @@ class Home extends Component {
                 componentToRender: "HomeForm",
               })
             }}
-            
+
             data={state.uploadEvent.payload}
           />
         )

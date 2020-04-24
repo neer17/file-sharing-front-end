@@ -1,7 +1,11 @@
 import axios from "axios"
+
 import { url } from "./domainConfig"
 
-export default function upload (form, files, callback = (events) => {}) {
+//  cancellation token
+export const source = axios.CancelToken.source()
+
+export const upload  = (form, files, callback = (events) => {}) => {
   const FUNC_TAG = "upload"
 
   // console.log('upload.js files ==> ', files)
@@ -30,11 +34,12 @@ export default function upload (form, files, callback = (events) => {}) {
         payload: event,
       })
     },
+    cancelToken: source.token
   }
 
   //  making a POST upload-file call
   //  sending all the data to the backend
-  //  res would get "post" object
+  //  res would get "post" object  
   axios
     .post(`${url}/upload-file`, data, config)
     .then((res) => {
@@ -45,6 +50,9 @@ export default function upload (form, files, callback = (events) => {}) {
       })
     })
     .catch((err) => {
+      if (axios.isCancel(err)) 
+      console.error('Axios request cancelled: error: ', err)
+
       return callback({
         type: "error",
         payload: err,

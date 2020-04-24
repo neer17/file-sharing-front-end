@@ -33,10 +33,11 @@ class TopPart extends React.Component {
   navigateToComponent() {
     const path = history.location.pathname
     if (path !== "/") history.goBack()
-    else
-      this.context.updateState({
-        componentToRender: "Home",
-      })
+    else if ("/")
+      // this.context.updateState({
+      //   componentToRender: "HomeForm",
+      // })
+      window.location.reload()
   }
 
   render() {

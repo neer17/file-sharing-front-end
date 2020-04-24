@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "./sass_files/style.css"
 
 import history from "./utils/history"
-import TopPart from './components/TopPart'
+import TopPart from "./components/TopPart"
 import Home from "./pages/Home"
 import ViewFile from "./pages/ViewFile"
 import { Provider } from "./components/Provider"
@@ -19,43 +19,43 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.info('componentDidMount')
+    console.info("componentDidMount")
   }
 
   componentWillUnmount() {
-    console.info('componentWillUnmount')
+    console.info("componentWillUnmount")
   }
 
   render() {
     let { showLoginForm } = this.state
 
     return (
-      <div className="app__main">
-        {/* background video */}
-        <div className="app__video-div">
-          <video
-            playsInline="playsinline"
-            autoPlay="autoplay"
-            muted="muted"
-            loop="loop"
-            className="video-background"
-          >
-            <source
-              src={require('./video/Mt_Baker.mp4')}
-              type="video/mp4"
-            ></source>
-          </video>
-        </div>
-       
-       {/* Top Bar */}
-       <div className="app__top-part container">
-          <TopPart />
-        </div>
+      <Provider>
+        <div className="app__main">
+          {/* background video */}
+          <div className="app__video-div">
+            <video
+              playsInline="playsinline"
+              autoPlay="autoplay"
+              muted="muted"
+              loop="loop"
+              className="video-background"
+            >
+              <source
+                src={require("./video/Mt_Baker.mp4")}
+                type="video/mp4"
+              ></source>
+            </video>
+          </div>
 
-        {/* main container */}
-        <div className="app__main-container container">
-          <ErrorBoundary>
-            <Provider>
+          {/* Top Bar */}
+          <div className="app__top-part container">
+            <TopPart />
+          </div>
+
+          {/* main container */}
+          <div className="app__main-container container">
+            <ErrorBoundary>
               {/* <TopBar onShowLoginForm={() => {
                         this.setState({
                             showLoginForm: true
@@ -80,10 +80,10 @@ class App extends Component {
                   <Route path={"/share/:id"} component={withRouter(ViewFile)} />
                 </Switch>
               </Router>
-            </Provider>
-          </ErrorBoundary>
+            </ErrorBoundary>
+          </div>
         </div>
-      </div>
+      </Provider>
     )
   }
 }
