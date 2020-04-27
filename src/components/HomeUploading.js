@@ -1,21 +1,20 @@
 import React, { Component } from "react"
-import { IconContext } from "react-icons"
-import { FiUpload } from "react-icons/fi"
 
-import {MyContext} from './Provider'
+import Icon from "./Icon"
+import { MyContext } from "./Provider"
 import { betterNumber } from "../utils/betterNumber"
 
 class HomeUploading extends Component {
   constructor(props) {
     super(props)
-    console.info('constructor')
+    console.info("constructor")
 
     this.state = {
       isOperationCancelled: false,
     }
 
     this.startTime = new Date().getTime()
-    this.currentLoaded = this.props.uploadEvent.payload.loaded
+    this.currentLoaded = this.props.uploadEvent.payload.loaded 
     this.currentUploadSpeed = 0
   }
 
@@ -40,7 +39,9 @@ class HomeUploading extends Component {
   }
 
   cancelRequest = () => {
-    this.props.uploadEvent.cancelSource.cancel("Operation cancelled by the user")
+    this.props.uploadEvent.cancelSource.cancel(
+      "Operation cancelled by the user"
+    )
 
     this.setState({
       isOperationCancelled: true,
@@ -51,25 +52,20 @@ class HomeUploading extends Component {
     this.props.changeComponent("HomeForm")
   }
 
-  // componentDidMount() {
-  //   console.info('componentDidMount')
-  // }
-
-  // componentWillUnmount() {
-  //   console.info('componentWillUnmount')
-  // }
-
   render() {
-    const total = this.props.uploadEvent.payload.total
-    const {
-      currentLoaded,
-      percentage,
-      currentUploadSpeed,
-    } = this.computeValues()
+    const total = this.props.uploadEvent.payload.total 
 
-    const loadedFormat = betterNumber(currentLoaded, true)
-    const totalFormat = betterNumber(total, true)
-    const uploadSpeed = betterNumber(currentUploadSpeed, true) + "/s"
+    
+      const {
+        currentLoaded,
+        percentage,
+        currentUploadSpeed,
+      } = this.computeValues()
+
+      const loadedFormat = betterNumber(currentLoaded, true)
+      const totalFormat = betterNumber(total, true)
+      const uploadSpeed = betterNumber(currentUploadSpeed, true) + "/s"
+    
 
     return (
       <div className={"app-card app-card-uploading"}>
@@ -77,16 +73,12 @@ class HomeUploading extends Component {
           <div className={"app-card-content-inner"}>
             <div className={"app-home-uploading"}>
               <div className={"app-home-uploading-icon"}>
-                <IconContext.Provider
-                  value={{
-                    color: "blue",
-                    className: "global-class-name",
-                    size: "5rem",
-                  }}
-                >
-                  <FiUpload />
-                </IconContext.Provider>
-                <div>Sending...</div>
+                <div className={"app-home-upload-sent-icon"}>
+                  <Icon size={"10rem"} />
+                </div>
+                <div className="app-card__uploading-title">
+                  Uploading files...
+                </div>
               </div>
 
               {this.state.isOperationCancelled ? (
@@ -96,7 +88,7 @@ class HomeUploading extends Component {
               ) : (
                 <div className="app-card__progress-card">
                   <div className={"app-upload-files-total"}>
-                    Uploading files.
+                    Progress
                   </div>
 
                   <div className={"app-progress"}>
@@ -122,7 +114,9 @@ class HomeUploading extends Component {
                   <button
                     className={"app-upload-cancel-button app-button"}
                     onClick={this.navigateBackToHome}
-                  >Go back to Home</button>
+                  >
+                    Go back to Home
+                  </button>
                 ) : (
                   <button
                     className={"app-upload-cancel-button app-button"}
@@ -139,6 +133,14 @@ class HomeUploading extends Component {
       </div>
     )
   }
+
+  // componentDidMount() {
+  //   console.info('componentDidMount')
+  // }
+
+  // componentWillUnmount() {
+  //   console.info('componentWillUnmount')
+  // }
 }
 
 HomeUploading.contextType = MyContext

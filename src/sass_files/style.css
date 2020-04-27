@@ -124,6 +124,10 @@ body {
 .authentication-img {
   height: 60vh; }
 
+.app-card__uploading-title {
+  font-size: 2rem;
+  font-weight: 400; }
+
 .app-card {
   height: 60vh;
   overflow: hidden;
