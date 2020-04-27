@@ -2,10 +2,7 @@ import axios from "axios"
 
 import { url } from "./domainConfig"
 
-//  cancellation token
-export const source = axios.CancelToken.source()
-
-export const upload  = (form, files, callback = (events) => {}) => {
+export const upload = (form, files, callback = (events) => {}) => {
   const FUNC_TAG = "upload"
 
   // console.log('upload.js files ==> ', files)
@@ -26,34 +23,39 @@ export const upload  = (form, files, callback = (events) => {}) => {
   /*
    * onUploadProgress would be called multiple times on a slow network
    */
+  //  cancellation token
+  const source = axios.CancelToken.source()
   const config = {
     onUploadProgress: (event) => {
       // console.info("progress:", event)
       callback({
         type: "onUploadProgress",
         payload: event,
+        cancelToken: source
       })
     },
-    cancelToken: source.token
+    cancelToken: source.token,
   }
 
   //  making a POST upload-file call
   //  sending all the data to the backend
-  //  res would get "post" object  
+  //  res would get "post" object
   axios
     .post(`${url}/upload-file`, data, config)
     .then((res) => {
       console.info(FUNC_TAG, res)
       return callback({
+        cancelToken: source,
         type: "success",
         payload: res,
       })
     })
     .catch((err) => {
-      if (axios.isCancel(err)) 
-      console.error('Axios request cancelled: error: ', err)
+      if (axios.isCancel(err))
+        console.error("Axios request cancelled: error: ", err)
 
       return callback({
+        cancelToken: source,
         type: "error",
         payload: err,
       })

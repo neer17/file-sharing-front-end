@@ -13,9 +13,10 @@ class HomeForm extends Component {
     super(props, context)
     this.ref = React.createRef()
 
+    console.info('props', props)
     this.state = {
       form: {
-        from: this.context.getState().userEmail,
+        from: "",
         to: "",
         message: "",
       },
@@ -27,11 +28,6 @@ class HomeForm extends Component {
     }
   }
 
-  componentWillUnmount() {
-    console.info("componentWillUnmount")
-  }
-
- 
 
   //  cancel method for removing the items added in drag and drop
   onCancel = (fileName) => {
@@ -68,7 +64,7 @@ class HomeForm extends Component {
 
     //  getting values from the inputs
     const receiversEmail = document.getElementById("receiversEmailID").value
-    const sendersEmail = this.state.form.from
+    const sendersEmail = this.props.userEmail
     const messageInput = document.getElementById("messageTextAreaID").value
 
     //  logic for validation
@@ -102,7 +98,7 @@ class HomeForm extends Component {
 
     //  updating the state
     //  files to pe passed in upload()
-    const files = this.context.getState().files
+    const files = this.props.files
     this.setState(
       (prevState) => {
         return {
@@ -133,8 +129,8 @@ class HomeForm extends Component {
     const filesObject = e.target.files
     const filesArray = Object.values(filesObject)
 
-    //  getting previous files from the state in Provider.js, adding it with the new files
-    const prevFiles = this.context.getState().files
+    //  getting previous files from the state in Home.js, adding it with the new files
+    const prevFiles = this.props.files
     let finalFiles = null
     if (prevFiles.length !== 0) finalFiles = [...prevFiles, ...filesArray]
     else finalFiles = filesArray
@@ -144,21 +140,17 @@ class HomeForm extends Component {
         hasFiles: true,
       },
       () => {
-        this.context.updateState({
-          files: finalFiles,
-        })
+        this.props.updateFiles(finalFiles)
       }
     )
   }
 
-  showAllFiles = () => {
-    this.context.updateState({
-      showMoreFilesPanel: true,
-    })
+  showPanel = () => {
+    this.props.showPanel(true)
   }
 
   render() {
-    const files = this.context.getState().files
+    const files = this.props.files
 
     return (
       <div className="home-form-container">
@@ -269,7 +261,7 @@ class HomeForm extends Component {
               })}
               {files.length > 3 ? (
                 <div className="chip chip__more-files d-inline-flex align-items-center">
-                  <div className="chip__filename" onClick={this.showAllFiles}>
+                  <div className="chip__filename" onClick={this.showPanel}>
                     +{files.length - 3} files
                   </div>
                 </div>
@@ -329,6 +321,10 @@ class HomeForm extends Component {
   // componentDidCatch(error, errorInfo) {
   //   const FUNC_TAG = "componentDidCatch"
   //   console.info(FUNC_TAG, "error: ", error, "error info", errorInfo)
+  // }
+
+  // componentWillUnmount() {
+  //   console.info("componentWillUnmount")
   // }
 }
 

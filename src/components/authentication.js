@@ -314,7 +314,7 @@ class Authentication extends Component {
   }
 
   componentWillUnmount() {
-    console.info('componentWillUnmount')
+    // console.info('componentWillUnmount')
     window.removeEventListener("beforeunload", this.cleanUpCode)
   }
 }

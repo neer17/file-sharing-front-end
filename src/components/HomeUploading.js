@@ -1,14 +1,14 @@
 import React, { Component } from "react"
 import { IconContext } from "react-icons"
 import { FiUpload } from "react-icons/fi"
-import {MyContext} from './Provider'
 
-import { source } from "./../utils/upload"
+import {MyContext} from './Provider'
 import { betterNumber } from "../utils/betterNumber"
 
 class HomeUploading extends Component {
   constructor(props) {
     super(props)
+    console.info('constructor')
 
     this.state = {
       isOperationCancelled: false,
@@ -40,7 +40,7 @@ class HomeUploading extends Component {
   }
 
   cancelRequest = () => {
-    source.cancel("Operation cancelled by the user")
+    this.props.uploadEvent.source.cancel("Operation cancelled by the user")
 
     this.setState({
       isOperationCancelled: true,
@@ -48,10 +48,16 @@ class HomeUploading extends Component {
   }
 
   navigateBackToHome = () => {
-    this.context.updateState({
-      componentToRender: "HomeForm"
-    })
+    this.props.changeComponent("HomeForm")
   }
+
+  // componentDidMount() {
+  //   console.info('componentDidMount')
+  // }
+
+  // componentWillUnmount() {
+  //   console.info('componentWillUnmount')
+  // }
 
   render() {
     const total = this.props.uploadEvent.payload.total

@@ -11,6 +11,11 @@ import { IMAGE_SIZE } from "./../utils/constants"
 class Panel extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      files: null
+    }
+
     this.ref = React.createRef()
   }
 
@@ -34,9 +39,7 @@ class Panel extends Component {
   }
 
   closePanel = () => {
-    this.context.updateState({
-      showMoreFilesPanel: false,
-    })
+    this.props.showPanel(false)
   }
 
   findFileType = (fileType) => {
@@ -82,7 +85,7 @@ class Panel extends Component {
   }
 
   render() {
-    const files = this.context.getState().files
+    const files = this.props.files
 
     return (
       <div className="panel container" ref={this.ref}>

@@ -5,21 +5,14 @@ import Icon from "./Icon"
 import history from "../utils/history"
 
 class HomeUploadSent extends Component {
-  componentDidMount() {
-    console.info("componentDidMount")
+  constructor(props) {
+    super(props) 
+    // console.info('props', props)
   }
-
-  componentWillUnmount() {
-    console.info("componentWillUnmount")
-  }
-
-  // componentDidCatch() {
-  //   console.info('componentDidCatch')
-  // }
 
   render() {
-    const objectId = this.props.data.data.file[0]._id
-    const toEmail = this.props.data.data.file[0].to
+    const objectId = this.props.data.file[0]._id
+    const toEmail = this.props.data.file[0].to
     
     return (
       <div className={"app-card app-card-upload-sent"}>
@@ -66,9 +59,21 @@ class HomeUploadSent extends Component {
     )
   }
 
-  componentDidCatch(error, errorInfo) {
-    console.error("error ==> ", error, "\n", "error info ==> ", errorInfo)
-  }
+  // componentDidCatch(error, errorInfo) {
+  //   console.error("error ==> ", error, "\n", "error info ==> ", errorInfo)
+  // }
+
+  // componentDidMount() {
+  //   console.info("componentDidMount")
+  // }
+
+  // componentWillUnmount() {
+  //   console.info("componentWillUnmount")
+  // }
+
+  // componentDidCatch() {
+  //   console.info('componentDidCatch')
+  // }
 }
 
 HomeUploadSent.propTypes = {

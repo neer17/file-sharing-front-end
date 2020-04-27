@@ -11,6 +11,7 @@ class ViewFile extends Component {
   constructor(props) {
     super(props)
 
+    console.info('props', props)
     this.state = {
       post: null,
     }
@@ -52,9 +53,7 @@ class ViewFile extends Component {
       })
   }
 
-  componentWillUnmount() {
-    console.info('componentWillUnmount')
-  }
+  
 
   getTotalDownloadSize() {
     const { post } = this.state
@@ -124,6 +123,10 @@ class ViewFile extends Component {
       </div>
     )
   }
+
+  // componentWillUnmount() {
+  //   console.info('componentWillUnmount')
+  // }
 }
 
 export default ViewFile

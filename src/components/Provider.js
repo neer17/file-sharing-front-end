@@ -14,30 +14,23 @@ export class Provider extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      componentToRender: "Authentication",
-      uploadEvent: {
-        type: null,
-        payload: null
-      },
       isAuthenticated: false,
-      showMoreFilesPanel: false,
-      files: [],
-      userEmail: null
+      files: []
     }
   }
 
   componentDidMount() {
-    window.addEventListener('beforeunload', this.cleanUpCode)
+    window.addEventListener("beforeunload", this.cleanUpCode)
   }
 
   updateState = (object = {}) => {
     const FUNC_TAG = "updateState"
     this.setState(
       {
-        ...object
+        ...object,
       },
       () => {
-        // console.info(FUNC_TAG, "state ==> ", this.state)
+        // console.info('state =>', this.state)
       }
     )
   }
@@ -48,7 +41,7 @@ export class Provider extends Component {
 
   //  getting the name of the file and then removing it from the values and finally
   //  updating the state with new "values"
-  cancel = nameOfFile => {
+  cancel = (nameOfFile) => {
     const files = this.state.files
 
     files.forEach((file, index) => {
@@ -58,12 +51,12 @@ export class Provider extends Component {
     })
 
     this.setState({
-      files
+      files,
     })
   }
 
   cleanUpCode = () => {
-      reactLocalStorage.setObject('state', this.state)
+    reactLocalStorage.setObject("state", this.state)
   }
 
   render() {
@@ -75,7 +68,7 @@ export class Provider extends Component {
         value={{
           updateState: this.updateState,
           getState: this.getState,
-          cancel: this.cancel
+          cancel: this.cancel,
         }}
       >
         {this.props.children}
@@ -84,7 +77,7 @@ export class Provider extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.cleanUpCode)
+    window.removeEventListener("beforeunload", this.cleanUpCode)
   }
 }
 
