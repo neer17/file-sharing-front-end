@@ -30,6 +30,7 @@ class Home extends Component {
       uploadEvent: {
         type: null,
         payload: null,
+        cancelSource: null
       },
       userEmail: null,
       makePanelVisible: false,
@@ -112,7 +113,7 @@ class Home extends Component {
 
   triggerUploading = (form, files) => {
     upload(form, files, (event) => {
-      const { type, payload, cancelToken } = event
+      const { type, payload, cancelSource } = event
 
       //  @see upload.js
       const componentToRender =
@@ -122,12 +123,14 @@ class Home extends Component {
       const uploadEvent = {
         type,
         payload: data,
-        cancelToken,
+        cancelSource,
       }
 
       this.setState({
         componentToRender,
         uploadEvent,
+      }, () => {
+        console.info('state', this.state)
       })
     })
   }
@@ -150,6 +153,7 @@ class Home extends Component {
                 uploadEvent: {
                   type: null,
                   payload: null,
+                  cancelSource: null
                 },
               })
             }}
@@ -233,7 +237,6 @@ class Home extends Component {
   }
 
   render() {
-    const files = this.state.files
     const { makePanelVisible } = this.state
 
     return (

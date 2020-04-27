@@ -25,13 +25,14 @@ export const upload = (form, files, callback = (events) => {}) => {
    */
   //  cancellation token
   const source = axios.CancelToken.source()
+
   const config = {
     onUploadProgress: (event) => {
       // console.info("progress:", event)
       callback({
         type: "onUploadProgress",
         payload: event,
-        cancelToken: source
+        cancelSource: source
       })
     },
     cancelToken: source.token,
@@ -45,7 +46,7 @@ export const upload = (form, files, callback = (events) => {}) => {
     .then((res) => {
       console.info(FUNC_TAG, res)
       return callback({
-        cancelToken: source,
+        cancelSource: source,
         type: "success",
         payload: res,
       })
@@ -55,7 +56,7 @@ export const upload = (form, files, callback = (events) => {}) => {
         console.error("Axios request cancelled: error: ", err)
 
       return callback({
-        cancelToken: source,
+        cancelSource: source,
         type: "error",
         payload: err,
       })

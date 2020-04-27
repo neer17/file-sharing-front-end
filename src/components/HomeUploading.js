@@ -40,7 +40,7 @@ class HomeUploading extends Component {
   }
 
   cancelRequest = () => {
-    this.props.uploadEvent.source.cancel("Operation cancelled by the user")
+    this.props.uploadEvent.cancelSource.cancel("Operation cancelled by the user")
 
     this.setState({
       isOperationCancelled: true,
