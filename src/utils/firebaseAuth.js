@@ -15,14 +15,14 @@ import {
 
 //  initializing firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyC91KBhO07a44v_M72KJbLjmuzHd1FJ9G0",
-  authDomain: "filesharingapp-117c3.firebaseapp.com",
-  databaseURL: "https://filesharingapp-117c3.firebaseio.com",
-  projectId: "filesharingapp-117c3",
-  storageBucket: "filesharingapp-117c3.appspot.com",
-  messagingSenderId: "38414507205",
-  appId: "1:38414507205:web:6ddb10eaad8b51d96524ac",
-  measurementId: "G-0VHW3DEX5R"
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID
 }
 firebase.initializeApp(firebaseConfig)
 

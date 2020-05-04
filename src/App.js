@@ -18,14 +18,6 @@ class App extends Component {
     showLoginForm: false,
   }
 
-  componentDidMount() {
-    console.info("componentDidMount")
-  }
-
-  componentWillUnmount() {
-    console.info("componentWillUnmount")
-  }
-
   render() {
     let { showLoginForm } = this.state
 

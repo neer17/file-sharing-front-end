@@ -1,19 +1,18 @@
 import React, { Component } from "react"
 import classnames from "classnames"
-import { reactLocalStorage } from "reactjs-localstorage"
+import ButtonWithProgressBar from './ButtonWithProgressBar'
 
 import { MyContext } from "./Provider"
 import { element } from "prop-types"
 
 class HomeForm extends Component {
-
   static contextType = MyContext
 
   constructor(props, context) {
     super(props, context)
     this.ref = React.createRef()
 
-    console.info('props', props)
+    console.info("props", props)
     this.state = {
       form: {
         from: "",
@@ -25,9 +24,9 @@ class HomeForm extends Component {
         isNull: null,
         isValid: null,
       },
+      showProgressBar: false,
     }
   }
-
 
   //  cancel method for removing the items added in drag and drop
   onCancel = (fileName) => {
@@ -118,8 +117,8 @@ class HomeForm extends Component {
         )
           return
 
-          //  this will trigger "upload" method in "Home"
-          this.props.onUploading(this.state.form, files)
+        //  this will trigger "upload" method in "Home"
+        this.props.onUploading(this.state.form, files)
       }
     )
   }
@@ -151,6 +150,7 @@ class HomeForm extends Component {
 
   render() {
     const files = this.props.files
+    const { showProgressBar } = this.state
 
     return (
       <div className="home-form-container">
@@ -272,46 +272,50 @@ class HomeForm extends Component {
 
           {/* FORM */}
           <div className="form__container">
-              <form className={"d-flex flex-column ml-5 mr-5"} onSubmit={this.onSubmit}>
-                <div
-                  className={classnames("form-group", {
-                    error:
-                      this.state.error.isNull === true ||
-                      this.state.error.isValid === false,
-                  })}
-                >
-                  <label htmlFor="receiversEmailID">Send To</label>
-                  <input
-                    type="email"
-                    className={
-                      this.state.error.isNull !== null &&
-                      (this.state.error.isNull === true ||
-                        this.state.error.isValid === false)
-                        ? "form-control border border-danger"
-                        : "form-control"
-                    }
-                    id="receiversEmailID"
-                    defaultValue={this.state.form.to}
-                    aria-describedby="emailHelp"
-                    placeholder="Enter email"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="messageTextAreaID">Message</label>
-                  <textarea
-                    className="form-control"
-                    id="messageTextAreaID"
-                    defaultValue={this.state.form.message}
-                    placeholder="Enter Message(Optional)"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="btn btn-primary btn-block mt-auto mb-2"
-                >
-                  Send
-                </button>
-              </form>          
+            <form
+              className={"d-flex flex-column ml-5 mr-5"}
+              onSubmit={this.onSubmit}
+            >
+              <div
+                className={classnames("form-group", {
+                  error:
+                    this.state.error.isNull === true ||
+                    this.state.error.isValid === false,
+                })}
+              >
+                <label htmlFor="receiversEmailID">Send To</label>
+                <input
+                  type="email"
+                  className={
+                    this.state.error.isNull !== null &&
+                    (this.state.error.isNull === true ||
+                      this.state.error.isValid === false)
+                      ? "form-control border border-danger"
+                      : "form-control"
+                  }
+                  id="receiversEmailID"
+                  defaultValue={this.state.form.to}
+                  aria-describedby="emailHelp"
+                  placeholder="Enter email"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="messageTextAreaID">Message</label>
+                <textarea
+                  className="form-control"
+                  id="messageTextAreaID"
+                  defaultValue={this.state.form.message}
+                  placeholder="Enter Message(Optional)"
+                />
+              </div>
+              <button
+                type="submit"
+                className="btn btn-primary btn-block mt-auto mb-2"
+              >
+                Send
+              </button>
+              {/* <ButtonWithProgressBar /> */}
+            </form>
           </div>
         </div>
       </div>
