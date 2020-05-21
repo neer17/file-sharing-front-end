@@ -1,6 +1,6 @@
 // $color-primary: rgba(27, 101, 246, 1);
 $color-primary: rgb(26, 134, 235);
-$color-grey-light: #cfd3d6;
+$color-grey-light: #cce2f3;
 $danger-color: rgba(208, 21, 46, 1);
 $body-text-color: rgba(87, 59, 59, 0);
 $header-height: 50px;
@@ -9,4 +9,7 @@ $screen-md: 992px;
 $screen-lg: 1200px;
 $display-5: 20px;
 $display-6: 12px;
+
+//  z-indices
+$z-index-settings-panel: 2000
 

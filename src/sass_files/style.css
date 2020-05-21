@@ -63,7 +63,7 @@
 .file-container__separator {
   padding: 0;
   margin: 0;
-  border-bottom: 1px solid #cfd3d6; }
+  border-bottom: 1px solid #cce2f3; }
 
 *,
 *::before,
@@ -325,6 +325,27 @@ body {
 
 .paper-plane-icon {
   cursor: pointer; }
+
+.settings {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  cursor: pointer; }
+  .settings:hover {
+    transition: all 0.2s ease-in;
+    transform: rotate(-20deg); }
+  .settings:not(:hover) {
+    transition: all 0.2s ease-in;
+    transform: rotate(20deg); }
+
+.settings__panel {
+  position: absolute;
+  right: 2rem;
+  top: 5rem;
+  height: 15rem;
+  width: 10rem;
+  background-color: #cce2f3;
+  z-index: 2000; }
 
 .main-box {
   height: 60vh;

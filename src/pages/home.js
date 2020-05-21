@@ -30,11 +30,11 @@ class Home extends Component {
       uploadEvent: {
         type: null,
         payload: null,
-        cancelSource: null
+        cancelSource: null,
       },
       userEmail: null,
       makePanelVisible: false,
-      files: []
+      files: [],
     }
 
     this.authChangeListener = this.authChangeListener.bind(this)
@@ -112,6 +112,8 @@ class Home extends Component {
   }
 
   triggerUploading = (form, files) => {
+    /*  this would be called multiple times on a slow network
+     */
     upload(form, files, (event) => {
       const { type, payload, cancelSource } = event
 
@@ -120,18 +122,23 @@ class Home extends Component {
         type === "success" ? "HomeUploadSent" : "HomeUploading"
       let data = type === "success" ? payload.data : payload
 
+      console.info('HomeForm', 'data => ', data)
+
       const uploadEvent = {
         type,
         payload: data,
         cancelSource,
       }
 
-      this.setState({
-        componentToRender,
-        uploadEvent,
-      }, () => {
-        console.info('state', this.state)
-      })
+      this.setState(
+        {
+          componentToRender,
+          uploadEvent,
+        },
+        () => {
+          console.info("state", this.state)
+        }
+      )
     })
   }
   //  switching the components
@@ -153,7 +160,7 @@ class Home extends Component {
                 uploadEvent: {
                   type: null,
                   payload: null,
-                  cancelSource: null
+                  cancelSource: null,
                 },
               })
             }}
@@ -231,10 +238,6 @@ class Home extends Component {
     })
   }
 
-  logout = () => {
-    localStorage.clear() //  to clear the token
-    firebase.auth().signOut().catch(console.error)
-  }
 
   render() {
     const { makePanelVisible } = this.state
