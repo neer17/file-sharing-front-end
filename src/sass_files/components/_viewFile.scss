@@ -1,35 +1,52 @@
 .main-box {
-    @include box;
-    background: white;
-    border-radius: 5px;
+  @include box;
+  background: white;
+  border-radius: 5px;
 
-    &__container {
-        height: 60vh;
-    }
+  &__container {
+    height: 60vh;
+  }
 }
 
 .app-card-heading {
-    text-align: center;
+  text-align: center;
 }
-  
+
 .app-download-file-list {
-    margin: 30px 0;
-    overflow-y: auto;
-  
-    .app-download-file-list-item {
-      border-bottom: 1px solid rgba(227, 234, 248, 1);
-      padding: 10px 5px;
-      display: flex;
-  
-      .filename {
-        flex-grow: 1;
-      }
-  
-      .download-action {
-        a {
-          color: $color-primary;
-          text-decoration: none;
-        }
+  margin: 30px 0;
+  overflow-y: auto;
+  position: relative;
+
+  .progress-bar {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    z-index: 100;
+    background-color: transparent;
+  }
+
+  .app-download-file-list-item {
+    border-bottom: 1px solid rgba(227, 234, 248, 1);
+    padding: 10px 5px;
+    display: flex;
+
+    .filename {
+      flex-grow: 1;
+    }
+
+    .download-action {
+      a {
+        color: $color-primary;
+        text-decoration: none;
       }
     }
   }
+}
+
+.app-download-actions a {
+  text-decoration: none;
+
+  &:hover {
+  text-decoration: none;
+  }
+}

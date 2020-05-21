@@ -1,7 +1,9 @@
 import React, { Component } from "react"
 import classnames from "classnames"
-import ButtonWithProgressBar from './ButtonWithProgressBar'
+import CircularProgress from "@material-ui/core/CircularProgress"
+import { LinearProgress } from "@material-ui/core"
 
+import ButtonWithProgressBar from "./ButtonWithProgressBar"
 import { MyContext } from "./Provider"
 import { element } from "prop-types"
 
@@ -12,7 +14,8 @@ class HomeForm extends Component {
     super(props, context)
     this.ref = React.createRef()
 
-    console.info("props", props)
+    // console.info("props", props)
+
     this.state = {
       form: {
         from: "",
@@ -118,7 +121,14 @@ class HomeForm extends Component {
           return
 
         //  this will trigger "upload" method in "Home"
-        this.props.onUploading(this.state.form, files)
+        this.setState(
+          {
+            showProgressBar: true,
+          },
+          () => {
+            this.props.onUploading(this.state.form, files)
+          }
+        )
       }
     )
   }
@@ -238,6 +248,9 @@ class HomeForm extends Component {
             </label>
           </div>
 
+          {/* Linear Progress Bar */}
+          {showProgressBar ? <LinearProgress color="secondary" /> : null}
+
           {/* displaying the names of files selected
           showing "chip__more-files" when files > 3*/}
           {this.state.hasFiles === true ? (
@@ -314,7 +327,6 @@ class HomeForm extends Component {
               >
                 Send
               </button>
-              {/* <ButtonWithProgressBar /> */}
             </form>
           </div>
         </div>

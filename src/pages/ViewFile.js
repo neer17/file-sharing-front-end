@@ -1,19 +1,22 @@
 import React, { Component } from "react"
 import _ from "lodash"
+import { CircularProgress } from "@material-ui/core"
 
 import Icon from "../components/Icon"
 import { postDownload } from "../utils/postDownload"
 import { url } from "../utils/domainConfig"
 import { betterNumber } from "../utils/betterNumber"
-import history from './../utils/history'
+import history from "./../utils/history"
 
 class ViewFile extends Component {
   constructor(props) {
     super(props)
 
-    console.info('props', props)
+    console.info("props", props)
+
     this.state = {
       post: null,
+      showProgressBar: true,
     }
 
     this.getTotalDownloadSize = this.getTotalDownloadSize.bind(this)
@@ -23,7 +26,7 @@ class ViewFile extends Component {
    * We'll have access to props because of the "history" package
    */
   componentDidMount() {
-    console.info('componentDidMount')
+    console.info("componentDidMount")
 
     const { match } = this.props
 
@@ -44,6 +47,7 @@ class ViewFile extends Component {
         this.setState(
           {
             post: _.get(response, "data"),
+            showProgressBar: false,
           },
           () => {}
         )
@@ -52,8 +56,6 @@ class ViewFile extends Component {
         console.log("an error fetching download data", err) // we can redirect user to not found page later
       })
   }
-
-  
 
   getTotalDownloadSize() {
     const { post } = this.state
@@ -69,7 +71,7 @@ class ViewFile extends Component {
   }
 
   render() {
-    const { post } = this.state
+    const { post, showProgressBar } = this.state
     const files = _.get(post, "files", [])
     const totalSize = this.getTotalDownloadSize()
     const postId = _.get(post, "_id", null)
@@ -83,13 +85,23 @@ class ViewFile extends Component {
             </div>
 
             <div className="app-card-heading h2">Ready to download</div>
-            <div className={"app-download-message app-text-center d-flex justify-content-center"}>
-             <div className="p-2">{files.length} files</div>
-             <div className="p-2">{totalSize}</div>
-             <div className="p-2">Expires in 30 days</div>
+            <div
+              className={
+                "app-download-message app-text-center d-flex justify-content-center"
+              }
+            >
+              <div className="p-2">{files.length} files</div>
+              <div className="p-2">{totalSize}</div>
+              <div className="p-2">Expires in 30 days</div>
             </div>
 
-            <div className={"app-download-file-list"}>
+            <div className={"app-download-file-list flex-grow-1"}>
+              <div className="progress-bar">
+                {showProgressBar ? (
+                  <CircularProgress color="secondary" />
+                ) : null}
+              </div>
+
               {files.map((file, index) => {
                 return (
                   <div key={index} className={"app-download-file-list-item"}>
@@ -107,10 +119,9 @@ class ViewFile extends Component {
               })}
             </div>
 
-            <div className={"mt-auto app-download-actions app-form-actions"}>
+            <div className={"mt-auto app-download-actions "}>
               <a
                 href={`${url}/downloadAllFiles/${postId}`}
-                className={"app-button primary"}
               >
                 Download All
               </a>
