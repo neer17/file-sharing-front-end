@@ -1,6 +1,16 @@
 import React, { Component } from "react"
 import _ from "lodash"
 import { CircularProgress } from "@material-ui/core"
+import {
+  WhatsappShareButton,
+  LinkedinShareButton,
+  FacebookShareButton,
+  TwitterShareButton,
+  WhatsappIcon,
+  FacebookIcon,
+  TwitterIcon,
+  LinkedinIcon,
+} from "react-share"
 
 import Icon from "../components/Icon"
 import { postDownload } from "../utils/postDownload"
@@ -122,12 +132,40 @@ class ViewFile extends Component {
             <div className={"mt-auto app-download-actions "}>
               <a
                 href={`${url}/downloadAllFiles/${postId}`}
+                className="btn btn-primary btn-block"
               >
                 Download All
               </a>
-              <button className={"app-button"} type={"button"}>
-                Share
-              </button>
+              <div className="share-buttons d-flex justify-content-center align-items-center mt-4 mb-2">
+                <span className="p-2">
+                  <WhatsappShareButton
+                    url={`${url}/downloadAllFiles/${postId}`}
+                  >
+                    <WhatsappIcon size={32} round={true} />
+                  </WhatsappShareButton>
+                </span>
+
+                <span className="p-2">
+                  <FacebookShareButton
+                    url={`${url}/downloadAllFiles/${postId}`}
+                  >
+                    <FacebookIcon size={32} round={true} />
+                  </FacebookShareButton>
+                </span>
+
+                <span className="p-2">
+                  <TwitterShareButton url={`${url}/downloadAllFiles/${postId}`}>
+                    <TwitterIcon size={32} round={true} />
+                  </TwitterShareButton>
+                </span>
+
+                <span className="p-2">
+                  <LinkedinShareButton url={`${url}/downloadAllFiles/${postId}`}>
+                    <LinkedinIcon size={32} round={true} />
+                  </LinkedinShareButton>
+                </span>
+
+              </div>
             </div>
           </div>
         </div>
