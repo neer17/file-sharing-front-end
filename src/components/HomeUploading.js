@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import { Alert, AlertTitle } from "@material-ui/lab"
 
 import Icon from "./Icon"
 import { MyContext } from "./Provider"
@@ -14,7 +15,7 @@ class HomeUploading extends Component {
     }
 
     this.startTime = new Date().getTime()
-    this.currentLoaded = this.props.uploadEvent.payload.loaded 
+    this.currentLoaded = this.props.uploadEvent.payload.loaded
     this.currentUploadSpeed = 0
   }
 
@@ -53,19 +54,17 @@ class HomeUploading extends Component {
   }
 
   render() {
-    const total = this.props.uploadEvent.payload.total 
+    const total = this.props.uploadEvent.payload.total
 
-    
-      const {
-        currentLoaded,
-        percentage,
-        currentUploadSpeed,
-      } = this.computeValues()
+    const {
+      currentLoaded,
+      percentage,
+      currentUploadSpeed,
+    } = this.computeValues()
 
-      const loadedFormat = betterNumber(currentLoaded, true)
-      const totalFormat = betterNumber(total, true)
-      const uploadSpeed = betterNumber(currentUploadSpeed, true) + "/s"
-    
+    const loadedFormat = betterNumber(currentLoaded, true)
+    const totalFormat = betterNumber(total, true)
+    const uploadSpeed = betterNumber(currentUploadSpeed, true) + "/s"
 
     return (
       <div className={"app-card app-card-uploading"}>
@@ -82,14 +81,13 @@ class HomeUploading extends Component {
               </div>
 
               {this.state.isOperationCancelled ? (
-                <div className="app-card__error-card">
-                  The operation has been canceled
-                </div>
+                <Alert severity="error">
+                  <AlertTitle>Error</AlertTitle>
+                  All files have been cancelled — <strong>oops...</strong>
+                </Alert>
               ) : (
                 <div className="app-card__progress-card">
-                  <div className={"app-upload-files-total"}>
-                    Progress
-                  </div>
+                  <div className={"app-upload-files-total"}>Progress</div>
 
                   <div className={"app-progress"}>
                     <span
