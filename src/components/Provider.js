@@ -39,22 +39,6 @@ export class Provider extends Component {
     return this.state
   }
 
-  //  getting the name of the file and then removing it from the values and finally
-  //  updating the state with new "values"
-  cancel = (nameOfFile) => {
-    const files = this.state.files
-
-    files.forEach((file, index) => {
-      if (file.name === nameOfFile) {
-        return files.splice(index, 1)
-      }
-    })
-
-    this.setState({
-      files,
-    })
-  }
-
   cleanUpCode = () => {
     reactLocalStorage.setObject("state", this.state)
   }

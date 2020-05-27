@@ -33,7 +33,7 @@ class HomeForm extends Component {
 
   //  cancel method for removing the items added in drag and drop
   onCancel = (fileName) => {
-    this.context.cancel(fileName)
+    this.props.cancel(fileName)
   }
 
   //  on form submission

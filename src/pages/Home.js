@@ -49,7 +49,7 @@ class Home extends Component {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         console.info(FUNC_TAG, "user authenticated")
-        
+
         // User is signed in.
         var displayName = user.displayName
         var email = user.email
@@ -248,13 +248,26 @@ class Home extends Component {
               })
             }}
             files={this.state.files}
+            cancel={filename => {
+              this.cancel(filename)
+            }}
           />
         )
     }
   }
 
-  cancel = (fileName) => {
-    this.context.cancel(fileName)
+  cancel = (nameOfFile) => {
+    const files = this.state.files
+
+    files.forEach((file, index) => {
+      if (file.name === nameOfFile) {
+        return files.splice(index, 1)
+      }
+    })
+
+    this.setState({
+      files,
+    })
   }
 
   closePanel = () => {
