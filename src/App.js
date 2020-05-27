@@ -14,13 +14,7 @@ import { Provider } from "./components/Provider"
 import ErrorBoundary from "./components/ErrorBoundary"
 
 class App extends Component {
-  state = {
-    showLoginForm: false,
-  }
-
   render() {
-    let { showLoginForm } = this.state
-
     return (
       <Provider>
         <div className="app__main">

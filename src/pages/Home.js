@@ -59,14 +59,23 @@ class Home extends Component {
 
         //  get token from session storage, validate
         const jwtTokenFromLS = localStorage.getItem(JWT_TOKEN_LOCAL_STORAGE)
+
+        /* if jwt token is found login otherwise create user */
         if (jwtTokenFromLS) {
           try {
             jwt.verify(jwtTokenFromLS, process.env.REACT_APP_JWT_TOKEN_SECRET)
 
-            classContext.setState({
-              componentToRender: "HomeForm",
-              userEmail: user.email,
-            })
+            classContext.setState(
+              {
+                componentToRender: "HomeForm",
+                userEmail: user.email,
+              },
+              () => {
+                classContext.context.updateState({
+                  isAuthenticated: true,
+                })
+              }
+            )
           } catch (error) {
             //  invalid token, log-out
             console.error(error)
@@ -94,19 +103,33 @@ class Home extends Component {
           CreateUser.createUserFirebase(user)
             .then((response) => {
               if (response)
-                classContext.setState({
-                  componentToRender: "HomeForm",
-                  userEmail: user.email,
-                })
+                classContext.setState(
+                  {
+                    componentToRender: "HomeForm",
+                    userEmail: user.email,
+                  },
+                  () => {
+                    classContext.context.updateState({
+                      isAuthenticated: true,
+                    })
+                  }
+                )
             })
             .catch(console.error)
         }
       } else {
         console.info(FUNC_TAG, "no user or logout")
 
-        classContext.setState({
-          componentToRender: "Authentication",
-        })
+        classContext.setState(
+          {
+            componentToRender: "Authentication",
+          },
+          () => {
+            classContext.context.updateState({
+              isAuthenticated: false,
+            })
+          }
+        )
       }
     })
   }
@@ -122,7 +145,7 @@ class Home extends Component {
         type === "success" ? "HomeUploadSent" : "HomeUploading"
       let data = type === "success" ? payload.data : payload
 
-      console.info('HomeForm', 'data => ', data)
+      console.info("HomeForm", "data => ", data)
 
       const uploadEvent = {
         type,
@@ -237,7 +260,6 @@ class Home extends Component {
       showPanel: false,
     })
   }
-
 
   render() {
     const { makePanelVisible } = this.state
