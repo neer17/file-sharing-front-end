@@ -1,11 +1,11 @@
 import React, { Component } from "react"
 import classnames from "classnames"
-import CircularProgress from "@material-ui/core/CircularProgress"
 import { LinearProgress } from "@material-ui/core"
+import Dropzone from "react-dropzone"
+import { IconContext } from "react-icons"
+import { GiFiles } from "react-icons/gi"
 
-import ButtonWithProgressBar from "./ButtonWithProgressBar"
 import { MyContext } from "./Provider"
-import { element } from "prop-types"
 
 class HomeForm extends Component {
   static contextType = MyContext
@@ -137,10 +137,7 @@ class HomeForm extends Component {
   }
 
   //  this would be called when files are added
-  onFilesAdded = (e) => {
-    const filesObject = e.target.files
-    const filesArray = Object.values(filesObject)
-
+  onFilesAdded = (filesArray) => {
     //  getting previous files from the state in Home.js, adding it with the new files
     const prevFiles = this.props.files
     let finalFiles = null
@@ -168,88 +165,71 @@ class HomeForm extends Component {
     return (
       <div className="home-form-container">
         <div className="home-form-card card">
-          <div className="card-header">
-            {/*using DragAndDrop component here*/}
-            <label
-              className={
-                this.state.error.isNull === null || this.state.hasFiles
-                  ? "d-block border-warning"
-                  : "d-block border border-danger"
-              }
-              style={
-                this.state.hasFiles === true
-                  ? {
-                      height: 40,
-                      position: "relative",
-                    }
-                  : {
-                      height: 80,
-                      position: "relative",
-                    }
-              }
-            >
-              <input
-                id={"multipleInputId"}
-                type="file"
-                multiple={true}
-                onChange={this.onFilesAdded}
-                style={{
-                  position: "fixed",
-                  display: "none",
-                }}
-              />
-              <div
+          {/*using DragAndDrop component here*/}
+          <Dropzone onDrop={this.onFilesAdded}>
+            {({ getRootProps, getInputProps }) => (
+              <section
+                className={
+                  this.state.error.isNull === null || this.state.hasFiles
+                    ? "dropzone__section d-block border-warning"
+                    : "dropzone__section d-block border border-danger"
+                }
                 style={
                   this.state.hasFiles === true
                     ? {
-                        position: "absolute",
-                        top: "0",
-                        left: "0",
-                        fontSize: 20,
+                        height: "10vh",
                       }
                     : {
-                        position: "absolute",
-                        top: "0",
-                        left: "20%",
-                        fontSize: 20,
+                        height: "20vh",
                       }
                 }
               >
-                Drag and drop files here
-              </div>
-              {/* <div
-                className={"d-block text-center"}
-                style={{
-                  position: "absolute",
-                  
-                  // transform: 'translate(-50%, 50%)'
-                }}
-              > */}
-              <i
-                className="far fa-images"
-                style={
-                  this.state.hasFiles === true
-                    ? {
-                        fontSize: 20,
-                        textAlign: "center",
-                        position: "absolute",
-                        left: "90%",
-                        top: "0",
-                        transition: "all .5s",
-                      }
-                    : {
-                        position: "absolute",
-                        fontSize: 50,
-                        textAlign: "center",
-                        left: "40%",
-                        top: "50%",
-
-                        transition: "all .5s",
-                      }
-                }
-              />
-            </label>
-          </div>
+                <div className="dropzone__main" {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  <div
+                    className="dropzone__text"
+                    style={
+                      this.state.hasFiles === true
+                        ? {
+                            top: "0",
+                            left: "5%",
+                          }
+                        : {
+                            top: "0",
+                            left: "20%",
+                          }
+                    }
+                  >
+                    Drag and drop files here
+                  </div>
+                  <div
+                    className="dropzone__icon"
+                    style={
+                      this.state.hasFiles === true
+                        ? {
+                            left: "90%",
+                            top: "0",
+                          }
+                        : {
+                            left: "40%",
+                            top: "30%",
+                          }
+                    }
+                  >
+                    <IconContext.Provider
+                      value={{
+                        color: this.state.color,
+                        className: "global-class-name",
+                        size: this.state.hasFiles === true ? "3rem" : "5rem",
+                      }}
+                    >
+                      <GiFiles />
+                    </IconContext.Provider>
+                  </div>
+                </div>
+              </section>
+            )}
+          </Dropzone>
 
           {/* Linear Progress Bar */}
           {showProgressBar ? <LinearProgress color="secondary" /> : null}

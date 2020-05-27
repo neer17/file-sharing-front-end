@@ -54,3 +54,25 @@
   margin: 0;
   border-bottom: 1px solid $color-grey-light;
 }
+
+.dropzone__section {
+  position: relative;
+  background-color: $color-grey-light-1;
+}
+
+.dropzone__main {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.dropzone__text {
+  position: absolute;
+  font-size: 20px;
+}
+
+.dropzone__icon {
+  position: absolute;
+  text-align: center;
+  transition: all .5s;
+}
