@@ -42,24 +42,6 @@ class App extends Component {
           {/* main container */}
           <div className="app__main-container container">
             <ErrorBoundary>
-              {/* <TopBar onShowLoginForm={() => {
-                        this.setState({
-                            showLoginForm: true
-                        })
-                    }}/>
-
-                    {showLoginForm ? <LoginForm onClose={() => {
-                        //  removing the     from the screen
-                        this.setState({
-                            showLoginForm: false
-                        })
-                    }} onSignupOrlogin={() => {
-                        this.setState({
-                            showLoginForm: false
-                        })
-                    }
-                    }/> : null} */}
-
               <Router history={history}>
                 <Switch>
                   <Route exact path={"/"} component={Home} />
