@@ -97,6 +97,9 @@ body {
 /* @media (min-width: 1280px) {
   html{font-size: 14px;}
 } */
+.authentication-div {
+  position: relative; }
+
 .create-account {
   cursor: pointer; }
 
@@ -120,6 +123,13 @@ body {
 
 .create-account {
   font-weight: 600; }
+
+.authentication__progress-bar {
+  position: absolute;
+  width: 3rem;
+  height: 3rem;
+  top: 50%;
+  left: 50%; }
 
 .authentication-img {
   height: 60vh; }

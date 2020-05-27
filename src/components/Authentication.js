@@ -2,6 +2,8 @@
 
 import React, { Component } from "react"
 import classNames from "classnames"
+import { CircularProgress } from "@material-ui/core"
+import classnames from "classnames"
 
 import Icon from "./Icon"
 import { MyContext } from "./Provider"
@@ -23,16 +25,17 @@ import {
 import { reactLocalStorage } from "reactjs-localstorage"
 
 class Authentication extends Component {
+  TAG = "Authentication"
+
   state = {
     signUpComponentShown: false,
     formError: null,
+    showProgressBar: false
   }
 
   /* listen for Auth changes */
   componentDidMount() {
     const FUNC_TAG = "componentDidMount: "
-
-    console.info(FUNC_TAG)
 
     //  register listener to run "cleanUpCode" before component unloads
     window.addEventListener("beforeunload", this.cleanUpCode)
@@ -47,16 +50,6 @@ class Authentication extends Component {
 
   cleanUpCode = () => {
     reactLocalStorage.setObject(AUTH_STATE, this.state)
-  }
-  googleSignIn = (e) => {
-    e.preventDefault()
-
-    triggerGoogleSignIn().then().catch(console.error)
-  }
-
-  logout = () => {
-    localStorage.clear() //  to clear the token
-    firebase.auth().signOut().catch(console.error)
   }
 
   emailSignUp = (e) => {
@@ -149,6 +142,18 @@ class Authentication extends Component {
       })
   }
 
+  googleSignIn = (e) => {
+    e.preventDefault()
+    
+    const classContext = this
+    triggerGoogleSignIn().then(_ => {
+      classContext.setState({
+        showProgressBar: true
+      })
+
+    }).catch(console.error)
+  }
+
   showSignUpComponent = (e) => {
     e.preventDefault()
 
@@ -156,6 +161,7 @@ class Authentication extends Component {
       signUpComponentShown: true,
     })
   }
+
   showSignInComponent = (e) => {
     e.preventDefault()
 
@@ -167,14 +173,14 @@ class Authentication extends Component {
   render() {
     // console.info("=================== render ======================")
 
-    let { signUpComponentShown: signUpComponentShown, formError } = this.state
+    let { signUpComponentShown: signUpComponentShown, formError, showProgressBar } = this.state
 
     return (
-      <div className="authentication-div p-4">
+      <div className={classnames("authentication-div p-4", {'pointer-events': showProgressBar})}>
         {/* Heading */}
         <div className="d-flex flex-row justify-content-center">
           <div className="p-2 align-self-center">
-            <Icon size={"3rem"}/>
+            <Icon size={"3rem"} />
           </div>
           <div
             className={classNames(
@@ -269,13 +275,6 @@ class Authentication extends Component {
             >
               {signUpComponentShown ? "Sign-Up" : "Login"}
             </button>
-            {/* <button
-              type="button"
-              className="btn btn-primary submitBtn h6 mt-1"
-              onClick={this.logout}
-            >
-              Logout
-            </button> */}
           </form>
 
           <div
@@ -309,6 +308,13 @@ class Authentication extends Component {
             </div>
           )}
         </div>
+
+        {/* progress bar */}
+        {showProgressBar ? (
+          <div className="authentication__progress-bar">
+            <CircularProgress color="secondary" />
+          </div>
+        ) : null}
       </div>
     )
   }

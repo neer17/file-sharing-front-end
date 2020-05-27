@@ -126,7 +126,10 @@ class HomeForm extends Component {
             showProgressBar: true,
           },
           () => {
-            this.props.onUploading(this.state.form, files)
+            //  to show the progress bar
+            setTimeout(() => {
+              this.props.onUploading(this.state.form, files)
+            }, 1500)
           }
         )
       }
