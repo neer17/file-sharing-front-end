@@ -3,6 +3,7 @@ import classnames from "classnames"
 import { LinearProgress } from "@material-ui/core"
 import Dropzone from "react-dropzone"
 import { IconContext } from "react-icons"
+import { Alert, AlertTitle } from "@material-ui/lab"
 import { GiFiles } from "react-icons/gi"
 
 import { MyContext } from "./Provider"
@@ -22,12 +23,21 @@ class HomeForm extends Component {
         to: "",
         message: "",
       },
-      hasFiles: false,
       error: {
         isNull: null,
         isValid: null,
       },
       showProgressBar: false,
+      fileSizeExceeded: false,
+    }
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const files = props.files
+    const fileSizeExceeded = HomeForm.checkFileSizeExceeded(files)
+    return {
+      ...state,
+      fileSizeExceeded,
     }
   }
 
@@ -111,12 +121,12 @@ class HomeForm extends Component {
       () => {
         /*console.log(`Inside callback after the state is updated ==> `, this.state)*/
 
-        //  if isNUll == true or isValid == false or hasFiles == false then returning
+        //  if isNUll === true or isValid === false or props.files.length === 0 then returning
         //  and the respective components will turn red as the classnames would get changed
         if (
           this.state.error.isNull ||
           !this.state.error.isValid ||
-          !this.state.hasFiles
+          files.length === 0
         )
           return
 
@@ -136,22 +146,39 @@ class HomeForm extends Component {
     )
   }
 
-  //  this would be called when files are added
+  //  getting previous files from the state in Home.js, adding it with the new files
   onFilesAdded = (filesArray) => {
-    //  getting previous files from the state in Home.js, adding it with the new files
+    let { fileSizeExceeded } = this.state
+
+    const classContext = this
+
     const prevFiles = this.props.files
     let finalFiles = null
     if (prevFiles.length !== 0) finalFiles = [...prevFiles, ...filesArray]
     else finalFiles = filesArray
 
+    console.info("final files array", finalFiles)
+
+    const totalSizeInMbs = HomeForm.checkFileSizeExceeded(finalFiles)
+    totalSizeInMbs > 25 ? (fileSizeExceeded = true) : (fileSizeExceeded = false)
+
     this.setState(
       {
-        hasFiles: true,
+        fileSizeExceeded,
       },
       () => {
-        this.props.updateFiles(finalFiles)
+        classContext.props.updateFiles(finalFiles)
       }
     )
+  }
+
+  static checkFileSizeExceeded = (finalFiles) => {
+    let totalSize = 0
+    finalFiles.forEach((file) => {
+      totalSize += file.size
+    })
+
+    return Math.ceil(totalSize / (1024 * 1024)) > 25 ? true : false
   }
 
   showPanel = () => {
@@ -160,7 +187,7 @@ class HomeForm extends Component {
 
   render() {
     const files = this.props.files
-    const { showProgressBar } = this.state
+    const { showProgressBar, fileSizeExceeded } = this.state
 
     return (
       <div className="home-form-container">
@@ -170,12 +197,12 @@ class HomeForm extends Component {
             {({ getRootProps, getInputProps }) => (
               <section
                 className={
-                  this.state.error.isNull === null || this.state.hasFiles
+                  this.state.error.isNull === null || files.length !== 0
                     ? "dropzone__section d-block border-warning"
                     : "dropzone__section d-block border border-danger"
                 }
                 style={
-                  this.state.hasFiles === true
+                  files.length !== 0 || fileSizeExceeded
                     ? {
                         height: "10vh",
                       }
@@ -189,7 +216,7 @@ class HomeForm extends Component {
                   <div
                     className="dropzone__text"
                     style={
-                      this.state.hasFiles === true
+                      files.length !== 0 || fileSizeExceeded
                         ? {
                             top: "0",
                             left: "5%",
@@ -205,7 +232,7 @@ class HomeForm extends Component {
                   <div
                     className="dropzone__icon"
                     style={
-                      this.state.hasFiles === true
+                      files.length !== 0 || fileSizeExceeded
                         ? {
                             left: "90%",
                             top: "0",
@@ -220,7 +247,10 @@ class HomeForm extends Component {
                       value={{
                         color: this.state.color,
                         className: "global-class-name",
-                        size: this.state.hasFiles === true ? "3rem" : "5rem",
+                        size:
+                          files.length !== 0 || fileSizeExceeded
+                            ? "3rem"
+                            : "5rem",
                       }}
                     >
                       <GiFiles />
@@ -231,86 +261,98 @@ class HomeForm extends Component {
             )}
           </Dropzone>
 
+          {/* error label */}
+          {fileSizeExceeded ? (
+            <Alert severity="error">
+              Files should be under 25Mbs — <strong>try again...</strong>
+            </Alert>
+          ) : null}
+
           {/* Linear Progress Bar */}
           {showProgressBar ? <LinearProgress color="secondary" /> : null}
 
           {/* displaying the names of files selected
           showing "chip__more-files" when files > 3*/}
-          {this.state.hasFiles === true ? (
-            <div className="file-container">
-              {files.map((file, index) => {
-                if (index < 3)
-                  return (
-                    <div
-                      className="chip d-inline-flex align-items-center"
-                      key={file.name}
-                    >
-                      <div className="chip__filename">{file.name}</div>
+          <div className="chips__and__form d-flex flex-column">
+            {files.length !== 0 ? (
+              <div className="file-container d-flex flex-wrap mb-auto">
+                {files.map((file, index) => {
+                  if (index < 3)
+                    return (
                       <div
-                        className="closebtn align-self-baseline"
-                        onClick={this.onCancel.bind(this, file.name)}
+                        className="chip d-inline-flex align-items-center mb-1"
+                        key={file.name}
                       >
-                        &times;
+                        <div className="chip__filename">{file.name}</div>
+                        <div
+                          className="closebtn align-self-baseline"
+                          onClick={this.onCancel.bind(this, file.name)}
+                        >
+                          &times;
+                        </div>
                       </div>
-                    </div>
-                  )
-              })}
-              {files.length > 3 ? (
-                <div className="chip chip__more-files d-inline-flex align-items-center">
-                  <div className="chip__filename" onClick={this.showPanel}>
-                    +{files.length - 3} files
-                  </div>
-                </div>
-              ) : null}
-              <div className="file-container__separator"></div>
-            </div>
-          ) : null}
-
-          {/* FORM */}
-          <div className="form__container">
-            <form
-              className={"d-flex flex-column ml-5 mr-5"}
-              onSubmit={this.onSubmit}
-            >
-              <div
-                className={classnames("form-group", {
-                  error:
-                    this.state.error.isNull === true ||
-                    this.state.error.isValid === false,
+                    )
                 })}
-              >
-                <label htmlFor="receiversEmailID">Send To</label>
-                <input
-                  type="email"
-                  className={
-                    this.state.error.isNull !== null &&
-                    (this.state.error.isNull === true ||
-                      this.state.error.isValid === false)
-                      ? "form-control border border-danger"
-                      : "form-control"
-                  }
-                  id="receiversEmailID"
-                  defaultValue={this.state.form.to}
-                  aria-describedby="emailHelp"
-                  placeholder="Enter email"
-                />
+                {files.length > 3 ? (
+                  <div className="chip chip__more-files d-inline-flex align-items-center mb-1">
+                    <div className="chip__filename" onClick={this.showPanel}>
+                      +{files.length - 3} files
+                    </div>
+                  </div>
+                ) : null}
+
+                <div className="file-container__separator mb-1 mt-1"></div>
+                
               </div>
-              <div className="form-group">
-                <label htmlFor="messageTextAreaID">Message</label>
-                <textarea
-                  className="form-control"
-                  id="messageTextAreaID"
-                  defaultValue={this.state.form.message}
-                  placeholder="Enter Message(Optional)"
-                />
-              </div>
-              <button
-                type="submit"
-                className="btn btn-primary btn-block mt-auto mb-2"
+            ) : null}
+
+            {/* FORM */}
+            <div className="form__container mt-auto">
+              <form
+                className={"d-flex flex-column ml-5 mr-5"}
+                onSubmit={this.onSubmit}
               >
-                Send
-              </button>
-            </form>
+                <div
+                  className={classnames("form-group", {
+                    error:
+                      this.state.error.isNull === true ||
+                      this.state.error.isValid === false,
+                  })}
+                >
+                  <label htmlFor="receiversEmailID">Send To</label>
+                  <input
+                    type="email"
+                    className={
+                      this.state.error.isNull !== null &&
+                      (this.state.error.isNull === true ||
+                        this.state.error.isValid === false)
+                        ? "form-control border border-danger"
+                        : "form-control"
+                    }
+                    id="receiversEmailID"
+                    defaultValue={this.state.form.to}
+                    aria-describedby="emailHelp"
+                    placeholder="Enter email"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="messageTextAreaID">Message</label>
+                  <textarea
+                    className="form-control"
+                    id="messageTextAreaID"
+                    defaultValue={this.state.form.message}
+                    placeholder="Enter Message(Optional)"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-block mt-auto mb-2"
+                  disabled={fileSizeExceeded ? true : false}
+                >
+                  Send
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

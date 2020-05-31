@@ -3,14 +3,13 @@ import { FaRegFilePdf, FaImage } from "react-icons/fa"
 import { TiDocumentText } from "react-icons/ti"
 import { IconContext } from "react-icons"
 
-import { MyContext } from "./Provider"
 import { IMAGE_SIZE } from "./../utils/constants"
 
 // rendered in home.js
 //  controlled from home-form.js
 class Panel extends Component {
   constructor(props) {
-    super(props)
+  super(props)
 
     this.state = {
       files: null
@@ -29,13 +28,11 @@ class Panel extends Component {
 
   hidePanel = (event) => {
     if (this.ref && !this.ref.current.contains(event.target))
-      this.context.updateState({
-        showMoreFilesPanel: false,
-      })
+      this.closePanel()
   }
 
   onCancel = (fileName) => {
-    this.context.cancel(fileName)
+    this.props.cancel(fileName)
   }
 
   closePanel = () => {
@@ -123,5 +120,4 @@ class Panel extends Component {
   }
 }
 
-Panel.contextType = MyContext
 export default Panel

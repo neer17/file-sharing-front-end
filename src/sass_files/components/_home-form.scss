@@ -3,8 +3,20 @@
 }
 
 .file-container {
-  padding: 10px 5px;
+  padding: 1rem 0.5rem;
   overflow: hidden;
+
+  &__separator {
+    width: 100%;
+    height: 2px;
+    padding: 0;
+    margin: 0;
+    background-color: $color-grey-light;
+  }
+}
+
+.chips__and__form {
+  height: 100%;
 }
 
 .form {
@@ -19,7 +31,6 @@
 
 .chip {
   padding: 0 15px;
-  margin-bottom: 10px;
   height: 25px;
   font-size: 10px;
   border-radius: 50px;
@@ -49,12 +60,6 @@
   color: #000;
 }
 
-.file-container__separator {
-  padding: 0;
-  margin: 0;
-  border-bottom: 1px solid $color-grey-light;
-}
-
 .dropzone__section {
   position: relative;
   background-color: $color-grey-light-1;
@@ -74,5 +79,5 @@
 .dropzone__icon {
   position: absolute;
   text-align: center;
-  transition: all .5s;
+  transition: all 0.5s;
 }

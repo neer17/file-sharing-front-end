@@ -256,6 +256,7 @@ class Home extends Component {
     }
   }
 
+  // remove files from state
   cancel = (nameOfFile) => {
     const files = this.state.files
 
@@ -277,7 +278,7 @@ class Home extends Component {
   }
 
   render() {
-    const { makePanelVisible } = this.state
+    const { makePanelVisible} = this.state
 
     return (
       <div className={"home-container container"}>
@@ -301,6 +302,9 @@ class Home extends Component {
                 })
               }}
               files={this.state.files}
+              cancel={fileName => {
+                this.cancel(fileName)
+              }}
             />
           ) : null}
 
