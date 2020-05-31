@@ -15,6 +15,8 @@ import ErrorBoundary from "./components/ErrorBoundary"
 
 class App extends Component {
   render() {
+    console.info('production', process.env.REACT_APP_PRODUCTION)
+    
     return (
       <Provider>
         <div className="app__main">

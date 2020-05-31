@@ -147,7 +147,7 @@ class Home extends Component {
         type === "success" ? "HomeUploadSent" : "HomeUploading"
       let data = type === "success" ? payload.data : payload
 
-      console.info("HomeForm", "data => ", data)
+      // console.info("HomeForm", "data => ", data)
 
       const uploadEvent = {
         type,

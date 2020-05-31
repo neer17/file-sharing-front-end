@@ -29,6 +29,7 @@ class HomeForm extends Component {
       },
       showProgressBar: false,
       fileSizeExceeded: false,
+      filesSent: false
     }
   }
 
@@ -134,6 +135,7 @@ class HomeForm extends Component {
         this.setState(
           {
             showProgressBar: true,
+            filesSent: true
           },
           () => {
             //  to show the progress bar
@@ -187,7 +189,7 @@ class HomeForm extends Component {
 
   render() {
     const files = this.props.files
-    const { showProgressBar, fileSizeExceeded } = this.state
+    const { showProgressBar, fileSizeExceeded, filesSent } = this.state
 
     return (
       <div className="home-form-container">
@@ -347,7 +349,7 @@ class HomeForm extends Component {
                 <button
                   type="submit"
                   className="btn btn-primary btn-block mt-auto mb-2"
-                  disabled={fileSizeExceeded ? true : false}
+                  disabled={fileSizeExceeded || filesSent ? true : false}
                 >
                   Send
                 </button>
