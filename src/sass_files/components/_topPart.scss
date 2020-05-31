@@ -18,13 +18,3 @@
     transform: rotate(20deg);
   }
 }
-
-.settings__panel {
-    position: absolute;
-    right: 2rem;
-    top: 5rem;
-    height: 15rem;
-    width: 10rem;
-    background-color: $color-grey-light;
-    z-index: $z-index-settings-panel;
-  }

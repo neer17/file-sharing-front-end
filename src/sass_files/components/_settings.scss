@@ -1,0 +1,13 @@
+.settings__panel {
+  position: absolute;
+  width: 10rem;
+  right: 2rem;
+  top: 5rem;
+  padding: 10px;
+  background-color: $color-grey-light;
+  z-index: $z-index-settings-panel;
+}
+
+.settings__github {
+    cursor: pointer;
+}

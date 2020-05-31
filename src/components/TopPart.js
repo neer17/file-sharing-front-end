@@ -1,13 +1,13 @@
 import React from "react"
 import { IconContext } from "react-icons"
 import { FiSettings } from "react-icons/fi"
-import { AiOutlineInfoCircle } from "react-icons/ai"
 
+
+import Settings from './Settings'
 import Icon from "./Icon"
 import { MyContext } from "./Provider"
 import history from "./../utils/history"
 import { firebase } from "../utils/firebaseAuth"
-import { TiScissors } from "react-icons/ti"
 
 class TopPart extends React.Component {
   static contextType = MyContext
@@ -103,7 +103,7 @@ class TopPart extends React.Component {
                 value={{
                   color: "red",
                   className: "global-class-name",
-                  size: "2.5rem",
+                  size: "2rem",
                 }}
               >
                 <FiSettings />
@@ -112,25 +112,7 @@ class TopPart extends React.Component {
           ) : null}
           
           {isSettingsClicked ? (
-            <div className="settings__panel d-flex flex-column">
-              <button
-                className="btn btn-block btn-primary"
-                onClick={this.logout}
-              >
-                Logout
-              </button>
-              <div className="align-self-center">
-                <IconContext.Provider
-                  value={{
-                    color: "red",
-                    className: "global-class-name",
-                    size: "2rem",
-                  }}
-                >
-                  <AiOutlineInfoCircle />
-                </IconContext.Provider>
-              </div>
-            </div>
+            <Settings />
           ) : null}
         </div>
         <h2 className="h2-home-page">Share your files</h2>

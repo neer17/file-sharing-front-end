@@ -369,15 +369,6 @@ body {
     transition: all 0.2s ease-in;
     transform: rotate(20deg); }
 
-.settings__panel {
-  position: absolute;
-  right: 2rem;
-  top: 5rem;
-  height: 15rem;
-  width: 10rem;
-  background-color: #cce2f3;
-  z-index: 2000; }
-
 .main-box {
   height: 60vh;
   box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5);
@@ -415,3 +406,15 @@ body {
   text-decoration: none; }
   .app-download-actions a:hover {
     text-decoration: none; }
+
+.settings__panel {
+  position: absolute;
+  width: 10rem;
+  right: 2rem;
+  top: 5rem;
+  padding: 10px;
+  background-color: #cce2f3;
+  z-index: 2000; }
+
+.settings__github {
+  cursor: pointer; }
