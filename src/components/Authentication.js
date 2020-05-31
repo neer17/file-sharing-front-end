@@ -36,6 +36,7 @@ class Authentication extends Component {
   /* listen for Auth changes */
   componentDidMount() {
     const FUNC_TAG = "componentDidMount: "
+    console.info(FUNC_TAG)
 
     //  register listener to run "cleanUpCode" before component unloads
     window.addEventListener("beforeunload", this.cleanUpCode)
@@ -320,7 +321,7 @@ class Authentication extends Component {
   }
 
   componentWillUnmount() {
-    // console.info('componentWillUnmount')
+    console.info('componentWillUnmount')
     window.removeEventListener("beforeunload", this.cleanUpCode)
   }
 }

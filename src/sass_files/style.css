@@ -1,3 +1,21 @@
+.paper-plane-icon {
+  cursor: pointer; }
+
+.settings {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  cursor: pointer; }
+  .settings:hover {
+    transition: all 0.2s ease-in;
+    transform: rotate(-20deg); }
+  .settings:not(:hover) {
+    transition: all 0.2s ease-in;
+    transform: rotate(20deg); }
+
+h2, h3, .h1 {
+  color: #f7f1f1fa; }
+
 .main-box {
   height: 60vh;
   box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5);
@@ -22,6 +40,13 @@
   cursor: pointer; }
   .cross-button:hover {
     color: black; }
+
+.progress-bar {
+  position: absolute;
+  left: 43%;
+  top: 45%;
+  z-index: 10001111;
+  background-color: transparent; }
 
 .home-form-card {
   height: 60vh; }
@@ -137,6 +162,7 @@ body {
   font-size: 12px; }
 
 .heading, .title {
+  color: #0c0c0c;
   transition: all .2s ease-in; }
 
 .input-height {
@@ -354,24 +380,6 @@ body {
   object-fit: cover;
   opacity: 0.9;
   filter: blur(2px); }
-
-.paper-plane-icon {
-  cursor: pointer; }
-
-.settings {
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
-  cursor: pointer; }
-  .settings:hover {
-    transition: all 0.2s ease-in;
-    transform: rotate(-20deg); }
-  .settings:not(:hover) {
-    transition: all 0.2s ease-in;
-    transform: rotate(20deg); }
-
-h2, h3, .h1 {
-  color: #f7f1f1fa; }
 
 .main-box {
   height: 60vh;

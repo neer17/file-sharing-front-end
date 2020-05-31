@@ -1,6 +1,7 @@
 @import "./components/mixins";
-@import "./components/home";
 @import "./variable";
+@import "./components/topPart";
+@import "./components/home";
 @import "./components/home-form";
 @import "./base";
 @import "./components/authentication";
@@ -8,7 +9,5 @@
 @import "./components/home-uploading";
 @import "./components/panel";
 @import "./components/app";
-@import "./components/topPart";
 @import "./components/viewFile";
 @import "./components//settings";
-// @import "./components/topBar";
