@@ -5,6 +5,7 @@ import { Route, Router, Switch, withRouter } from "react-router-dom"
 import { CookiesProvider } from "react-cookie"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./sass_files/style.css"
+import WebFont from "webfontloader"
 
 import history from "./utils/history"
 import TopPart from "./components/TopPart"
@@ -14,9 +15,18 @@ import { Provider } from "./components/Provider"
 import ErrorBoundary from "./components/ErrorBoundary"
 
 class App extends Component {
+  
+  componentDidMount() {
+    WebFont.load({
+      google: {
+        families: ["Roboto Slab:300", "sanss-serif"],
+      },
+    })
+  }
+
   render() {
-    console.info('production', process.env.REACT_APP_PRODUCTION)
-    
+    console.info("production", process.env.REACT_APP_PRODUCTION)
+
     return (
       <Provider>
         <div className="app__main">

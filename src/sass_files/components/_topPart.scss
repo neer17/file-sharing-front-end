@@ -1,3 +1,4 @@
+
 .paper-plane-icon {
   cursor: pointer;
 }
@@ -17,4 +18,8 @@
     transition: all 0.2s ease-in;
     transform: rotate(20deg);
   }
+}
+
+h2, h3, .h1 {
+  color: $body-text-color;
 }
