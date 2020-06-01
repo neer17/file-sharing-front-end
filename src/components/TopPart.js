@@ -93,7 +93,7 @@ class TopPart extends React.Component {
           >
             <Icon />
           </div>
-          <div className="h1 p-2">SHARE</div>
+          <div className="h1-heading p-2">SHARE</div>
           {isAuthenticated ? (
             <div
               className="settings ml-auto p-2"
