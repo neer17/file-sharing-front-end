@@ -36,7 +36,6 @@ class Home extends Component {
       userEmail: null,
       makePanelVisible: false,
       files: [],
-      showProgressBar: false,
     }
 
     this.authChangeListener = this.authChangeListener.bind(this)
@@ -50,31 +49,65 @@ class Home extends Component {
 
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
-            // User is signed in.
-            var displayName = user.displayName
-            var email = user.email
-            var uid = user.uid
+        // User is signed in.
+        var displayName = user.displayName
+        var email = user.email
+        var uid = user.uid
 
-            console.info(FUNC_TAG, "user.email: ", email)
+        console.info(FUNC_TAG, "user.email: ", email)
 
-            //  progress bar
+        //  progress bar
 
-            //  get token from session storage, validate
-            const jwtTokenFromLS = localStorage.getItem(JWT_TOKEN_LOCAL_STORAGE)
+        //  get token from session storage, validate
+        const jwtTokenFromLS = localStorage.getItem(JWT_TOKEN_LOCAL_STORAGE)
 
-            /* if jwt token is found login otherwise create user */
-            if (jwtTokenFromLS) {
-              try {
-                jwt.verify(
-                  jwtTokenFromLS,
-                  process.env.REACT_APP_JWT_TOKEN_SECRET
-                )
+        /* if jwt token is found login otherwise create user */
+        if (jwtTokenFromLS) {
+          try {
+            jwt.verify(jwtTokenFromLS, process.env.REACT_APP_JWT_TOKEN_SECRET)
 
+            classContext.setState(
+              {
+                componentToRender: "HomeForm",
+                userEmail: user.email,
+              },
+              () => {
+                classContext.context.updateState({
+                  isAuthenticated: true,
+                })
+              }
+            )
+          } catch (error) {
+            //  invalid token, log-out
+            console.error(error)
+            classContext.logout()
+          }
+        } else {
+          //  generating jwt, sending jwt to backend
+          const jwtToken = jwt.sign(
+            {
+              data: {
+                name: displayName,
+                email: email,
+                uid: uid,
+              },
+            },
+            process.env.REACT_APP_JWT_TOKEN_SECRET,
+            {
+              expiresIn: "24h",
+            }
+          )
+
+          //  store in local storage and send to backend
+          localStorage.setItem(JWT_TOKEN_LOCAL_STORAGE, jwtToken)
+
+          CreateUser.createUserFirebase(user)
+            .then((response) => {
+              if (response)
                 classContext.setState(
                   {
                     componentToRender: "HomeForm",
                     userEmail: user.email,
-                    showProgressBar: false,
                   },
                   () => {
                     classContext.context.updateState({
@@ -82,47 +115,9 @@ class Home extends Component {
                     })
                   }
                 )
-              } catch (error) {
-                //  invalid token, log-out
-                console.error(error)
-                classContext.logout()
-              }
-            } else {
-              //  generating jwt, sending jwt to backend
-              const jwtToken = jwt.sign(
-                {
-                  data: {
-                    name: displayName,
-                    email: email,
-                    uid: uid,
-                  },
-                },
-                process.env.REACT_APP_JWT_TOKEN_SECRET,
-                {
-                  expiresIn: "24h",
-                }
-              )
-
-              //  store in local storage and send to backend
-              localStorage.setItem(JWT_TOKEN_LOCAL_STORAGE, jwtToken)
-
-              CreateUser.createUserFirebase(user)
-                .then((response) => {
-                  if (response)
-                    classContext.setState(
-                      {
-                        componentToRender: "HomeForm",
-                        userEmail: user.email,
-                      },
-                      () => {
-                        classContext.context.updateState({
-                          isAuthenticated: true,
-                        })
-                      }
-                    )
-                })
-                .catch(console.error)
-            }
+            })
+            .catch(console.error)
+        }
       } else {
         console.info(FUNC_TAG, "no user or logout")
 
@@ -281,10 +276,14 @@ class Home extends Component {
     })
   }
 
+  logout = () => {
+    localStorage.clear() //  to clear the token
+    firebase.auth().signOut().catch(console.error)
+  }
+
   render() {
-    console.info('state: ', this.state)
-    const { makePanelVisible, showProgressBar } = this.state
-    console.info('showProgressBar', showProgressBar)
+    console.info("state: ", this.state)
+    const { makePanelVisible } = this.state
 
     return (
       <div className={"home-container container"}>
@@ -296,12 +295,6 @@ class Home extends Component {
 
           {/* RIGHT PART ( this changes based on values in Provider.js ) */}
           <div className="home-right-container col col-lg-6">
-            {showProgressBar ? (
-              <div className="progress-bar">
-                <CircularProgress size={"2rem"} color="secondary" />
-              </div>
-            ) : null}
-
             <div className="home-right-component">{this.renderComponent()}</div>
           </div>
 
@@ -319,10 +312,6 @@ class Home extends Component {
               }}
             />
           ) : null}
-
-          {/* <button className="btn btn-primary" onClick={this.logout}>
-            Logout
-          </button> */}
         </div>
       </div>
     )

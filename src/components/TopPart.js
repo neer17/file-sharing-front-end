@@ -112,7 +112,9 @@ class TopPart extends React.Component {
           ) : null}
           
           {isSettingsClicked ? (
-            <Settings />
+            <Settings logout={_ => {
+              this.logout()
+            }}/>
           ) : null}
         </div>
         <h2 className="h2-home-page">Share your files</h2>

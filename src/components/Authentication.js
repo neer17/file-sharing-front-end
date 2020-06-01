@@ -176,6 +176,8 @@ class Authentication extends Component {
 
     let { signUpComponentShown: signUpComponentShown, formError, showProgressBar } = this.state
 
+    console.info('show progress bar', showProgressBar)
+
     return (
       <div className={classnames("authentication-div p-4", {'pointer-events': showProgressBar})}>
         {/* Heading */}
