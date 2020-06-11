@@ -50,7 +50,8 @@ class Authentication extends Component {
   }
 
   cleanUpCode = () => {
-    reactLocalStorage.setObject(AUTH_STATE, this.state)
+      reactLocalStorage.setObject(AUTH_STATE, this.state)
+      console.info('cleanup code after ')
   }
 
   emailSignUp = (e) => {
@@ -146,8 +147,10 @@ class Authentication extends Component {
   googleSignIn = (e) => {
     e.preventDefault()
     
+    console.info('inside googe signin')
     const classContext = this
-    triggerGoogleSignIn().then(_ => {
+    triggerGoogleSignIn().then( _ => {
+      console.info('inside trigger google signin')
       classContext.setState({
         showProgressBar: true
       })
