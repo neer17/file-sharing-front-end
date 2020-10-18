@@ -22,8 +22,6 @@ class TopPart extends React.Component {
     }
 
     this.navigateToComponent = this.navigateToComponent.bind(this)
-
-    this.unlisten = null
   }
 
   componentDidMount() {

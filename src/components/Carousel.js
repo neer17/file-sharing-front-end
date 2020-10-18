@@ -36,7 +36,7 @@ export default class Carousel extends Component {
               <picture className="picture-container">
                 <img
                   className={"authentication-img"}
-                  src={require("./../images/sample-4.jpg")}
+                  src={require("./../images/sample-3.jpg")}
                   alt="Sample Image"
                 ></img>
               </picture>

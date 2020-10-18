@@ -46,100 +46,99 @@ class Home extends Component {
 
     const classContext = this
 
-    this.firebaseAuthListener = firebase
-      .auth()
-      .onAuthStateChanged(function (user) {
-        if (user) {
-          // User is signed in.
-          var displayName = user.displayName
-          var email = user.email
-          var uid = user.uid
+    this.firebaseAuthListener = firebase.auth().onAuthStateChanged(function (user) {
 
-          //  get token from session storage, validate
-          const jwtTokenFromLS = localStorage.getItem(JWT_TOKEN_LOCAL_STORAGE)
+      if (user) {
+        // User is signed in.
+        var displayName = user.displayName
+        var email = user.email
+        var uid = user.uid
 
-          /* if jwt token is found login otherwise create user */
-          if (jwtTokenFromLS) {
-            try {
-              jwt.verify(jwtTokenFromLS, process.env.REACT_APP_JWT_TOKEN_SECRET)
+        //  get token from session storage, validate
+        const jwtTokenFromLS = localStorage.getItem(JWT_TOKEN_LOCAL_STORAGE)
 
-              classContext.setState(
-                {
-                  componentToRender: "HomeForm",
-                  userEmail: user.email,
-                },
-                () => {
-                  console.info("User logged in")
+        /* if jwt token is found login otherwise create user */
+        if (jwtTokenFromLS) {
+          try {
+            jwt.verify(jwtTokenFromLS, process.env.REACT_APP_JWT_TOKEN_SECRET)
 
-                  classContext.context.updateState({
-                    isAuthenticated: true,
-                  })
-                }
-              )
-            } catch (error) {
-              //  invalid token, log-out
-              console.error(error)
-              classContext.logout()
-            }
-          } else {
-            //  generating jwt, sending jwt to backend
-            const jwtToken = jwt.sign(
+            classContext.setState(
               {
-                data: {
-                  name: displayName,
-                  email: email,
-                  uid: uid,
-                },
+                componentToRender: "HomeForm",
+                userEmail: user.email,
               },
-              process.env.REACT_APP_JWT_TOKEN_SECRET,
-              {
-                expiresIn: "24h",
+              () => {
+                console.info('User logged in')
+                
+                classContext.context.updateState({
+                  isAuthenticated: true,
+                })
               }
             )
-
-            //  store in local storage and send to backend
-            localStorage.setItem(JWT_TOKEN_LOCAL_STORAGE, jwtToken)
-
-            CreateUser.createUserFirebase(user)
-              .then(response => {
-                if (response)
-                  classContext.setState(
-                    {
-                      componentToRender: "HomeForm",
-                      userEmail: user.email,
-                    },
-                    () => {
-                      console.info("New user logged in")
-
-                      classContext.context.updateState({
-                        isAuthenticated: true,
-                      })
-                    }
-                  )
-              })
-              .catch(console.error)
+          } catch (error) {
+            //  invalid token, log-out
+            console.error(error)
+            classContext.logout()
           }
         } else {
-          console.info(FUNC_TAG, "no user or logout")
-
-          classContext.setState(
+          //  generating jwt, sending jwt to backend
+          const jwtToken = jwt.sign(
             {
-              componentToRender: "Authentication",
+              data: {
+                name: displayName,
+                email: email,
+                uid: uid,
+              },
             },
-            () => {
-              classContext.context.updateState({
-                isAuthenticated: false,
-              })
+            process.env.REACT_APP_JWT_TOKEN_SECRET,
+            {
+              expiresIn: "24h",
             }
           )
+
+          //  store in local storage and send to backend
+          localStorage.setItem(JWT_TOKEN_LOCAL_STORAGE, jwtToken)
+
+          CreateUser.createUserFirebase(user)
+            .then((response) => {
+              if (response)
+                classContext.setState(
+                  {
+                    componentToRender: "HomeForm",
+                    userEmail: user.email,
+                  },
+                  () => {
+                    console.info('New user logged in')
+
+                    classContext.context.updateState({
+                      isAuthenticated: true,
+                    })
+                  }
+                )
+            })
+            .catch(console.error)
         }
-      })
+      } else {
+        console.info(FUNC_TAG, "no user or logout")
+
+        classContext.setState(
+          {
+            componentToRender: "Authentication",
+          },
+          () => {
+            classContext.context.updateState({
+              isAuthenticated: false,
+            })
+          }
+        )
+      }
+    })
   }
 
   triggerUploading = (form, files) => {
     /*  this would be called multiple times on a slow network
      */
-    upload(form, files, event => {
+    upload(form, files, (event) => {
       const { type, payload, cancelSource } = event
 
       //  @see upload.js
@@ -189,7 +188,7 @@ class Home extends Component {
                 },
               })
             }}
-            changeComponent={componentToRender => {
+            changeComponent={(componentToRender) => {
               this.setState({
                 componentToRender,
               })
@@ -205,7 +204,7 @@ class Home extends Component {
               })
             }}
             data={this.state.uploadEvent.payload}
-            changeComponent={componentToRender => {
+            changeComponent={(componentToRender) => {
               this.setState({
                 componentToRender,
               })
@@ -216,7 +215,7 @@ class Home extends Component {
       case "Authentication":
         return (
           <Authentication
-            changeComponent={componentToRender => {
+            changeComponent={(componentToRender) => {
               this.setState({
                 componentToRender,
               })
@@ -231,24 +230,24 @@ class Home extends Component {
             onUploading={(form, files) => {
               this.triggerUploading(form, files)
             }}
-            changeComponent={componentToRender => {
+            changeComponent={(componentToRender) => {
               this.setState({
                 componentToRender,
               })
             }}
             userEmail={this.state.userEmail}
-            showPanel={makePanelVisible => {
+            showPanel={(makePanelVisible) => {
               this.setState({
                 makePanelVisible,
               })
             }}
-            updateFiles={files => {
+            updateFiles={(files) => {
               this.setState({
                 files,
               })
             }}
             files={this.state.files}
-            cancel={filename => {
+            cancel={(filename) => {
               this.cancel(filename)
             }}
           />
@@ -257,7 +256,7 @@ class Home extends Component {
   }
 
   // remove files from state
-  cancel = nameOfFile => {
+  cancel = (nameOfFile) => {
     const files = this.state.files
 
     files.forEach((file, index) => {
@@ -301,13 +300,13 @@ class Home extends Component {
           {/* MORE FILES PANEL */}
           {makePanelVisible === true ? (
             <Panel
-              showPanel={makePanelVisible => {
+              showPanel={(makePanelVisible) => {
                 this.setState({
                   makePanelVisible,
                 })
               }}
               files={this.state.files}
-              cancel={fileName => {
+              cancel={(fileName) => {
                 this.cancel(fileName)
               }}
             />
@@ -326,8 +325,8 @@ class Home extends Component {
 
   componentWillUnmount() {
     console.info("componentWillUnmount")
-    this.firebaseAuthListener && this.firebaseAuthListener()
-    this.authChangeListener = undefined
+   this.firebaseAuthListener && this.firebaseAuthListener()
+   this.authChangeListener = undefined
   }
 }
 

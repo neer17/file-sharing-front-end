@@ -14,7 +14,7 @@
     transform: rotate(20deg); }
 
 .h2-home-page, .h3-home-page, .h1-heading {
-  color: #f7f1f1fa; }
+  color: #141313fa; }
 
 .main-box {
   height: 60vh;
@@ -211,7 +211,7 @@ body {
   .app-home-upload-sent-icon i {
     font-size: 50px;
     display: inline-block;
-    border: 1px solid #f7f1f1fa;
+    border: 1px solid #141313fa;
     width: 100px;
     height: 100px;
     border-radius: 50%;
