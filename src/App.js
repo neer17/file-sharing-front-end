@@ -15,7 +15,6 @@ import { Provider } from "./components/Provider"
 import ErrorBoundary from "./components/ErrorBoundary"
 
 class App extends Component {
-  
   componentDidMount() {
     WebFont.load({
       google: {
@@ -32,7 +31,7 @@ class App extends Component {
         <div className="app__main">
           {/* background video */}
           <div className="app__video-div">
-            <video
+            {/*  <video
               playsInline="playsinline"
               autoPlay="autoplay"
               muted="muted"
@@ -43,7 +42,8 @@ class App extends Component {
                 src={require("./video/Mt_Baker.mp4")}
                 type="video/mp4"
               ></source>
-            </video>
+            </video> */}
+            <img className="video-background" src={require("./images/cover-image-2.jpg")} alt="Cover Image"/>
           </div>
 
           {/* Top Bar */}

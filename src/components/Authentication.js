@@ -36,7 +36,6 @@ class Authentication extends Component {
   /* listen for Auth changes */
   componentDidMount() {
     const FUNC_TAG = "componentDidMount: "
-    console.info(FUNC_TAG)
 
     //  register listener to run "cleanUpCode" before component unloads
     window.addEventListener("beforeunload", this.cleanUpCode)
@@ -51,7 +50,6 @@ class Authentication extends Component {
 
   cleanUpCode = () => {
       reactLocalStorage.setObject(AUTH_STATE, this.state)
-      console.info('cleanup code after ')
   }
 
   emailSignUp = (e) => {
@@ -66,10 +64,11 @@ class Authentication extends Component {
 
     triggerEmailSignUp(email, password, confirmPassword, username)
       .then((response) => {
-        console.info("Email Signup response ==> ", response)
+        // console.info("Email Signup response ==> ", response)
       })
       .catch((error) => {
-        console.error("Email Signup error => ", error)
+        // console.error("Email Signup error => ", error)
+        
         switch (error) {
           case INVALID_EMAIL: {
             formError = INVALID_EMAIL
@@ -116,10 +115,11 @@ class Authentication extends Component {
 
     triggerEmailSignIn(email, password)
       .then((res) => {
-        console.info("EmailSignIn ==> ", res.user.email)
+        // console.info("EmailSignIn ==> ", res.user.email)
       })
       .catch((error) => {
-        console.error(error)
+        // console.error(error)
+
         switch (error) {
           case INVALID_EMAIL: {
             formError = INVALID_EMAIL
@@ -147,15 +147,14 @@ class Authentication extends Component {
   googleSignIn = (e) => {
     e.preventDefault()
     
-    console.info('inside googe signin')
+    // console.info('inside google signin')
     const classContext = this
     triggerGoogleSignIn().then( _ => {
-      console.info('inside trigger google signin')
       classContext.setState({
         showProgressBar: true
       })
 
-    }).catch(console.error)
+    }).catch(/* console.error */)
   }
 
   showSignUpComponent = (e) => {
@@ -178,8 +177,6 @@ class Authentication extends Component {
     // console.info("=================== render ======================")
 
     let { signUpComponentShown: signUpComponentShown, formError, showProgressBar } = this.state
-
-    console.info('show progress bar', showProgressBar)
 
     return (
       <div className={classnames("authentication-div p-4", {'pointer-events': showProgressBar})}>
@@ -326,7 +323,6 @@ class Authentication extends Component {
   }
 
   componentWillUnmount() {
-    console.info('componentWillUnmount')
     window.removeEventListener("beforeunload", this.cleanUpCode)
   }
 }

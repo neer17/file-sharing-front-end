@@ -33,6 +33,7 @@ class TopPart extends React.Component {
   }
 
   componentWillUnmount() {
+    console.info('componentWillUnmount')
     this.unlisten()
   }
 
@@ -79,8 +80,6 @@ class TopPart extends React.Component {
   }
 
   render() {
-    console.log(this.TAG, "render state => ", this.state)
-
     const { isSettingsClicked } = this.state
     const { isAuthenticated } = this.context.getState()
 

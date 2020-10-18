@@ -22,8 +22,6 @@ class ViewFile extends Component {
   constructor(props) {
     super(props)
 
-    console.info("props", props)
-
     this.state = {
       post: null,
       showProgressBar: true,
@@ -36,8 +34,6 @@ class ViewFile extends Component {
    * We'll have access to props because of the "history" package
    */
   componentDidMount() {
-    console.info("componentDidMount")
-
     const { match } = this.props
 
     const postId = _.get(match, "params.id")
@@ -172,10 +168,6 @@ class ViewFile extends Component {
       </div>
     )
   }
-
-  // componentWillUnmount() {
-  //   console.info('componentWillUnmount')
-  // }
 }
 
 export default ViewFile

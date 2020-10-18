@@ -6,7 +6,7 @@ export const upload = (form, files, callback = (events) => {}) => {
   const FUNC_TAG = "upload"
 
 
-  console.log('upload.js url ==> ', url)
+  // console.log('upload.js url ==> ', url)
   //  creating an instance of form to send to the backend
   let data = new FormData()
 
@@ -45,7 +45,6 @@ export const upload = (form, files, callback = (events) => {}) => {
   axios
     .post(`${url}/upload-file`, data, config)
     .then((res) => {
-      console.info(FUNC_TAG, res)
       return callback({
         cancelSource: source,
         type: "success",

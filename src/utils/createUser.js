@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import {url} from './domainConfig'
 
-console.log('createUser url ==> ', url)
+// console.log('createUser url ==> ', url)
 
 class CreateUser {
     constructor(user) {

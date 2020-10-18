@@ -8,8 +8,7 @@ import { betterNumber } from "../utils/betterNumber"
 class HomeUploading extends Component {
   constructor(props) {
     super(props)
-    console.info("constructor")
-
+    
     this.state = {
       isOperationCancelled: false,
     }

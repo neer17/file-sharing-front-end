@@ -159,7 +159,7 @@ class HomeForm extends Component {
     if (prevFiles.length !== 0) finalFiles = [...prevFiles, ...filesArray]
     else finalFiles = filesArray
 
-    console.info("final files array", finalFiles)
+    // console.info("final files array", finalFiles)
 
     const totalSizeInMbs = HomeForm.checkFileSizeExceeded(finalFiles)
     totalSizeInMbs > 25 ? (fileSizeExceeded = true) : (fileSizeExceeded = false)
