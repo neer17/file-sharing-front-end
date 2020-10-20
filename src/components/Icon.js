@@ -39,10 +39,6 @@ export default class Icon extends Component {
     }, 200)
   }
 
-  componentWillUnmount() {
-    clearInterval(this.interval)
-  }
-
   render() {
     return (
       <React.Fragment>
@@ -57,5 +53,9 @@ export default class Icon extends Component {
         </IconContext.Provider>
       </React.Fragment>
     )
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval)
   }
 }

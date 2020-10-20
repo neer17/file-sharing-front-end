@@ -20,40 +20,6 @@ class HomeUploading extends Component {
     this.currentUploadSpeed = 0
   }
 
-  computeValues = () => {
-    const currentTime = new Date().getTime()
-    const { loaded, total } = this.uploadEvent.payload
-    const elapsedTime = currentTime - this.startTime
-    const diffInLoad = loaded - this.currentLoaded
-    this.currentUploadSpeed = (diffInLoad / elapsedTime) * 1000
-    const percentage = total !== 0 ? (loaded / total) * 100 : 0
-
-    const returnObject = {
-      currentLoaded: this.currentLoaded,
-      percentage,
-      currentUploadSpeed: this.currentUploadSpeed,
-    }
-    //  updating values
-    this.currentLoaded = loaded
-    this.startTime = currentTime
-
-    return returnObject
-  }
-
-  cancelRequest = () => {
-    this.uploadEvent.cancelSource.cancel(
-      "Operation cancelled by the user"
-    )
-
-    this.setState({
-      isOperationCancelled: true,
-    })
-  }
-
-  navigateBackToHome = () => {
-    this.props.changeComponent("HomeForm")
-  }
-
   render() {
     const total = this.uploadEvent.payload.total
 
@@ -133,13 +99,39 @@ class HomeUploading extends Component {
     )
   }
 
-  // componentDidMount() {
-  //   console.info('componentDidMount')
-  // }
+  computeValues = () => {
+    const currentTime = new Date().getTime()
+    const { loaded, total } = this.uploadEvent.payload
+    const elapsedTime = currentTime - this.startTime
+    const diffInLoad = loaded - this.currentLoaded
+    this.currentUploadSpeed = (diffInLoad / elapsedTime) * 1000
+    const percentage = total !== 0 ? (loaded / total) * 100 : 0
 
-  // componentWillUnmount() {
-  //   console.info('componentWillUnmount')
-  // }
+    const returnObject = {
+      currentLoaded: this.currentLoaded,
+      percentage,
+      currentUploadSpeed: this.currentUploadSpeed,
+    }
+    //  updating values
+    this.currentLoaded = loaded
+    this.startTime = currentTime
+
+    return returnObject
+  }
+
+  cancelRequest = () => {
+    this.uploadEvent.cancelSource.cancel(
+      "Operation cancelled by the user"
+    )
+
+    this.setState({
+      isOperationCancelled: true,
+    })
+  }
+
+  navigateBackToHome = () => {
+    this.props.changeComponent("HomeForm")
+  }
 }
 
 HomeUploading.contextType = MyContext

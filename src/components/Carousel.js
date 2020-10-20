@@ -19,8 +19,7 @@ export default class Carousel extends Component {
                 <img
                   className="authentication-img"
                   src={require("./../images/sample-1.jpg")}
-                  alt="Sample Image"
-                ></img>
+                />
               </picture>
             </div>
             <div className="carousel-item" id="carousel-item">
@@ -28,8 +27,7 @@ export default class Carousel extends Component {
                 <img
                   className={"authentication-img"}
                   src={require("./../images/sample-2.jpg")}
-                  alt="Sample Image"
-                ></img>
+                />
               </picture>
             </div>
             <div className="carousel-item" id="carousel-item">
@@ -37,8 +35,7 @@ export default class Carousel extends Component {
                 <img
                   className={"authentication-img"}
                   src={require("./../images/sample-3.jpg")}
-                  alt="Sample Image"
-                ></img>
+                />
               </picture>
             </div>
           </div>

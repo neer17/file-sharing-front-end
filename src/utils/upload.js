@@ -3,9 +3,6 @@ import axios from "axios"
 import { url } from "./domainConfig"
 
 export const upload = (form, files, callback = (events) => {}) => {
-  const FUNC_TAG = "upload"
-
-
   // console.log('upload.js url ==> ', url)
   //  creating an instance of form to send to the backend
   let data = new FormData()

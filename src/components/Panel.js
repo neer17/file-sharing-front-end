@@ -22,8 +22,42 @@ class Panel extends Component {
     document.addEventListener("mousedown", this.hidePanel)
   }
 
-  componentWillUnmount() {
-    document.removeEventListener("mousedown", this.hidePanel)
+  render() {
+    const files = this.props.files
+
+    return (
+      <div className="panel container" ref={this.ref}>
+        <div className="panel__cross-btn" onClick={this.closePanel}>
+          &times;
+        </div>
+
+        {files.length > 0 ? (
+          <div>
+            {files.map((file) => {
+              return (
+                <div
+                  className="panel__container d-flex p-2"
+                  key={file.name + `${new Date().getTime()}`}
+                >
+                  <div className="panel__img align-self-center p-1 mr-4">
+                    {this.findFileType(file.type)}
+                  </div>
+                  <div className="panel__filename flex-grow-1 p-1">
+                    {file.name}
+                  </div>
+                  <div
+                    className="panel__close-button p-1"
+                    onClick={this.onCancel.bind(this, file.name)}
+                  >
+                    &times;
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        ) : null}
+      </div>
+    )
   }
 
   hidePanel = (event) => {
@@ -81,42 +115,8 @@ class Panel extends Component {
     }
   }
 
-  render() {
-    const files = this.props.files
-
-    return (
-      <div className="panel container" ref={this.ref}>
-        <div className="panel__cross-btn" onClick={this.closePanel}>
-          &times;
-        </div>
-
-        {files.length > 0 ? (
-          <div>
-            {files.map((file) => {
-              return (
-                <div
-                  className="panel__container d-flex p-2"
-                  key={file.name + `${new Date().getTime()}`}
-                >
-                  <div className="panel__img align-self-center p-1 mr-4">
-                    {this.findFileType(file.type)}
-                  </div>
-                  <div className="panel__filename flex-grow-1 p-1">
-                    {file.name}
-                  </div>
-                  <div
-                    className="panel__close-button p-1"
-                    onClick={this.onCancel.bind(this, file.name)}
-                  >
-                    &times;
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        ) : null}
-      </div>
-    )
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.hidePanel)
   }
 }
 

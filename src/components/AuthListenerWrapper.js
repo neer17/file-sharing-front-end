@@ -15,10 +15,6 @@ import CreateUser from "../utils/createUser"
 import { JWT_TOKEN_LOCAL_STORAGE } from "../utils/constants"
 
 class AuthListenerWrapper extends Component {
-  constructor(props, context) {
-    super(props, context)
-  }
-
   componentDidMount() {
     WebFont.load({
       google: {
@@ -50,8 +46,7 @@ class AuthListenerWrapper extends Component {
   //  listen auth changes from Firebase
   authChangeListener = () => {
     const FUNC_TAG = "Home.js: authChangeListener: "
-
-    const classContext = this
+    
     const myContext = this.context
 
     this.firebaseAuthListener = firebase

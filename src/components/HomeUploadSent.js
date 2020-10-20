@@ -5,11 +5,6 @@ import Icon from "./Icon"
 import history from "../utils/history"
 
 class HomeUploadSent extends Component {
-  constructor(props) {
-    super(props) 
-    // console.info('props', props)
-  }
-
   render() {
     const objectId = this.props.data.file[0]._id
     const toEmail = this.props.data.file[0].to
@@ -58,22 +53,6 @@ class HomeUploadSent extends Component {
       </div>
     )
   }
-
-  // componentDidCatch(error, errorInfo) {
-  //   console.error("error ==> ", error, "\n", "error info ==> ", errorInfo)
-  // }
-
-  // componentDidMount() {
-  //   console.info("componentDidMount")
-  // }
-
-  // componentWillUnmount() {
-  //   console.info("componentWillUnmount")
-  // }
-
-  // componentDidCatch() {
-  //   console.info('componentDidCatch')
-  // }
 }
 
 HomeUploadSent.propTypes = {

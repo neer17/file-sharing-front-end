@@ -30,8 +30,24 @@ export class Provider extends Component {
     window.addEventListener("beforeunload", this.cleanUpCode)
   }
 
+  render() {
+    return (
+      //  state will now be available to all the components
+      //  as this Provider class would be wrapped around all the components in App.js
+      //  updating and getting the state with respective methods
+      <Context.Provider
+        value={{
+          updateState: this.updateState,
+          getState: this.getState,
+          cancel: this.cancel,
+        }}
+      >
+        {this.props.children}
+      </Context.Provider>
+    )
+  }
+
   updateState = (object = {}) => {
-    const FUNC_TAG = "updateState"
     this.setState(
       {
         ...object,
@@ -48,23 +64,6 @@ export class Provider extends Component {
 
   cleanUpCode = () => {
     reactLocalStorage.setObject("state", this.state)
-  }
-
-  render() {
-    return (
-      //  state will now be available to all the components
-      //  as this Provider class would be wrapped around all the components in App.js
-      //  updating and getting the state with respective methods
-      <Context.Provider
-        value={{
-          updateState: this.updateState,
-          getState: this.getState,
-          cancel: this.cancel,
-        }}
-      >
-        {this.props.children}
-      </Context.Provider>
-    )
   }
 
   componentWillUnmount() {

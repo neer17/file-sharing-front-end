@@ -3,7 +3,7 @@ import classnames from "classnames"
 import { LinearProgress } from "@material-ui/core"
 import Dropzone from "react-dropzone"
 import { IconContext } from "react-icons"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { Alert } from "@material-ui/lab"
 import { GiFiles } from "react-icons/gi"
 
 import { MyContext } from "./Provider"
@@ -361,15 +361,6 @@ class HomeForm extends Component {
   showPanel = () => {
     this.props.showPanel(true)
   }
-
-  // componentDidCatch(error, errorInfo) {
-  //   const FUNC_TAG = "componentDidCatch"
-  //   console.info(FUNC_TAG, "error: ", error, "error info", errorInfo)
-  // }
-
-  // componentWillUnmount() {
-  //   console.info("componentWillUnmount")
-  // }
 }
 
 HomeForm.contextType = MyContext

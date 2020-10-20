@@ -34,38 +34,6 @@ class TopPart extends React.Component {
     return true
   }
 
-  navigateToComponent() {
-    const path = history.location.pathname
-    if (path !== "/") history.goBack()
-    else if ("/")
-      // this.context.updateState({
-      //   componentToRender: "HomeForm",
-      // })
-      window.location.reload()
-  }
-
-  onSettingsClick = () => {
-    const { isSettingsClicked } = this.state
-
-    this.setState({
-      isSettingsClicked: !isSettingsClicked,
-    })
-  }
-
-  logout = () => {
-    const { isSettingsClicked } = this.state
-
-    this.setState(
-      {
-        isSettingsClicked: !isSettingsClicked,
-      },
-      () => {
-        localStorage.clear() //  to clear the token
-        firebase.auth().signOut().catch(console.error)
-      }
-    )
-  }
-
   render() {
     const { isSettingsClicked } = this.state
     const { isAuthenticated } = this.context.getState()
@@ -108,8 +76,38 @@ class TopPart extends React.Component {
       </div>
     )
   }
-}
 
-// TopPart.contextType = MyContext
+  navigateToComponent() {
+    const path = history.location.pathname
+    if (path !== "/") history.goBack()
+    else if ("/")
+      // this.context.updateState({
+      //   componentToRender: "HomeForm",
+      // })
+      window.location.reload()
+  }
+
+  onSettingsClick = () => {
+    const { isSettingsClicked } = this.state
+
+    this.setState({
+      isSettingsClicked: !isSettingsClicked,
+    })
+  }
+
+  logout = () => {
+    const { isSettingsClicked } = this.state
+
+    this.setState(
+      {
+        isSettingsClicked: !isSettingsClicked,
+      },
+      () => {
+        localStorage.clear() //  to clear the token
+        firebase.auth().signOut().catch(console.error)
+      }
+    )
+  }
+}
 
 export default TopPart
