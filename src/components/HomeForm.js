@@ -33,160 +33,6 @@ class HomeForm extends Component {
     }
   }
 
-  static getDerivedStateFromProps(props, state) {
-    const files = props.files
-    const fileSizeExceeded = HomeForm.checkFileSizeExceeded(files)
-    return {
-      ...state,
-      fileSizeExceeded,
-    }
-  }
-
-  //  cancel method for removing the items added in drag and drop
-  onCancel = (fileName) => {
-    this.props.cancel(fileName)
-  }
-
-  //  on form submission
-  onSubmit = (e) => {
-    e.preventDefault()
-    this.formValidation(e)
-  }
-
-  //  validating the input fields
-  formValidation = (e) => {
-    e.preventDefault()
-
-    let fields = {
-      form: {
-        from: "",
-        to: "",
-        message: "",
-      },
-      error: {
-        isNull: true,
-        isValid: false,
-      },
-    }
-
-    //  regex to test the emails
-    let regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
-    let { isNull, isValid } = fields.error
-    let { from, to, message } = fields.form
-
-    //  getting values from the inputs
-    const receiversEmail = document.getElementById("receiversEmailID").value
-    const sendersEmail = this.props.userEmail
-    const messageInput = document.getElementById("messageTextAreaID").value
-
-    //  logic for validation
-    if (receiversEmail.length === 0 && sendersEmail.length === 0) {
-      isNull = true
-      isValid = false
-      // console.log('Addresses are null')
-    } else if (receiversEmail.length !== 0 && sendersEmail.length !== 0) {
-      isNull = false
-
-      //  validating the emails of receiver's and sender's
-      const receiversEmailValid = regexEmail.test(receiversEmail)
-      const sendersEmailValid = regexEmail.test(sendersEmail)
-
-      isValid = receiversEmailValid && sendersEmailValid
-      // console.log(`isValid ==> ${isValid}`)
-
-      if (isValid && !isNull) {
-        from = sendersEmail
-        to = receiversEmail
-        message = messageInput
-      }
-    }
-
-    //  updating "fields"
-    fields.form.from = from
-    fields.form.to = to
-    fields.form.message = message
-    fields.error.isNull = isNull
-    fields.error.isValid = isValid
-
-    //  updating the state
-    //  files to pe passed in upload()
-    const files = this.props.files
-    this.setState(
-      (prevState) => {
-        return {
-          ...prevState,
-          ...fields,
-        }
-      },
-      () => {
-        /*console.log(`Inside callback after the state is updated ==> `, this.state)*/
-
-        //  if isNUll === true or isValid === false or props.files.length === 0 then returning
-        //  and the respective components will turn red as the classnames would get changed
-        if (
-          this.state.error.isNull ||
-          !this.state.error.isValid ||
-          files.length === 0
-        )
-          return
-
-        //  this will trigger "upload" method in "Home"
-        this.setState(
-          {
-            showProgressBar: true,
-            filesSent: true
-          },
-          () => {
-            //  to show the progress bar
-            setTimeout(() => {
-              this.props.onUploading(this.state.form, files)
-            }, 1500)
-          }
-        )
-      }
-    )
-  }
-
-  //  getting previous files from the state in Home.js, adding it with the new files
-  onFilesAdded = (filesArray) => {
-    let { fileSizeExceeded } = this.state
-
-    const classContext = this
-
-    const prevFiles = this.props.files
-    let finalFiles = null
-    if (prevFiles.length !== 0) finalFiles = [...prevFiles, ...filesArray]
-    else finalFiles = filesArray
-
-    // console.info("final files array", finalFiles)
-
-    const totalSizeInMbs = HomeForm.checkFileSizeExceeded(finalFiles)
-    totalSizeInMbs > 25 ? (fileSizeExceeded = true) : (fileSizeExceeded = false)
-
-    this.setState(
-      {
-        fileSizeExceeded,
-      },
-      () => {
-        classContext.props.updateFiles(finalFiles)
-      }
-    )
-  }
-
-  static checkFileSizeExceeded = (finalFiles) => {
-    let totalSize = 0
-    finalFiles.forEach((file) => {
-      totalSize += file.size
-    })
-
-    return Math.ceil(totalSize / (1024 * 1024)) > 25 ? true : false
-  }
-
-  showPanel = () => {
-    this.props.showPanel(true)
-  }
-
   render() {
     const files = this.props.files
     const { showProgressBar, fileSizeExceeded, filesSent } = this.state
@@ -359,6 +205,161 @@ class HomeForm extends Component {
         </div>
       </div>
     )
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const files = props.files
+    const fileSizeExceeded = HomeForm.checkFileSizeExceeded(files)
+    return {
+      ...state,
+      fileSizeExceeded,
+    }
+  }
+
+  //  cancel method for removing the items added in drag and drop
+  onCancel = (fileName) => {
+    this.props.cancel(fileName)
+  }
+
+  //  on form submission
+  onSubmit = (e) => {
+    e.preventDefault()
+    this.formValidation(e)
+  }
+
+  //  validating the input fields
+  formValidation = (e) => {
+    e.preventDefault()
+
+    let fields = {
+      form: {
+        from: "",
+        to: "",
+        message: "",
+      },
+      error: {
+        isNull: true,
+        isValid: false,
+      },
+    }
+
+    //  regex to test the emails
+    let regexEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+    let { isNull, isValid } = fields.error
+    let { from, to, message } = fields.form
+
+    //  getting values from the inputs
+    const receiversEmail = document.getElementById("receiversEmailID").value
+    const sendersEmail = this.props.userEmail
+    const messageInput = document.getElementById("messageTextAreaID").value
+
+    //  logic for validation
+    if (receiversEmail.length === 0 && sendersEmail.length === 0) {
+      isNull = true
+      isValid = false
+      // console.log('Addresses are null')
+    } else if (receiversEmail.length !== 0 && sendersEmail.length !== 0) {
+      isNull = false
+
+      //  validating the emails of receiver's and sender's
+      const receiversEmailValid = regexEmail.test(receiversEmail)
+      const sendersEmailValid = regexEmail.test(sendersEmail)
+
+      isValid = receiversEmailValid && sendersEmailValid
+      // console.log(`isValid ==> ${isValid}`)
+
+      if (isValid && !isNull) {
+        from = sendersEmail
+        to = receiversEmail
+        message = messageInput
+      }
+    }
+
+    //  updating "fields"
+    fields.form.from = from
+    fields.form.to = to
+    fields.form.message = message
+    fields.error.isNull = isNull
+    fields.error.isValid = isValid
+
+    //  updating the state
+    //  files to pe passed in upload()
+    const files = this.props.files
+    
+    this.setState(
+      (prevState) => {
+        return {
+          ...prevState,
+          ...fields,
+        }
+      },
+      () => {
+        /*console.log(`Inside callback after the state is updated ==> `, this.state)*/
+
+        //  if isNUll === true or isValid === false or props.files.length === 0 then returning
+        //  and the respective components will turn red as the classnames would get changed
+        if (
+          this.state.error.isNull ||
+          !this.state.error.isValid ||
+          files.length === 0
+        )
+          return
+
+        //  this will trigger "upload" method in "Home"
+        this.setState(
+          {
+            showProgressBar: true,
+            filesSent: true
+          },
+          () => {
+            //  delay added to show the progress bar
+            setTimeout(() => {
+              this.props.onUploading(this.state.form, files)
+            }, 1500)
+          }
+        )
+      }
+    )
+  }
+
+  //  getting previous files from the state in Home.js, adding it with the new files
+  onFilesAdded = (filesArray) => {
+    let { fileSizeExceeded } = this.state
+
+    const classContext = this
+
+    const prevFiles = this.props.files
+    let finalFiles = null
+    if (prevFiles.length !== 0) finalFiles = [...prevFiles, ...filesArray]
+    else finalFiles = filesArray
+
+    // console.info("final files array", finalFiles)
+
+    const totalSizeInMbs = HomeForm.checkFileSizeExceeded(finalFiles)
+    totalSizeInMbs > 25 ? (fileSizeExceeded = true) : (fileSizeExceeded = false)
+
+    this.setState(
+      {
+        fileSizeExceeded,
+      },
+      () => {
+        classContext.props.updateFiles(finalFiles)
+      }
+    )
+  }
+
+  static checkFileSizeExceeded = (finalFiles) => {
+    let totalSize = 0
+    finalFiles.forEach((file) => {
+      totalSize += file.size
+    })
+
+    return Math.ceil(totalSize / (1024 * 1024)) > 25 ? true : false
+  }
+
+  showPanel = () => {
+    this.props.showPanel(true)
   }
 
   // componentDidCatch(error, errorInfo) {

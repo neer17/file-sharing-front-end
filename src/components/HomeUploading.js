@@ -8,19 +8,21 @@ import { betterNumber } from "../utils/betterNumber"
 class HomeUploading extends Component {
   constructor(props) {
     super(props)
-    
+
     this.state = {
       isOperationCancelled: false,
     }
 
+    this.uploadEvent = this.props.uploadEvent ? this.props.uploadEvent : null
+
     this.startTime = new Date().getTime()
-    this.currentLoaded = this.props.uploadEvent.payload.loaded
+    this.currentLoaded = this.uploadEvent.payload.loaded
     this.currentUploadSpeed = 0
   }
 
   computeValues = () => {
     const currentTime = new Date().getTime()
-    const { loaded, total } = this.props.uploadEvent.payload
+    const { loaded, total } = this.uploadEvent.payload
     const elapsedTime = currentTime - this.startTime
     const diffInLoad = loaded - this.currentLoaded
     this.currentUploadSpeed = (diffInLoad / elapsedTime) * 1000
@@ -39,7 +41,7 @@ class HomeUploading extends Component {
   }
 
   cancelRequest = () => {
-    this.props.uploadEvent.cancelSource.cancel(
+    this.uploadEvent.cancelSource.cancel(
       "Operation cancelled by the user"
     )
 
@@ -53,7 +55,7 @@ class HomeUploading extends Component {
   }
 
   render() {
-    const total = this.props.uploadEvent.payload.total
+    const total = this.uploadEvent.payload.total
 
     const {
       currentLoaded,

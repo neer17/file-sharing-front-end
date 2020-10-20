@@ -24,17 +24,6 @@ class TopPart extends React.Component {
     this.navigateToComponent = this.navigateToComponent.bind(this)
   }
 
-  componentDidMount() {
-    this.unlisten = history.listen((location) => {
-      console.info("history location:", location)
-    })
-  }
-
-  componentWillUnmount() {
-    console.info('componentWillUnmount')
-    this.unlisten()
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     const isAuthenticated = this.context.getState().isAuthenticated
     if (isAuthenticated === false)

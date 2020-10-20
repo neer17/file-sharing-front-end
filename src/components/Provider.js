@@ -15,7 +15,14 @@ export class Provider extends Component {
     super(props)
     this.state = {
       isAuthenticated: false,
-      files: []
+      files: [],
+      componentToRender: "Authentication",
+      userEmail: null,
+      uploadEvent: {
+        type: null,
+        payload: null,
+        cancelSource: null,
+      },
     }
   }
 
@@ -30,7 +37,7 @@ export class Provider extends Component {
         ...object,
       },
       () => {
-        // console.info('state =>', this.state)
+        // console.info("state =>", this.state)
       }
     )
   }

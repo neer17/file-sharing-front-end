@@ -30,7 +30,7 @@ class Authentication extends Component {
   state = {
     signUpComponentShown: false,
     formError: null,
-    showProgressBar: false
+    showProgressBar: false,
   }
 
   /* listen for Auth changes */
@@ -48,138 +48,19 @@ class Authentication extends Component {
       })
   }
 
-  cleanUpCode = () => {
-      reactLocalStorage.setObject(AUTH_STATE, this.state)
-  }
-
-  emailSignUp = (e) => {
-    e.preventDefault()
-
-    let { formError } = this.state
-
-    const email = e.target.inputEmail.value
-    const password = e.target.inputPassword.value
-    const username = e.target.inputUsername.value
-    const confirmPassword = e.target.inputConfirmPassword.value
-
-    triggerEmailSignUp(email, password, confirmPassword, username)
-      .then((response) => {
-        // console.info("Email Signup response ==> ", response)
-      })
-      .catch((error) => {
-        // console.error("Email Signup error => ", error)
-        
-        switch (error) {
-          case INVALID_EMAIL: {
-            formError = INVALID_EMAIL
-            break
-          }
-          case EMPTY_EMAIL: {
-            formError = EMPTY_EMAIL
-            break
-          }
-          case EMPTY_PASSWORD: {
-            formError = EMPTY_PASSWORD
-            break
-          }
-          case EMPTY_CONFIRM_PASSWORD: {
-            formError = EMPTY_CONFIRM_PASSWORD
-            break
-          }
-          case PASSWORD_DOES_NOT_MATCH: {
-            formError = PASSWORD_DOES_NOT_MATCH
-            break
-          }
-          case EMPTY_USERNAME: {
-            formError = EMPTY_USERNAME
-            break
-          }
-          default: {
-            // to handle error from firebase
-          }
-        }
-
-        this.setState({
-          formError,
-        })
-      })
-  }
-
-  emailSignIn = (e) => {
-    e.preventDefault()
-
-    let { formError } = this.state
-
-    const email = e.target.inputEmail.value
-    const password = e.target.inputPassword.value
-
-    triggerEmailSignIn(email, password)
-      .then((res) => {
-        // console.info("EmailSignIn ==> ", res.user.email)
-      })
-      .catch((error) => {
-        // console.error(error)
-
-        switch (error) {
-          case INVALID_EMAIL: {
-            formError = INVALID_EMAIL
-            break
-          }
-          case EMPTY_EMAIL: {
-            formError = EMPTY_EMAIL
-            break
-          }
-          case EMPTY_PASSWORD: {
-            formError = EMPTY_PASSWORD
-            break
-          }
-          default: {
-            // handle error from Firebase
-          }
-        }
-
-        this.setState({
-          formError,
-        })
-      })
-  }
-
-  googleSignIn = (e) => {
-    e.preventDefault()
-    
-    // console.info('inside google signin')
-    const classContext = this
-    triggerGoogleSignIn().then( _ => {
-      classContext.setState({
-        showProgressBar: true
-      })
-
-    }).catch(/* console.error */)
-  }
-
-  showSignUpComponent = (e) => {
-    e.preventDefault()
-
-    this.setState({
-      signUpComponentShown: true,
-    })
-  }
-
-  showSignInComponent = (e) => {
-    e.preventDefault()
-
-    this.setState({
-      signUpComponentShown: false,
-    })
-  }
-
   render() {
-    // console.info("=================== render ======================")
-
-    let { signUpComponentShown: signUpComponentShown, formError, showProgressBar } = this.state
+    let {
+      signUpComponentShown,
+      formError,
+      showProgressBar,
+    } = this.state
 
     return (
-      <div className={classnames("authentication-div p-4", {'pointer-events': showProgressBar})}>
+      <div
+        className={classnames("authentication-div p-4", {
+          "pointer-events": showProgressBar,
+        })}
+      >
         {/* Heading */}
         <div className="d-flex flex-row justify-content-center">
           <div className="p-2 align-self-center">
@@ -320,6 +201,132 @@ class Authentication extends Component {
         ) : null}
       </div>
     )
+  }
+
+  cleanUpCode = () => {
+    reactLocalStorage.setObject(AUTH_STATE, this.state)
+  }
+
+  emailSignUp = e => {
+    e.preventDefault()
+
+    let { formError } = this.state
+
+    const email = e.target.inputEmail.value
+    const password = e.target.inputPassword.value
+    const username = e.target.inputUsername.value
+    const confirmPassword = e.target.inputConfirmPassword.value
+
+    triggerEmailSignUp(email, password, confirmPassword, username)
+      .then(response => {
+        // console.info("Email Signup response ==> ", response)
+      })
+      .catch(error => {
+        // console.error("Email Signup error => ", error)
+
+        switch (error) {
+          case INVALID_EMAIL: {
+            formError = INVALID_EMAIL
+            break
+          }
+          case EMPTY_EMAIL: {
+            formError = EMPTY_EMAIL
+            break
+          }
+          case EMPTY_PASSWORD: {
+            formError = EMPTY_PASSWORD
+            break
+          }
+          case EMPTY_CONFIRM_PASSWORD: {
+            formError = EMPTY_CONFIRM_PASSWORD
+            break
+          }
+          case PASSWORD_DOES_NOT_MATCH: {
+            formError = PASSWORD_DOES_NOT_MATCH
+            break
+          }
+          case EMPTY_USERNAME: {
+            formError = EMPTY_USERNAME
+            break
+          }
+          default: {
+            // to handle error from firebase
+          }
+        }
+
+        this.setState({
+          formError,
+        })
+      })
+  }
+
+  emailSignIn = e => {
+    e.preventDefault()
+
+    let { formError } = this.state
+
+    const email = e.target.inputEmail.value
+    const password = e.target.inputPassword.value
+
+    triggerEmailSignIn(email, password)
+      .then(res => {
+        // console.info("EmailSignIn ==> ", res.user.email)
+      })
+      .catch(error => {
+        // console.error(error)
+
+        switch (error) {
+          case INVALID_EMAIL: {
+            formError = INVALID_EMAIL
+            break
+          }
+          case EMPTY_EMAIL: {
+            formError = EMPTY_EMAIL
+            break
+          }
+          case EMPTY_PASSWORD: {
+            formError = EMPTY_PASSWORD
+            break
+          }
+          default: {
+            // handle error from Firebase
+          }
+        }
+
+        this.setState({
+          formError,
+        })
+      })
+  }
+
+  googleSignIn = e => {
+    e.preventDefault()
+
+    // console.info('inside google signin')
+    const classContext = this
+    triggerGoogleSignIn()
+      .then(_ => {
+        classContext.setState({
+          showProgressBar: true,
+        })
+      })
+      .catch(/* console.error */)
+  }
+
+  showSignUpComponent = e => {
+    e.preventDefault()
+
+    this.setState({
+      signUpComponentShown: true,
+    })
+  }
+
+  showSignInComponent = e => {
+    e.preventDefault()
+
+    this.setState({
+      signUpComponentShown: false,
+    })
   }
 
   componentWillUnmount() {

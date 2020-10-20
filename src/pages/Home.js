@@ -1,20 +1,14 @@
 /* eslint-disable */
 
 import React, { Component } from "react"
-import jwt from "jsonwebtoken"
 
-import TopPartHome from "../components/TopPart"
+import Authentication from "../components/Authentication"
 import HomeForm from "../components/HomeForm"
 import HomeUploading from "../components/HomeUploading"
 import HomeUploadSent from "../components/HomeUploadSent"
 import Panel from "../components/Panel"
 import { MyContext } from "../components/Provider"
-import Authentication from "../components/Authentication"
 import Carousel from "../components/Carousel"
-import { firebase } from "../utils/firebaseAuth"
-import CreateUser from "../utils/createUser"
-import { JWT_TOKEN_LOCAL_STORAGE } from "../utils/constants"
-import history from "./../utils/history"
 import { upload } from "./../utils/upload"
 
 /*
@@ -22,123 +16,109 @@ import { upload } from "./../utils/upload"
  * "Provider.js" only contains the state of this class
  * */
 class Home extends Component {
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
 
     this.state = {
-      componentToRender: "Authentication",
-      uploadEvent: {
-        type: null,
-        payload: null,
-        cancelSource: null,
-      },
-      userEmail: null,
       makePanelVisible: false,
       files: [],
     }
-
-    this.authChangeListener = this.authChangeListener.bind(this)
   }
 
-  //  listen auth changes from Firebase
-  authChangeListener = () => {
-    const FUNC_TAG = "Home.js: authChangeListener: "
+  //  switching the components
+  renderComponent = () => {
+    const myContext = this.context
+    const { componentToRender, userEmail, uploadEvent } = myContext.getState()
 
-    const classContext = this
+    // console.info("componentToRender ==> ", componentToRender)
 
-    this.firebaseAuthListener = firebase.auth().onAuthStateChanged(function (user) {
-
-      if (user) {
-        // User is signed in.
-        var displayName = user.displayName
-        var email = user.email
-        var uid = user.uid
-
-        //  get token from session storage, validate
-        const jwtTokenFromLS = localStorage.getItem(JWT_TOKEN_LOCAL_STORAGE)
-
-        /* if jwt token is found login otherwise create user */
-        if (jwtTokenFromLS) {
-          try {
-            jwt.verify(jwtTokenFromLS, process.env.REACT_APP_JWT_TOKEN_SECRET)
-
-            classContext.setState(
-              {
+    switch (componentToRender) {
+      case "HomeUploading":
+        return (
+          <HomeUploading
+            uploadEvent={uploadEvent}
+            onCancel={() => {
+              myContext.updateState({
                 componentToRender: "HomeForm",
-                userEmail: user.email,
-              },
-              () => {
-                console.info('User logged in')
-                
-                classContext.context.updateState({
-                  isAuthenticated: true,
-                })
-              }
-            )
-          } catch (error) {
-            //  invalid token, log-out
-            console.error(error)
-            classContext.logout()
-          }
-        } else {
-          //  generating jwt, sending jwt to backend
-          const jwtToken = jwt.sign(
-            {
-              data: {
-                name: displayName,
-                email: email,
-                uid: uid,
-              },
-            },
-            process.env.REACT_APP_JWT_TOKEN_SECRET,
-            {
-              expiresIn: "24h",
-            }
-          )
-
-          //  store in local storage and send to backend
-          localStorage.setItem(JWT_TOKEN_LOCAL_STORAGE, jwtToken)
-
-          CreateUser.createUserFirebase(user)
-            .then((response) => {
-              if (response)
-                classContext.setState(
-                  {
-                    componentToRender: "HomeForm",
-                    userEmail: user.email,
-                  },
-                  () => {
-                    console.info('New user logged in')
-
-                    classContext.context.updateState({
-                      isAuthenticated: true,
-                    })
-                  }
-                )
-            })
-            .catch(console.error)
-        }
-      } else {
-        console.info(FUNC_TAG, "no user or logout")
-
-        classContext.setState(
-          {
-            componentToRender: "Authentication",
-          },
-          () => {
-            classContext.context.updateState({
-              isAuthenticated: false,
-            })
-          }
+                uploadEvent: {
+                  type: null,
+                  payload: null,
+                  cancelSource: null,
+                },
+              })
+            }}
+            changeComponent={componentToRender => {
+              myContext.updateState({
+                componentToRender,
+              })
+            }}
+          />
         )
-      }
-    })
+      case "HomeUploadSent":
+        return (
+          <HomeUploadSent
+            onSendAnotherFile={() => {
+              myContext.updateState({
+                componentToRender: "HomeForm",
+              })
+            }}
+            data={uploadEvent.payload}
+            changeComponent={componentToRender => {
+              myContext.updateState({
+                componentToRender,
+              })
+            }}
+          />
+        )
+
+      case "Authentication":
+        return (
+          <Authentication
+            changeComponent={componentToRender => {
+              myContext.updateState({
+                componentToRender,
+              })
+            }}
+          />
+        )
+
+      case "HomeForm":
+        return (
+          <HomeForm
+            onUploading={(form, files) => {
+              this.triggerUploading(form, files)
+            }}
+            changeComponent={componentToRender => {
+              myContext.updateState({
+                componentToRender,
+              })
+            }}
+            userEmail={userEmail}
+            showPanel={makePanelVisible => {
+              this.setState({
+                makePanelVisible,
+              })
+            }}
+            updateFiles={files => {
+              this.setState({
+                files,
+              })
+            }}
+            files={this.state.files}
+            cancel={filename => {
+              this.cancel(filename)
+            }}
+          />
+        )
+    }
   }
 
   triggerUploading = (form, files) => {
+    const myContext = this.context
+
     /*  this would be called multiple times on a slow network
      */
-    upload(form, files, (event) => {
+    upload(form, files, event => {
       const { type, payload, cancelSource } = event
 
       //  @see upload.js
@@ -154,109 +134,15 @@ class Home extends Component {
         cancelSource,
       }
 
-      this.setState(
-        {
-          componentToRender,
-          uploadEvent,
-        },
-        () => {
-          // console.info("state", this.state)
-        }
-      )
+      myContext.updateState({
+        componentToRender,
+        uploadEvent,
+      })
     })
-  }
-  //  switching the components
-  renderComponent = () => {
-    const { componentToRender } = this.state
-
-    // console.info("componentToRender ==> ", componentToRender)
-
-    switch (componentToRender) {
-      case "HomeUploading":
-        const { uploadEvent } = this.state
-
-        return (
-          <HomeUploading
-            uploadEvent={uploadEvent}
-            onCancel={() => {
-              this.setState({
-                componentToRender: "HomeForm",
-                uploadEvent: {
-                  type: null,
-                  payload: null,
-                  cancelSource: null,
-                },
-              })
-            }}
-            changeComponent={(componentToRender) => {
-              this.setState({
-                componentToRender,
-              })
-            }}
-          />
-        )
-      case "HomeUploadSent":
-        return (
-          <HomeUploadSent
-            onSendAnotherFile={() => {
-              this.setState({
-                componentToRender: "HomeForm",
-              })
-            }}
-            data={this.state.uploadEvent.payload}
-            changeComponent={(componentToRender) => {
-              this.setState({
-                componentToRender,
-              })
-            }}
-          />
-        )
-
-      case "Authentication":
-        return (
-          <Authentication
-            changeComponent={(componentToRender) => {
-              this.setState({
-                componentToRender,
-              })
-            }}
-          />
-        )
-
-      //  this would run if the "componentToRender" == "HomeForm" or otherwise
-      case "HomeForm":
-        return (
-          <HomeForm
-            onUploading={(form, files) => {
-              this.triggerUploading(form, files)
-            }}
-            changeComponent={(componentToRender) => {
-              this.setState({
-                componentToRender,
-              })
-            }}
-            userEmail={this.state.userEmail}
-            showPanel={(makePanelVisible) => {
-              this.setState({
-                makePanelVisible,
-              })
-            }}
-            updateFiles={(files) => {
-              this.setState({
-                files,
-              })
-            }}
-            files={this.state.files}
-            cancel={(filename) => {
-              this.cancel(filename)
-            }}
-          />
-        )
-    }
   }
 
   // remove files from state
-  cancel = (nameOfFile) => {
+  cancel = nameOfFile => {
     const files = this.state.files
 
     files.forEach((file, index) => {
@@ -274,11 +160,6 @@ class Home extends Component {
     this.setState({
       showPanel: false,
     })
-  }
-
-  logout = () => {
-    localStorage.clear() //  to clear the token
-    firebase.auth().signOut().catch(console.error)
   }
 
   render() {
@@ -300,13 +181,13 @@ class Home extends Component {
           {/* MORE FILES PANEL */}
           {makePanelVisible === true ? (
             <Panel
-              showPanel={(makePanelVisible) => {
+              showPanel={makePanelVisible => {
                 this.setState({
                   makePanelVisible,
                 })
               }}
               files={this.state.files}
-              cancel={(fileName) => {
+              cancel={fileName => {
                 this.cancel(fileName)
               }}
             />
@@ -315,21 +196,8 @@ class Home extends Component {
       </div>
     )
   }
-
-  componentDidMount() {
-    const FUNC_TAG = "Home.js: componentDidMount: "
-    // console.info(FUNC_TAG)
-
-    this.authChangeListener()
-  }
-
-  componentWillUnmount() {
-    console.info("componentWillUnmount")
-   this.firebaseAuthListener && this.firebaseAuthListener()
-   this.authChangeListener = undefined
-  }
 }
 
-Home.contextType = MyContext
-
 export default Home
+
+Home.contextType = MyContext

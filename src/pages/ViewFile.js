@@ -16,7 +16,6 @@ import Icon from "../components/Icon"
 import { postDownload } from "../utils/postDownload"
 import { url } from "../utils/domainConfig"
 import { betterNumber } from "../utils/betterNumber"
-import history from "./../utils/history"
 
 class ViewFile extends Component {
   constructor(props) {
@@ -63,18 +62,6 @@ class ViewFile extends Component {
       })
   }
 
-  getTotalDownloadSize() {
-    const { post } = this.state
-
-    let total = 0
-    const filesIds = _.get(post, "files", [])
-
-    _.each(filesIds, (fileId) => {
-      total += _.get(fileId, "size", 0)
-    })
-
-    return betterNumber(total, true)
-  }
 
   render() {
     const { post, showProgressBar } = this.state
@@ -167,6 +154,20 @@ class ViewFile extends Component {
         </div>
       </div>
     )
+  }
+
+    
+  getTotalDownloadSize() {
+    const { post } = this.state
+
+    let total = 0
+    const filesIds = _.get(post, "files", [])
+
+    _.each(filesIds, (fileId) => {
+      total += _.get(fileId, "size", 0)
+    })
+
+    return betterNumber(total, true)
   }
 }
 
