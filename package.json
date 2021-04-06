@@ -32,7 +32,8 @@
     "webfontloader": "^1.6.28"
   },
   "scripts": {
-    "start": "set port=3001 && react-scripts start",
+    "start": "react-scripts start",
+    "dev": "set port=3001 && react-scripts start",
     "build": "react-scripts build",
     "server": "",
     "watch:sass": "node-sass src/sass_files/main.scss src/sass_files/style.css -w",

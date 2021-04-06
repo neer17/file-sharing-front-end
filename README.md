@@ -6,10 +6,10 @@
 
 ## Features:
   - Send files without any restrictions on the type of file to their inboxes as long as the total file size is under 25Mbs.
-  - View files sent at the end, download them indivudially or altogether in the zip form.
+  - View files sent at the end, download them individually or altogether in the zip form.
   - Share zip of all files on social media.
 
-## Techinal Details:
+## Technical Details:
   - Google and email auth is used though Firebase Authentication.
   - AWS S3 is used for storage.
   - Express.js is used for server script.
